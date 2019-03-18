@@ -5,5 +5,7 @@ jobs:
       - image: circleci/python:3.6.2-stretch-browsers
     steps:
       - checkout
-      - run: echo "Hello World!"
+      - setup_remote_docker
+      - run: pip3 install gigantum
+      - run: echo `pwd`
 

@@ -7,19 +7,19 @@ jobs:
       - checkout
       - setup_remote_docker
       - run:
-        name: Install Chrome and ChromeDriver
-        command: |
-          sudo apt-get -y install libxss1 libappindicator1 libindicator7 && \
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-          sudo dpkg -i google-chrome*.deb && \
-          sudo apt-get -y install -f && \
-          sudo apt-get -y install xvfb && \
-          sudo apt-get -y install unzip && \
-          wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip && \
-          unzip chromedriver_linux64.zip && chmod +x chromedriver && \
-          sudo mv -f chromedriver /usr/local/share/chromedriver && \
-          sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver && \
-          sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
+          name: Install Chrome and ChromeDriver
+          command: |
+            sudo apt-get -y install libxss1 libappindicator1 libindicator7 && \
+            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+            sudo dpkg -i google-chrome*.deb && \
+            sudo apt-get -y install -f && \
+            sudo apt-get -y install xvfb && \
+            sudo apt-get -y install unzip && \
+            wget -N http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip && \
+            unzip chromedriver_linux64.zip && chmod +x chromedriver && \
+            sudo mv -f chromedriver /usr/local/share/chromedriver && \
+            sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver && \
+            sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
       - run: sudo pip3 install -r requirements.txt
       - run: sudo pip3 install gigantum

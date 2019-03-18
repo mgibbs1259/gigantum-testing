@@ -6,6 +6,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: pip3 install gigantum
+      - run: sudo pip3 install gigantum
       - run: echo `pwd`
 

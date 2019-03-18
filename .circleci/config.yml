@@ -9,7 +9,7 @@ jobs:
       - run:
           name: Install Chrome and ChromeDriver
           command: |
-            sudo apt-get -y install libxss1 libappindicator1 libindicator7 && \
+            sudo apt-get -y install libxss1 libappindicator1 libindicator7 libappindicator3-1 && \
             wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
             sudo dpkg -i google-chrome*.deb && \
             sudo apt-get -y install -f && \

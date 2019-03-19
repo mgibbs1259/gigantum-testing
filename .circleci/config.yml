@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Activate virtual env and run Gigantum
           command: |
-            sudo rm -f /usr/bin/python3 && sudo ln -s /usr/bin/python3.6 /usr/bin/python3
+            sudo rm -f /usr/bin/python3 && sudo ln -s /usr/bin/python3.6 /usr/bin/python3 && \
             python3 -m venv test-env && \
             source test-env/bin/activate && \
             sudo pip3 install -r requirements.txt && \

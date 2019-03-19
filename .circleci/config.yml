@@ -34,5 +34,6 @@ jobs:
             gigantum install && \
             gigantum start && \
             sleep 10 && \
+            export $(dbus-launch) && export NSS_USE_SHARED_DB=ENABLED && \
             python3 driver.py
 

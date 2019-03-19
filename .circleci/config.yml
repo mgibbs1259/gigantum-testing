@@ -39,5 +39,5 @@ jobs:
             gigantum install && \
             gigantum start && \
             sleep 10 && \
-            python3 driver.py
+            python3 driver.py --headless
 

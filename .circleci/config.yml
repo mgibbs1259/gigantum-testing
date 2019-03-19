@@ -17,23 +17,23 @@ jobs:
             mv chromedriver ~/bin && export PATH=/home/circleci/bin:$PATH && \
             chromedriver --version
 
-#      - run:
-#          name: Set up credentials.txt for test user (circleci)
-#          command: |
-#            echo $TEST_USERNAME > credentials.txt
-#            echo $TEST_PASSWORD >> credentials.txt
-#            cat credentials.txt
-#
-#      - run:
-#          name: Activate virtual env and run Gigantum
-#          command: |
-#            export PATH=/home/circleci/bin:$PATH
-#            python3.6 -m venv test-env && \
-#            source test-env/bin/activate && \
-#            pip install -r requirements.txt && \
-#            pip install gigantum && \
-#            gigantum install && \
-#            gigantum start && \
-#            sleep 10 && \
-#            python3 driver.py --headless
+      - run:
+          name: Set up credentials.txt for test user (circleci)
+          command: |
+            echo $TEST_USERNAME > credentials.txt
+            echo $TEST_PASSWORD >> credentials.txt
+            cat credentials.txt
+
+      - run:
+          name: Activate virtual env and run Gigantum
+          command: |
+            export PATH=/home/circleci/bin:$PATH
+            python3.6 -m venv test-env && \
+            source test-env/bin/activate && \
+            pip install -r requirements.txt && \
+            pip install gigantum && \
+            gigantum install && \
+            gigantum start && \
+            sleep 10 && \
+            python3 driver.py --headless
 

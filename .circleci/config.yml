@@ -14,24 +14,25 @@ jobs:
             sudo apt-get -y install unzip && \
             wget -N https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip && \
             unzip chromedriver_linux64.zip && chmod +x chromedriver && \
-            sudo mv -f chromedriver /usr/local/share/chromedriver
+            sudo mv -f chromedriver /usr/local/share/chromedrivera && \
+            chromedriver --version
 
-      - run:
-          name: Set up credentials.txt for test user (circleci)
-          command: |
-            echo $TEST_USERNAME > credentials.txt
-            echo $TEST_PASSWORD >> credentials.txt
-            cat credentials.txt
-
-      - run:
-          name: Activate virtual env and run Gigantum
-          command: |
-            python3.6 -m venv test-env && \
-            source test-env/bin/activate && \
-            pip install -r requirements.txt && \
-            pip install gigantum && \
-            gigantum install && \
-            gigantum start && \
-            sleep 10 && \
-            python3 driver.py --headless
+#      - run:
+#          name: Set up credentials.txt for test user (circleci)
+#          command: |
+#            echo $TEST_USERNAME > credentials.txt
+#            echo $TEST_PASSWORD >> credentials.txt
+#            cat credentials.txt
+#
+#      - run:
+#          name: Activate virtual env and run Gigantum
+#          command: |
+#            python3.6 -m venv test-env && \
+#            source test-env/bin/activate && \
+#            pip install -r requirements.txt && \
+#            pip install gigantum && \
+#            gigantum install && \
+#            gigantum start && \
+#            sleep 10 && \
+#            python3 driver.py --headless
 

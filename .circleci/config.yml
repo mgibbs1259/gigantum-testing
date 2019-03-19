@@ -14,7 +14,9 @@ jobs:
             rm -f chromedriver chromedriver_linux64.zip && \
             wget https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip && \
             unzip chromedriver_linux64.zip && chmod +x chromedriver && \
-            mv chromedriver ~/bin && export PATH=/home/circleci/bin:$PATH && \
+            sudo mv -f chromedriver /usr/local/share/chromedriver && \
+            sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver && \
+            sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver && \
             chromedriver --version
 
       - run:
@@ -27,7 +29,6 @@ jobs:
       - run:
           name: Activate virtual env and run Gigantum
           command: |
-            export PATH=/home/circleci/bin:$PATH
             python3.6 -m venv test-env && \
             source test-env/bin/activate && \
             pip install -r requirements.txt && \
@@ -35,6 +36,5 @@ jobs:
             gigantum install && \
             gigantum start && \
             sleep 10 && \
-            export $(dbus-launch) && export NSS_USE_SHARED_DB=ENABLED && \
             python3 driver.py
 

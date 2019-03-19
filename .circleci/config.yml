@@ -28,5 +28,6 @@ jobs:
             pip install gigantum && \
             gigantum install && \
             gigantum start && \
-            sleep 20
+            sleep 20 && \
+            printf 'GET /api/ping HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 1000
 

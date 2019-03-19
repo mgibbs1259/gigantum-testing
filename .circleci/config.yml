@@ -23,8 +23,8 @@ jobs:
           command: |
             python3.6 -m venv test-env && \
             source test-env/bin/activate && \
-            sudo pip3 install -r requirements.txt && \
-            sudo pip3 install gigantum && \
+            pip3 install -r requirements.txt && \
+            pip3 install gigantum && \
             gigantum install && \
             gigantum start && \
             sleep 20

@@ -18,9 +18,16 @@ jobs:
             unzip chromedriver_linux64.zip && chmod +x chromedriver && \
             sudo mv -f chromedriver /usr/local/share/chromedriver
 
-      - run: which python3.6
-      - run: python3 -V
-      - run: sudo pip3 install -r requirements.txt
-      - run: sudo pip3 install gigantum
-      - run: gigantum install && gigantum start || cat /home/circleci/gigantum/.labmanager/logs/labmanager.log
+      - run: ln -s /usr/bin/python3.6 /usr/bin/python3
+      - run: which python3
+      - run: 
+          name: Activate virtual env and run Gigantum
+          command: |
+            python3 -m venv test-env && \
+            source test-env/bin/activate && \
+            sudo pip3 install -r requirements.txt && \
+            sudo pip3 install gigantum && \
+            gigantum install && \
+            gigantum start && \
+            sleep 20
 

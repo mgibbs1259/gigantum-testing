@@ -3,6 +3,7 @@ import logging
 import time
 import os
 import shutil
+import subprocess
 
 # Library imports
 import selenium
@@ -41,9 +42,11 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     assert "Added remote" in driver.find_element_by_css_selector(".Footer__message-title").text, "Expected 'Added remote' in footer"
-    # Add file to input data and sync project
     input_data_path = os.path.join(os.environ['GIGANTUM_HOME'], username,
                                    username, 'labbooks', project_title, 'input', 'file-3000000b.rando')
+
+    # Add file to input data and sync project
+
     shutil.copy('testmaterial/file-3000000b.rando', input_data_path)
     driver.find_element_by_css_selector("#inputData").click()
     time.sleep(5)

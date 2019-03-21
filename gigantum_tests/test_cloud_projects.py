@@ -45,8 +45,8 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     input_data_path = os.path.join(os.environ['GIGANTUM_HOME'], username,
                                    username, 'labbooks', project_title, 'input', 'file-3000000b.rando')
 
-    # Add file to input data and sync project
 
+    # Add file to input data and sync project
     shutil.copy('testmaterial/file-3000000b.rando', input_data_path)
     driver.find_element_by_css_selector("#inputData").click()
     time.sleep(5)

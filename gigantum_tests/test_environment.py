@@ -148,5 +148,4 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     # assert container status is stopped and 'Successfully tagged' is in footer
     assert driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed(), "Expected rebuild container status"
-    print(driver.find_element_by_css_selector(".Footer__message-title").text)
     assert "Project failed to build" in driver.find_element_by_css_selector(".Footer__message-title").text, "Expected 'Project failed to build' in footer"

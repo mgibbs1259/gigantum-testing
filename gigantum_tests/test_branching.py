@@ -39,7 +39,7 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Checking that the new branch is local only")
     # Assert that current branch is new branch and local in upper left
     assert "branch" == driver.find_element_by_css_selector(".BranchMenu__dropdown-text").text, "Expected to be on newly created branch, upper left"
-    assert True == True if driver.find_element_by_css_selector('.BranchMenu__status > .BranchMenu__status--local') else False, "Expected newly created branch to be local only, upper left"
+    assert True == True if driver.find_element_by_css_selector('div[data-tooltip="Local only"]') else False, "Expected newly created branch to be local only, upper left"
     # Open branch manager
     driver.find_element_by_css_selector(".BranchMenu__buttons > .BranchMenu__btn--manage").click()
     time.sleep(2)

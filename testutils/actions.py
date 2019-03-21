@@ -237,6 +237,23 @@ def add_valid_custom_docker(driver: selenium.webdriver):
     environment.environment_tab_button.click()
     driver.execute_script("window.scrollBy(0, 600);")
     environment.custom_docker_edit_button.click()
-    environment.custom_docker_text_input.send_keys(testutils.custom_docker_instructions())
+    environment.custom_docker_text_input.send_keys(testutils.valid_custom_docker_instruction())
+    driver.execute_script("window.scrollBy(0, 300);")
+    environment.custom_docker_save_button.click()
+
+
+def add_invalid_custom_docker(driver: selenium.webdriver):
+    """
+    Add invalid custom Docker.
+
+    Args:
+        driver
+    """
+    logging.info("Adding invalid custom Docker")
+    environment = elements.EnvironmentElements(driver)
+    environment.environment_tab_button.click()
+    driver.execute_script("window.scrollBy(0, 600);")
+    environment.custom_docker_edit_button.click()
+    environment.custom_docker_text_input.send_keys(testutils.invalid_custom_docker_instruction())
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()

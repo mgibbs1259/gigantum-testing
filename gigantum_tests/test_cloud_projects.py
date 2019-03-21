@@ -48,8 +48,9 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     driver.find_element_by_css_selector("#inputData").click()
     time.sleep(5)
     assert "file-3000000b.rando" in driver.find_element_by_css_selector(".File__text").text, "Expected file-3000000b.rando in input data"
-
-
+    driver.find_element_by_css_selector(".BranchMenu__btn--sync").click()
+    time.sleep(2)
+    assert "Sync complete" in driver.find_element_by_css_selector(".Footer__message-title").text, "Expected 'Sync complete' in footer"
     driver.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
     time.sleep(10)
     driver.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()

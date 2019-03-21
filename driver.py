@@ -16,9 +16,9 @@ def get_playbooks(path):
     # If given a specific path
     if path and 'test_' in path:
         return [path]
-    # Else, get all test playbooks
+    # Else, get all test playbooks, but skip examples
     return [t for t in os.listdir(os.path.join(TEST_ROOT, path))
-            if '.py' in t and 'test_' in t]
+            if '.py' in t and 'test_' in t and 'test_examples.py' != t]
 
 
 def load_test_methods(path):

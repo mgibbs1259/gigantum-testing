@@ -1,6 +1,8 @@
 # Builtin imports
 import logging
 import time
+import os
+import shutil
 
 # Library imports
 import selenium
@@ -20,7 +22,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
             driver
     """
     # Project set up
-    testutils.log_in(driver)
+    username = testutils.log_in(driver)
     time.sleep(2)
     testutils.remove_guide(driver)
     time.sleep(2)
@@ -39,9 +41,15 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     assert "Added remote" in driver.find_element_by_css_selector(".Footer__message-title").text, "Expected 'Added remote' in footer"
-    # Add file and sync project
+    # Add file to input data and sync project
+    input_data_path = os.path.join(os.environ['GIGANTUM_HOME'], username,
+                                   username, 'labbooks', project_title, 'input', 'file-3000000b.rando')
+    shutil.copy('testmaterial/file-3000000b.rando', input_data_path)
+    driver.find_element_by_css_selector("#inputData").click()
+    time.sleep(5)
+    assert "file-3000000b.rando" in driver.find_element_by_css_selector(".File__text").text, "Expected file-3000000b.rando in input data"
 
-    # Go to cloud tab
+
     driver.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
     time.sleep(10)
     driver.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()

@@ -142,6 +142,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver.find_element_by_css_selector(".CollaboratorsModal__btn--add").click()
     time.sleep(5)
     driver.find_element_by_css_selector(".Modal__close").click()
+    logging.info("Logging out")
     time.sleep(2)
     driver.find_element_by_css_selector("#username").click()
     time.sleep(2)
@@ -150,6 +151,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver.quit()
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
+    logging.info("Switching to new driver for collaborator")
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--incognito")
@@ -177,6 +179,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download").click()
     wait2.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     assert project_title in driver2.find_element_by_css_selector(".TitleSection__namespace-title").text, "After import, expected shared project page"
+    logging.info("Logging out")
     time.sleep(2)
     driver2.find_element_by_css_selector("#username").click()
     time.sleep(2)
@@ -185,6 +188,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.quit()
 
     # Owner deletes cloud project
+    logging.info("Switching to new driver for owner")
     lines2 = open('credentials.txt').readlines()
     username3, password3 = lines2[0], lines2[1]
     driver3 = webdriver.Chrome(chrome_options=chrome_options)

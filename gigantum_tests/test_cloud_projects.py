@@ -4,7 +4,6 @@ import time
 import os
 import shutil
 from subprocess import Popen, PIPE
-import sys
 
 # Library imports
 import selenium
@@ -16,7 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 # Local packages
 import testutils
 
-'''
+
 def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs):
     """
         #Test that a project in Gigantum can be published, synced, and deleted.
@@ -77,12 +76,13 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
 
     # Delete cloud project
+    logging.info("Deleting cloud project")
     driver.find_element_by_css_selector(".RemoteLabbooks__icon--delete").click()
     time.sleep(2)
     driver.find_element_by_css_selector("#deleteInput").send_keys(project_title)
     time.sleep(2)
     driver.find_element_by_css_selector(".ButtonLoader").click()
-    time.sleep(5)
+    time.sleep(10)
     assert project_title not in driver.find_element_by_css_selector(".RemoteLabbooks__panel-title:first-child span span").text, "Expected project to be removed from cloud tab"
     driver.find_element_by_css_selector(".Labbooks__nav-item--local").click()
     time.sleep(2)
@@ -91,7 +91,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     git_command2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
     del_stderr = git_command2.stderr.readline().decode('utf-8').strip()
     assert "fatal" in del_stderr, "Expected project to be deleted from remote"
-'''
+
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     """
@@ -115,7 +115,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     project_title = full_project_title[full_project_title.index("/") + 1:].lstrip()
 
     # Publish project
-    logging.info("Publishing project")
+    logging.info("Publishing a private project")
     driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish").click()
     driver.find_element_by_css_selector(".VisibilityModal__buttons > button").click()
     time.sleep(5)
@@ -127,6 +127,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert "https://" in pub_stdout, "Expected project on remote"
 
     # Add collaborator
+    logging.info("Adding a collaborator to private project")
     time.sleep(3)
     driver.find_element_by_css_selector(".Collaborators__btn").click()
     time.sleep(3)
@@ -142,7 +143,6 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver.find_element_by_css_selector("#logout").click()
     time.sleep(3)
     driver.quit()
-    time.sleep(10)
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
     chrome_options = webdriver.ChromeOptions()
@@ -163,6 +163,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.find_element_by_css_selector(".auth0-lock-submit").click()
     time.sleep(5)
     testutils.remove_guide(driver2)
+    logging.info("Collaborator importing shared project")
     driver2.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()
     time.sleep(2)
     wait2 = WebDriverWait(driver2, 200)
@@ -177,7 +178,6 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.find_element_by_css_selector("#logout").click()
     time.sleep(3)
     driver2.quit()
-    time.sleep(10)
 
     # Owner deletes cloud project
     lines2 = open('credentials.txt').readlines()
@@ -194,8 +194,9 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     auth0_elts.username_input.send_keys(username3)
     auth0_elts.password_input.click()
     auth0_elts.password_input.send_keys(password3)
-    time.sleep(5)
+    time.sleep(10)
     testutils.remove_guide(driver3)
+    logging.info("Owner deleting shared project")
     driver3.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
     driver3.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()
     time.sleep(2)

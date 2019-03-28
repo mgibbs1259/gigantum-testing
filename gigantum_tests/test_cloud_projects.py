@@ -127,15 +127,21 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert "https://" in pub_stdout, "Expected project on remote"
 
     # Add collaborator
+    time.sleep(3)
     driver.find_element_by_css_selector(".Collaborators__btn").click()
-    time.sleep(2)
+    time.sleep(3)
     lines = open('credentials.txt').readlines()
     username2, password2 = lines[2], lines[3]
     driver.find_element_by_css_selector(".CollaboratorsModal__input--collaborators").send_keys(username2)
     driver.find_element_by_css_selector(".CollaboratorsModal__btn--add").click()
     time.sleep(5)
     driver.find_element_by_css_selector(".Modal__close").click()
-
+    time.sleep(2)
+    driver.find_element_by_css_selector("#username").click()
+    time.sleep(2)
+    driver.find_element_by_css_selector("#logout").click()
+    time.sleep(3)
+    driver.quit()
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
     chrome_options = webdriver.ChromeOptions()
@@ -164,3 +170,43 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download").click()
     wait2.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     assert project_title in driver2.find_element_by_css_selector(".TitleSection__namespace-title").text, "After import, expected shared project page"
+    time.sleep(2)
+    driver2.find_element_by_css_selector("#username").click()
+    time.sleep(2)
+    driver2.find_element_by_css_selector("#logout").click()
+    time.sleep(3)
+    driver2.quit()
+
+    # Owner deletes cloud project
+    lines2 = open('credentials.txt').readlines()
+    username3, password3 = lines2[0], lines2[1]
+    driver3 = webdriver.Chrome(chrome_options=chrome_options)
+    driver3.implicitly_wait(5)
+    driver3.set_window_size(1440, 1000)
+    driver3.get("http://localhost:10000/projects/local#")
+    logging.info("Logging in")
+    auth0_elts = testutils.Auth0LoginElements(driver3)
+    auth0_elts.login_green_button.click()
+    time.sleep(2)
+    auth0_elts.username_input.click()
+    auth0_elts.username_input.send_keys(username3)
+    auth0_elts.password_input.click()
+    auth0_elts.password_input.send_keys(password3)
+    time.sleep(5)
+    testutils.remove_guide(driver3)
+    driver3.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
+    driver3.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()
+    time.sleep(2)
+    wait3 = selenium.webdriver.support.ui.WebDriverWait(driver3, 200)
+    wait3.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
+    driver3.find_element_by_css_selector(".RemoteLabbooks__icon--delete").click()
+    time.sleep(2)
+    driver3.find_element_by_css_selector("#deleteInput").send_keys(project_title)
+    time.sleep(2)
+    driver3.find_element_by_css_selector(".ButtonLoader").click()
+    time.sleep(5)
+    git_command2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
+    del_stderr = git_command2.stderr.readline().decode('utf-8').strip()
+    assert "fatal" in del_stderr, "Expected project to be deleted from remote"
+
+

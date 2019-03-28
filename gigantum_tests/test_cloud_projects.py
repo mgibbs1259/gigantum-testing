@@ -142,6 +142,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver.find_element_by_css_selector("#logout").click()
     time.sleep(3)
     driver.quit()
+    time.sleep(10)
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
     chrome_options = webdriver.ChromeOptions()
@@ -176,6 +177,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     driver2.find_element_by_css_selector("#logout").click()
     time.sleep(3)
     driver2.quit()
+    time.sleep(10)
 
     # Owner deletes cloud project
     lines2 = open('credentials.txt').readlines()

@@ -18,9 +18,9 @@ import testutils
 
 def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs):
     """
-        #Test that a project in Gigantum can be published, synced, and deleted.
+        Test that a project in Gigantum can be published, synced, and deleted.
 
-        #Args:
+        Args:
             #driver
     """
     # Project set up
@@ -91,6 +91,11 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     git_command2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
     del_stderr = git_command2.stderr.readline().decode('utf-8').strip()
     assert "fatal" in del_stderr, "Expected project to be deleted from remote"
+    time.sleep(2)
+    driver.find_element_by_css_selector("#username").click()
+    time.sleep(2)
+    driver.find_element_by_css_selector("#logout").click()
+    time.sleep(3)
 
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):

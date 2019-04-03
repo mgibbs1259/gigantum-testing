@@ -36,6 +36,11 @@ def unique_project_name(prefix: str = "selenium-project"):
     return f'{prefix}-{uuid.uuid4().hex[:8]}'
 
 
+def unique_dataset_name(prefix: str = "selenium-dataset"):
+    """ Return a universally-unique dataset name """
+    return f'{prefix}-{uuid.uuid4().hex[:8]}'
+
+
 def unique_project_description():
     """ Return a universally-unique project description """
     return ''.join([str(uuid.uuid4())[:6] for num in range(30)])

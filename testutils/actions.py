@@ -4,10 +4,14 @@ import time
 
 # Library imports
 import selenium
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # Local packages
 from testutils import elements
 from testutils import testutils
+
 
 
 # create project
@@ -257,3 +261,53 @@ def add_invalid_custom_docker(driver: selenium.webdriver):
     environment.custom_docker_text_input.send_keys(testutils.invalid_custom_docker_instruction())
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
+
+
+def create_dataset(driver: selenium.webdriver) -> str:
+    """
+    Create a dataset.
+
+    Args:
+        driver
+
+    Returns:
+        Name of dataset just created
+    """
+    unique_dataset_name = testutils.unique_dataset_name()
+    logging.info(f"Creating a new dataset: {unique_dataset_name}")
+    dataset_elts = elements.AddDatasetElements(driver)
+    dataset_elts.dataset_page_tab.click()
+    dataset_elts.create_new_button.click()
+    dataset_elts.dataset_title_input.click()
+    dataset_elts.dataset_title_input.send_keys(unique_dataset_name)
+    dataset_elts.dataset_description_input.click()
+    dataset_elts.dataset_description_input.send_keys(testutils.unique_project_description())
+    dataset_elts.dataset_continue_button.click()
+    dataset_elts.gigantum_cloud_button.click()
+    dataset_elts.create_dataset_button.click()
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".TitleSection")))
+    return unique_dataset_name
+
+
+def publish_dataset(driver: selenium.webdriver):
+    """
+    Publish a dataset to cloud.
+
+    Args:
+        driver
+
+    """
+    logging.info("Publish dataset to cloud")
+    dataset_elts = elements.AddDatasetElements(driver)
+    dataset_elts.publish_dataset_button.click()
+    dataset_elts.publish_confirm_button.click()
+    time.sleep(5)
+    dataset_elts.dataset_page_tab.click()
+    time.sleep(5)
+    dataset_elts.dataset_cloud_page.click()
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".VisibilityModal__buttons")))
+
+
+

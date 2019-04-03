@@ -46,7 +46,7 @@ def remove_guide(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Getting rid of 'Gotit!'")
+    logging.info("Getting rid of 'Got it!'")
     guide_elts = elements.GuideElements(driver)
     guide_elts.got_it_button.click()
     logging.info("Turning off guide and helper")

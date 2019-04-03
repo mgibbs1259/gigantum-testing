@@ -34,19 +34,25 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Creating a new branch")
     branch_elts = testutils.BranchElements(driver)
     branch_elts.create_branch_button.click()
-    driver.find_element_by_css_selector("#CreateBranchName").send_keys("branch")
-    driver.find_element_by_css_selector(".CreateBranch_navItem > .ButtonLoader").click()
+    branch_elts.branch_name_input.send_keys("branch")
+    branch_elts.create_button.click()
     time.sleep(5)
     logging.info("Checking that the new branch is local only")
 
-    assert "branch" == driver.find_element_by_css_selector(".BranchMenu__dropdown-text").text, "Expected to be on newly created branch, upper left"
-    assert driver.find_element_by_css_selector('.BranchMenu__dropdown-btn>div[data-tooltip="Local only"]'), "Expected newly created branch to be local only, upper left"
+    upper_left_branch_name = driver.find_element_by_css_selector(".BranchMenu__dropdown-text").text
+    upper_left_local_only = driver.find_element_by_css_selector(
+        '.BranchMenu__dropdown-btn>div[data-tooltip="Local only"]')
+    assert upper_left_branch_name == "branch", "Expected to be on newly created branch, upper left"
+    assert upper_left_local_only, "Expected newly created branch to be local only, upper left"
 
-    # Open branch manager
-    driver.find_element_by_css_selector(".BranchMenu__buttons > .BranchMenu__btn--manage").click()
+    # Open manage branches
+    branch_elts.manage_branches_button.click()
     time.sleep(2)
 
-    assert "branch" == driver.find_element_by_css_selector(".Branches__branchname").text, "Expected to be on newly created branch, branch manager"
-    assert driver.find_element_by_css_selector('.Branches__details>div[data-tooltip="Local only"]'), "Expected newly created branch to be local only, branch manager"
+    manage_branches_branch_name = driver.find_element_by_css_selector(".Branches__branchname").text
+    manage_branches_local_only = driver.find_element_by_css_selector(
+        '.Branches__details>div[data-tooltip="Local only"]')
+    assert manage_branches_branch_name == "branch", "Expected to be on newly created branch, manage branches"
+    assert manage_branches_local_only, "Expected newly created branch to be local only, manage branches"
 
 

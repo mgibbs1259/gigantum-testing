@@ -213,7 +213,7 @@ class AddDatasetElements(UiElement):
 
     @property
     def publish_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons > button")
+        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons>button")
 
 
 class BranchElements(UiElement):
@@ -231,6 +231,44 @@ class BranchElements(UiElement):
 
     @property
     def manage_branches_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__buttons > .BranchMenu__btn--manage")
+        return self.driver.find_element_by_css_selector(".BranchMenu__buttons>.BranchMenu__btn--manage")
 
 
+class PublishProjectElements(UiElement):
+    @property
+    def publish_project_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish")
+
+    @property
+    def publish_confirm_button(self):
+        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons>button")
+
+    @property
+    def cloud_tab(self):
+        return self.driver.find_element_by_css_selector(".Labbooks__nav-item--cloud")
+
+    @property
+    def local_tab(self):
+        return self.driver.find_element_by_css_selector(".Labbooks__nav-item--local")
+
+    @property
+    def sync_project_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync")
+
+    @property
+    def delete_project_button(self):
+        return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--delete")
+
+    @property
+    def delete_project_input(self):
+        return self.driver.find_element_by_css_selector("#deleteInput")
+
+    @property
+    def delete_confirm_button(self):
+        return self.driver.find_element_by_css_selector(".ButtonLoader")
+
+
+class InputDataElements(UiElement):
+    @property
+    def input_data_tab(self):
+        return self.driver.find_element_by_css_selector("#inputData")

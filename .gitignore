@@ -5,3 +5,4 @@ __pycache__
 geckodriver.log
 testutils/.DS_Store
 .DS_Store
+testmaterial

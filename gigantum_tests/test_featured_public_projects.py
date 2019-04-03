@@ -25,10 +25,9 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
     testutils.remove_guide(driver)
     time.sleep(2)
     # Import featured public projects
-    # TO DO - add in https://gigantum.com/gigantum-examples/allen-sdk-examples
+    # TO DO - add in gigantum.com/randal/baltimore-sun-data-bridge-data, https://gigantum.com/gigantum-examples/allen-sdk-examples
     featured_public_projects = ["gigantum.com/meg297/military-expenditure-gdp-population",
-                                "gigantum.com/billvb/fsw-telecoms-study",
-                                "gigantum.com/randal/baltimore-sun-data-bridge-data"]
+                                "gigantum.com/billvb/fsw-telecoms-study"]
     for project in featured_public_projects:
         logging.info(f"Importing featured public project: {project}")
         driver.find_element_by_css_selector(".btn--import ~ .btn--import").click()
@@ -36,8 +35,8 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
         driver.find_element_by_css_selector(".Import__input").send_keys(project)
         time.sleep(2)
         driver.find_element_by_css_selector("button ~ button").click()
-        time.sleep(80)
         wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#overview")))
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
         assert driver.find_element_by_css_selector(".flex>.Stopped").is_displayed(), "Expected stopped container status"
         logging.info(f"Featured public project {project} was imported successfully")

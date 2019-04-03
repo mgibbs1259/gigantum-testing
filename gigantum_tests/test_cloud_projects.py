@@ -55,8 +55,8 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
         "Expected project to be the first project in the cloud tab"
 
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title)
-    git_command1 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
-    pub_stdout = git_command1.stdout.readline().decode('utf-8').strip()
+    git_get_remote_command_1 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
+    pub_stdout = git_get_remote_command_1.stdout.readline().decode('utf-8').strip()
 
     assert "https://" in pub_stdout, "Expected project on remote"
 
@@ -68,10 +68,11 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     with open('/tmp/sample-upload.txt', 'w') as example_file:
         example_file.write('Sample Text')
     input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title,
-                              'input', 'file-3000000b.rando')
+                              'input')
     shutil.copy(example_file.name, input_path)
     time.sleep(5)
-    driver.find_element_by_css_selector("#inputData").click()
+    input_data_elts = testutils.InputDataElements(driver)
+    input_data_elts.input_data_tab.click()
     time.sleep(2)
     logging.info("Syncing project")
     publish_elts.sync_project_button.click()
@@ -97,13 +98,16 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     assert cloud_tab_first_project_title != project_title, \
         "Expected project to not be the first project in the cloud tab"
 
-    driver.find_element_by_css_selector(".Labbooks__nav-item--local").click()
+    publish_elts.local_tab.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".LocalLabbooks__panel-title")))
 
-    assert project_title in driver.find_element_by_css_selector(".LocalLabbooks__panel-title:first-child span span").text, "Expected project in local tab"
+    local_tab_first_project_title = driver.find_element_by_css_selector(
+        ".LocalLabbooks__panel-title:first-child span span").text
+    assert local_tab_first_project_title == project_title, \
+        "Expected project to be the first project in the cloud tab"
 
-    git_command2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
-    del_stderr = git_command2.stderr.readline().decode('utf-8').strip()
+    git_get_remote_command_2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
+    del_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()
 
     assert "fatal" in del_stderr, "Expected project to be deleted from remote"

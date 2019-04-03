@@ -268,3 +268,7 @@ class PublishProjectElements(UiElement):
         return self.driver.find_element_by_css_selector(".ButtonLoader")
 
 
+class InputDataElements(UiElement):
+    @property
+    def input_data_tab(self):
+        return self.driver.find_element_by_css_selector("#inputData")

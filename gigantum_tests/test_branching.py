@@ -42,8 +42,8 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     upper_left_branch_name = driver.find_element_by_css_selector(".BranchMenu__dropdown-text").text
     upper_left_local_only = driver.find_element_by_css_selector(
         '.BranchMenu__dropdown-btn>div[data-tooltip="Local only"]')
-    assert upper_left_branch_name == "branch", "Expected to be on newly created branch, upper left"
-    assert upper_left_local_only, "Expected newly created branch to be local only, upper left"
+    assert upper_left_branch_name == "my-test-branch", "Expected to be on my-test-branch, upper left"
+    assert upper_left_local_only, "Expected my-test-branch to be local only, upper left"
 
     # Open manage branches
     branch_elts.manage_branches_button.click()
@@ -52,7 +52,7 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     manage_branches_branch_name = driver.find_element_by_css_selector(".Branches__branchname").text
     manage_branches_local_only = driver.find_element_by_css_selector(
         '.Branches__details>div[data-tooltip="Local only"]')
-    assert manage_branches_branch_name == "branch", "Expected to be on newly created branch, manage branches"
-    assert manage_branches_local_only, "Expected newly created branch to be local only, manage branches"
+    assert manage_branches_branch_name == "branch", "Expected to be on my-test-branch, manage branches"
+    assert manage_branches_local_only, "Expected my-test-branch to be local only, manage branches"
 
 

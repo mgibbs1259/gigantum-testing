@@ -46,5 +46,5 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
         assert project_stopped_visible, "Expected stopped container status"
 
         logging.info(f"Featured public project {project} was imported successfully")
-        side_bar_elts.side_bar_projects_icon.click()
+        side_bar_elts.projects_icon.click()
         time.sleep(2)

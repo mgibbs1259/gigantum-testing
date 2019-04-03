@@ -170,6 +170,6 @@ class ImportProjectElements(UiElement):
 
 class SideBarElements(UiElement):
     @property
-    def side_bar_projects_icon(self):
+    def projects_icon(self):
         return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
 

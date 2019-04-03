@@ -41,7 +41,10 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
         wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#overview")))
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-        assert driver.find_element_by_css_selector(".flex>.Stopped").is_displayed(), "Expected stopped container status"
+
+        project_stopped_visible = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
+        assert project_stopped_visible, "Expected stopped container status"
+
         logging.info(f"Featured public project {project} was imported successfully")
         side_bar_elts.side_bar_projects_icon.click()
         time.sleep(2)

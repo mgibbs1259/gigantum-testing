@@ -152,4 +152,85 @@ class ContainerStatus(UiElement):
     @property
     def container_status_stop(self):
         return self.driver.find_element_by_css_selector(".flex>.Stopped")
+    
+
+class ImportProjectElements(UiElement):
+    @property
+    def import_existing_button(self):
+        return self.driver.find_element_by_css_selector(".btn--import~.btn--import")
+
+    @property
+    def project_url_input(self):
+        return self.driver.find_element_by_css_selector(".Import__input")
+
+    @property
+    def import_button(self):
+        return self.driver.find_element_by_css_selector("button~button")
+
+
+class SideBarElements(UiElement):
+    @property
+    def projects_icon(self):
+        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
+
+
+class AddDatasetElements(UiElement):
+    @property
+    def dataset_page_tab(self):
+        return self.driver.find_element_by_xpath("//a[contains(text(), 'Datasets')]")
+
+    @property
+    def create_new_button(self):
+        return self.driver.find_element_by_css_selector(".btn--import")
+
+    @property
+    def dataset_title_input(self):
+        return self.driver.find_element_by_css_selector(".CreateLabbook input")
+
+    @property
+    def dataset_description_input(self):
+        return self.driver.find_element_by_css_selector(".CreateLabbook__description-input")
+
+    @property
+    def dataset_continue_button(self):
+        return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
+
+    @property
+    def gigantum_cloud_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Gigantum Cloud')]")
+
+    @property
+    def create_dataset_button(self):
+        return self.driver.find_element_by_css_selector(".ButtonLoader ")
+
+    @property
+    def publish_dataset_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish")
+
+    @property
+    def dataset_cloud_page(self):
+        return self.driver.find_element_by_css_selector(".Datasets__nav-item--cloud")
+
+    @property
+    def publish_confirm_button(self):
+        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons > button")
+
+
+class BranchElements(UiElement):
+    @property
+    def create_branch_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__btn--create")
+
+    @property
+    def branch_name_input(self):
+        return self.driver.find_element_by_css_selector("#CreateBranchName")
+
+    @property
+    def create_button(self):
+        return self.driver.find_element_by_css_selector(".CreateBranch_navItem>.ButtonLoader")
+
+    @property
+    def manage_branches_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__buttons > .BranchMenu__btn--manage")
+
 

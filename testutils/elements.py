@@ -152,4 +152,24 @@ class ContainerStatus(UiElement):
     @property
     def container_status_stop(self):
         return self.driver.find_element_by_css_selector(".flex>.Stopped")
+    
+
+class ImportProjectElements(UiElement):
+    @property
+    def import_existing_button(self):
+        return self.driver.find_element_by_css_selector(".btn--import ~ .btn--import")
+
+    @property
+    def project_url_input(self):
+        return self.driver.find_element_by_css_selector(".Import__input")
+
+    @property
+    def import_button(self):
+        return self.driver.find_element_by_css_selector("button ~ button")
+
+
+class SideBarElements(UiElement):
+    @property
+    def projects_icon(self):
+        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
 

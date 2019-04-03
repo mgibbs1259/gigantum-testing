@@ -37,14 +37,15 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     driver.find_element_by_css_selector(".CreateBranch_navItem > .ButtonLoader").click()
     time.sleep(5)
     logging.info("Checking that the new branch is local only")
-    # Assert that current branch is new branch and local in upper left
+
     assert "branch" == driver.find_element_by_css_selector(".BranchMenu__dropdown-text").text, "Expected to be on newly created branch, upper left"
-    assert True == True if driver.find_element_by_css_selector('.BranchMenu__dropdown-btn>div[data-tooltip="Local only"]') else False, "Expected newly created branch to be local only, upper left"
+    assert driver.find_element_by_css_selector('.BranchMenu__dropdown-btn>div[data-tooltip="Local only"]'), "Expected newly created branch to be local only, upper left"
+
     # Open branch manager
     driver.find_element_by_css_selector(".BranchMenu__buttons > .BranchMenu__btn--manage").click()
     time.sleep(2)
-    # Assert that current branch is new branch and local in branch manager
+
     assert "branch" == driver.find_element_by_css_selector(".Branches__branchname").text, "Expected to be on newly created branch, branch manager"
-    assert True == True if driver.find_element_by_css_selector('.Branches__details>div[data-tooltip="Local only"]') else False, "Expected newly created branch to be local only, branch manager"
+    assert driver.find_element_by_css_selector('.Branches__details>div[data-tooltip="Local only"]'), "Expected newly created branch to be local only, branch manager"
 
 

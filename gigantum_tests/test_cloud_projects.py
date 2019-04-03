@@ -27,14 +27,11 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     time.sleep(2)
     testutils.remove_guide(driver)
     time.sleep(2)
-    testutils.create_project_without_base(driver)
+    project_title = testutils.create_project_without_base(driver)
     # Python 3 minimal base
     testutils.add_py3_min_base(driver)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # Grab project title
-    full_project_title = driver.find_element_by_css_selector(".TitleSection__namespace-title").text
-    project_title = full_project_title[full_project_title.index("/") + 1:].lstrip()
 
     # Publish project
     logging.info("Publishing project")

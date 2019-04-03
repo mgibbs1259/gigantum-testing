@@ -49,9 +49,9 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     publish_elts.cloud_tab.click()
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
 
-    cloud_tab_first_project_title = driver.find_element_by_css_selector(
+    cloud_tab_first_project_title_publish = driver.find_element_by_css_selector(
         ".RemoteLabbooks__panel-title:first-child span span").text
-    assert cloud_tab_first_project_title == project_title, \
+    assert cloud_tab_first_project_title_publish == project_title, \
         "Expected project to be the first project in the cloud tab"
 
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title)
@@ -95,7 +95,9 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     publish_elts.delete_confirm_button.click()
     time.sleep(5)
 
-    assert cloud_tab_first_project_title != project_title, \
+    cloud_tab_first_project_title_delete = driver.find_element_by_css_selector(
+        ".RemoteLabbooks__panel-title:first-child span span").text
+    assert cloud_tab_first_project_title_delete != project_title, \
         "Expected project to not be the first project in the cloud tab"
 
     publish_elts.local_tab.click()

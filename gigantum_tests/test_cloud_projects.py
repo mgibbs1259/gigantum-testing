@@ -38,21 +38,29 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
     # Publish project
     logging.info("Publishing project")
-    driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish").click()
-    driver.find_element_by_css_selector(".VisibilityModal__buttons > button").click()
+    publish_elts = testutils.PublishProjectElements(driver)
+    publish_elts.publish_project_button.click()
+    publish_elts.publish_confirm_button.click()
     time.sleep(5)
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     time.sleep(5)
-    driver.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
-    driver.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()
+    side_bar_elts = testutils.SideBarElements(driver)
+    side_bar_elts.projects_icon.click()
+    publish_elts.cloud_tab.click()
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
-    assert project_title in driver.find_element_by_css_selector(".RemoteLabbooks__panel-title:first-child span span").text, "Expected project to be in cloud tab"
+
+    cloud_tab_first_project_title = driver.find_element_by_css_selector(
+        ".RemoteLabbooks__panel-title:first-child span span").text
+    assert cloud_tab_first_project_title_publish == project_title, \
+        "Expected project to be the first project in the cloud tab"
+
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title)
     git_command1 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
     pub_stdout = git_command1.stdout.readline().decode('utf-8').strip()
+
     assert "https://" in pub_stdout, "Expected project on remote"
-    driver.find_element_by_css_selector(".Labbooks__nav-item--local").click()
+
+    publish_elts.local_tab.click()
     driver.find_element_by_css_selector(f"a[href='/projects/{username}/{project_title}']").click()
 
     # Add file to input data and sync project
@@ -63,29 +71,37 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     time.sleep(5)
     driver.find_element_by_css_selector("#inputData").click()
     time.sleep(2)
-    assert "file-3000000b.rando" in driver.find_element_by_css_selector(".File__text").text, "Expected file-3000000b.rando in input data"
     logging.info("Syncing project")
-    driver.find_element_by_css_selector(".BranchMenu__btn--sync").click()
+    publish_elts.sync_project_button.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    assert "Sync complete" in driver.find_element_by_css_selector(".Footer__message-list").text, "Expected 'Sync complete' in footer"
-    driver.find_element_by_css_selector(".SideBar__icon--labbooks-selected").click()
-    driver.find_element_by_css_selector(".Labbooks__nav-item--cloud").click()
+
+    sync_message = driver.find_element_by_css_selector(".Footer__message-list").text
+    assert "Sync complete" in sync_message, "Expected 'Sync complete' in footer"
+
+    side_bar_elts.projects_icon.click()
+    publish_elts.cloud_tab.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
 
     # Delete cloud project
-    driver.find_element_by_css_selector(".RemoteLabbooks__icon--delete").click()
+    publish_elts.delete_project_button.click()
     time.sleep(2)
-    driver.find_element_by_css_selector("#deleteInput").send_keys(project_title)
+    publish_elts.delete_project_input.send_keys(project_title)
     time.sleep(2)
-    driver.find_element_by_css_selector(".ButtonLoader").click()
+    publish_elts.delete_confirm_button.click()
     time.sleep(5)
-    assert project_title not in driver.find_element_by_css_selector(".RemoteLabbooks__panel-title:first-child span span").text, "Expected project to be removed from cloud tab"
+
+    assert cloud_tab_first_project_title != project_title, \
+        "Expected project to not be the first project in the cloud tab"
+
     driver.find_element_by_css_selector(".Labbooks__nav-item--local").click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".LocalLabbooks__panel-title")))
+
     assert project_title in driver.find_element_by_css_selector(".LocalLabbooks__panel-title:first-child span span").text, "Expected project in local tab"
+
     git_command2 = Popen(['git', 'remote', 'get-url', 'origin'], cwd=project_path, stdout=PIPE, stderr=PIPE)
     del_stderr = git_command2.stderr.readline().decode('utf-8').strip()
+
     assert "fatal" in del_stderr, "Expected project to be deleted from remote"

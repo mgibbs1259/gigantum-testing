@@ -174,3 +174,11 @@ class SideBarElements(UiElement):
         return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
 
 
+class BranchElements(UiElement):
+    @property
+    def create_branch_button(self):
+        return self.driver.find_element_by_css_selector(".BranchMenu__btn--create")
+
+
+
+

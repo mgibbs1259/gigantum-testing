@@ -32,7 +32,8 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex > .Stopped")))
     # Select create branch
     logging.info("Creating a new branch")
-    driver.find_element_by_css_selector(".BranchMenu__btn--create").click()
+    branch_elts = testutils.BranchElements(driver)
+    branch_elts.create_branch_button.click()
     driver.find_element_by_css_selector("#CreateBranchName").send_keys("branch")
     driver.find_element_by_css_selector(".CreateBranch_navItem > .ButtonLoader").click()
     time.sleep(5)

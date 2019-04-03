@@ -51,7 +51,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
     cloud_tab_first_project_title = driver.find_element_by_css_selector(
         ".RemoteLabbooks__panel-title:first-child span span").text
-    assert cloud_tab_first_project_title_publish == project_title, \
+    assert cloud_tab_first_project_title == project_title, \
         "Expected project to be the first project in the cloud tab"
 
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title)

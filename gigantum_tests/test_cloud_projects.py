@@ -26,7 +26,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     username = testutils.log_in(driver)
     time.sleep(2)
     testutils.remove_guide(driver)
-    time.sleep(2)
+    time.sleep(3)
     project_title = testutils.create_project_without_base(driver)
 
     # Python 3 minimal base
@@ -85,6 +85,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
 
     # Delete cloud project
+    logging.info(f"Deleting {project_title} from cloud")
     publish_elts.delete_project_button.click()
     time.sleep(2)
     publish_elts.delete_project_input.send_keys(project_title)
@@ -145,8 +146,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     logging.info("Adding a collaborator to private project")
     publish_elts.collaborators_button.click()
     time.sleep(2)
-    credentials = open('credentials.txt').readlines()
-    username2, password2 = credentials[2], credentials[3]
+    username2 = testutils.load_credentials(user_index=1)
     publish_elts.collaborators_input.send_keys(username2)
     publish_elts.add_collaborators_button.click()
     time.sleep(2)
@@ -155,12 +155,15 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
     logging.info("Logging in as a collaborator")
-    testutils.log_in(driver, user_index = 1)
+    testutils.log_in(driver, user_index=1)
     time.sleep(2)
-    testutils.remove_guide(driver)
+    try:
+        testutils.remove_guide(driver)
+    except:
+        pass
     time.sleep(2)
-    logging.info("Collaborator importing shared project")
     publish_elts.cloud_tab.click()
+    time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
 
     # Test that shared cloud project is in cloud tab
@@ -169,20 +172,24 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert cloud_tab_first_project_title_delete == project_title, "Expected shared cloud project in cloud tab"
 
     publish_elts.download_cloud_project_button.click()
+    time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
     # Test that after import, the shared project opens to overview page
     shared_project_title = driver.find_element_by_css_selector(".TitleSection__namespace-title").text
-    assert shared_project_title == project_title, "After import, expected shared project to open to overview page"
+    assert project_title in shared_project_title, "After import, expected shared project to open to overview page"
 
     testutils.log_out(driver)
 
     # Owner deletes cloud project
     testutils.log_in(driver)
     time.sleep(2)
-    testutils.remove_guide(driver)
+    try:
+        testutils.remove_guide(driver)
+    except:
+        pass
     time.sleep(2)
-    logging.info("Owner deleting shared project")
+    logging.info("Owner deleting shared project from cloud")
     publish_elts.cloud_tab.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))

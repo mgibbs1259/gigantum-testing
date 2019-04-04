@@ -300,7 +300,7 @@ class PublishProjectElements(UiElement):
         return self.driver.find_element_by_css_selector(".Modal__close")
 
     @property
-    def download_cloud_project_button(self):
+    def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download")
 
 

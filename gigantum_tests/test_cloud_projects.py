@@ -154,7 +154,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     testutils.log_out(driver)
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully
-    logging.info("Logging in as a collaborator")
+    logging.info(f"Logging in as {username2[0].rstrip()}")
     testutils.log_in(driver, user_index=1)
     time.sleep(2)
     try:
@@ -172,7 +172,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert cloud_tab_first_project_title_delete == project_title, \
         f"Expected shared cloud {project_title} in cloud tab"
 
-    publish_elts.download_cloud_project_button.click()
+    publish_elts.import_first_cloud_project_button.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 

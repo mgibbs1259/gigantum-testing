@@ -21,7 +21,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
 
     Args:
         driver
-        user_index:
+        user_index: an offset into credentials.txt
 
     Returns:
         Username of user just logged in

@@ -331,3 +331,4 @@ def log_out(driver: selenium.webdriver):
     time.sleep(2)
     side_bar_elts.logout_button.click()
     time.sleep(2)
+

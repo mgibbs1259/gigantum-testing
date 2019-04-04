@@ -116,3 +116,11 @@ def cleanup():
         except Exception as e:
             logging.info(f"Error deleting {project_path}: {e}")
 
+    dataset_paths = glob.glob(f'{workdir}/*/labbooks/selenium-dataset-*')
+    for dataset_path in dataset_paths:
+        try:
+            shutil.rmtree(dataset_path)
+            logging.info(f'  Deleted project path {dataset_path}')
+        except Exception as e:
+            logging.info(f"Error deleting {dataset_path}: {e}")
+

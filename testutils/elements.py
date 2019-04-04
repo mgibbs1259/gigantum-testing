@@ -173,6 +173,14 @@ class SideBarElements(UiElement):
     def projects_icon(self):
         return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
 
+    @property
+    def username_button(self):
+        return self.driver.find_element_by_css_selector("#username")
+
+    @property
+    def logout_button(self):
+        return self.driver.find_element_by_css_selector("#logout")
+
 
 class AddDatasetElements(UiElement):
     @property
@@ -201,7 +209,7 @@ class AddDatasetElements(UiElement):
 
     @property
     def create_dataset_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader ")
+        return self.driver.find_element_by_css_selector(".ButtonLoader")
 
     @property
     def publish_dataset_button(self):
@@ -283,10 +291,15 @@ class PublishProjectElements(UiElement):
     def close_collaborators_button(self):
         return self.driver.find_element_by_css_selector(".Modal__close")
 
+    @property
+    def download_cloud_project_button(self):
+        return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download")
+
 
 class InputDataElements(UiElement):
     @property
     def input_data_tab(self):
         return self.driver.find_element_by_css_selector("#inputData")
+
 
 

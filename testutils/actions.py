@@ -15,12 +15,13 @@ from testutils import testutils
 
 
 # create project
-def log_in(driver: selenium.webdriver) -> str:
+def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     Log in to Gigantum.
 
     Args:
         driver
+        user_index:
 
     Returns:
         Username of user just logged in
@@ -30,7 +31,7 @@ def log_in(driver: selenium.webdriver) -> str:
     auth0_elts = elements.Auth0LoginElements(driver)
     auth0_elts.login_green_button.click()
     time.sleep(2)
-    username,password = testutils.load_credentials()
+    username, password = testutils.load_credentials(user_index)
     auth0_elts.username_input.click()
     auth0_elts.username_input.send_keys(username)
     auth0_elts.password_input.click()
@@ -296,7 +297,6 @@ def publish_dataset(driver: selenium.webdriver):
 
     Args:
         driver
-
     """
     logging.info("Publish dataset to cloud")
     dataset_elts = elements.AddDatasetElements(driver)
@@ -310,4 +310,17 @@ def publish_dataset(driver: selenium.webdriver):
     wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".VisibilityModal__buttons")))
 
 
+def log_out(driver: selenium.webdriver):
+    """
+    Log out of Gigantum.
 
+    Args:
+     driver
+    """
+    logging.info("Logging out")
+    time.sleep(2)
+    side_bar_elts = elements.SideBarElements(driver)
+    side_bar_elts.username_button.click()
+    time.sleep(2)
+    side_bar_elts.logout_button.click()
+    time.sleep(2)

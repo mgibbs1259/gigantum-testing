@@ -46,14 +46,14 @@ def unique_project_description():
     return ''.join([str(uuid.uuid4())[:6] for num in range(30)])
 
 
-def load_credentials(path: str = 'credentials.txt'):
+def load_credentials(path: str = 'credentials.txt', user_index: int = 0):
     """ Return tuple of username and password """
     assert os.path.exists(path), f"Specificy login credentials in {path}"
     with open(path) as cfile:
         lines = cfile.readlines()
         assert len(lines) >= 2, f"Must have line for username and password in {path}"
     # return username (first line) and password (second line)
-    return lines[0], lines[1]
+    return lines[2 * user_index], lines[(2 * user_index) + 1]
 
 
 def valid_custom_docker_instruction():

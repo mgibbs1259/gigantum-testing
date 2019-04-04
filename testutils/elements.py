@@ -267,8 +267,26 @@ class PublishProjectElements(UiElement):
     def delete_confirm_button(self):
         return self.driver.find_element_by_css_selector(".ButtonLoader")
 
+    @property
+    def collaborators_button(self):
+        return self.driver.find_element_by_css_selector(".Collaborators__btn")
+
+    @property
+    def collaborators_input(self):
+        return self.driver.find_element_by_css_selector(".CollaboratorsModal__input--collaborators")
+
+    @property
+    def add_collaborators_button(self):
+        return self.driver.find_element_by_css_selector(".CollaboratorsModal__btn--add")
+
+    @property
+    def close_collaborators_button(self):
+        return self.driver.find_element_by_css_selector(".Modal__close")
+
 
 class InputDataElements(UiElement):
     @property
     def input_data_tab(self):
         return self.driver.find_element_by_css_selector("#inputData")
+
+

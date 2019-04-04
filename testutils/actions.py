@@ -27,7 +27,6 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
         Username of user just logged in
     """
     driver.get("http://localhost:10000/projects/local#")
-    logging.info("Logging in")
     auth0_elts = elements.Auth0LoginElements(driver)
     auth0_elts.login_green_button.click()
     time.sleep(2)
@@ -39,6 +38,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
         pass
     time.sleep(2)
     username, password = testutils.load_credentials(user_index=user_index)
+    logging.info(f"Logging in as {username}")
     auth0_elts.username_input.click()
     auth0_elts.username_input.send_keys(username)
     auth0_elts.password_input.click()

@@ -11,6 +11,14 @@ class Auth0LoginElements(UiElement):
         return self.driver.find_element_by_css_selector(".Login__button")
 
     @property
+    def auth0_lock_button(self):
+        return self.driver.find_element_by_css_selector(".auth0-lock-social-button")
+
+    @property
+    def not_your_account_button(self):
+        return self.driver.find_element_by_css_selector(".auth0-lock-alternative-link")
+
+    @property
     def username_input(self):
         return self.driver.find_element_by_css_selector(".auth0-lock-input[name = username]")
 

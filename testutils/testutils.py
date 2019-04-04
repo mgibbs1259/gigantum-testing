@@ -16,13 +16,16 @@ from selenium.webdriver.chrome.options import Options
 
 def load_chrome_driver():
     """ Return Chrome webdriver """
-    return webdriver.Chrome()
+    options = Options()
+    options.add_argument("--incognito")
+    return webdriver.Chrome(options=options)
 
 
 def load_chrome_driver_headless():
     """ Return headless Chrome webdriver """
     options = Options()
     options.add_argument("--headless")
+    options.add_argument("--incognito")
     return webdriver.Chrome(options=options)
 
 

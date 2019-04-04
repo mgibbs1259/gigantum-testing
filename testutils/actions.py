@@ -309,5 +309,3 @@ def publish_dataset(driver: selenium.webdriver):
     wait = WebDriverWait(driver, 200)
     wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".VisibilityModal__buttons")))
 
-
-

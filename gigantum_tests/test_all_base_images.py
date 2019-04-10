@@ -25,7 +25,7 @@ def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 2 minimal base
     testutils.add_py2_min_base(driver)
     # wait until container status is stopped
@@ -48,7 +48,7 @@ def test_py3_min_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_base(driver)
     # wait until container status is stopped
@@ -71,7 +71,7 @@ def test_py3_ds_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 data science base
     testutils.add_py3_ds_base(driver)
     # wait until container status is stopped
@@ -94,7 +94,7 @@ def test_rtidy_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # R tidyverse base
     testutils.add_rtidy_base(driver)
     # wait until container status is stopped
@@ -117,7 +117,7 @@ def test_py3_min_cuda_10_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_cuda_10_base(driver)
     # wait until container status is stopped
@@ -140,7 +140,7 @@ def test_py3_min_cuda_8_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_cuda_8_base(driver)
     # wait until container status is stopped
@@ -163,7 +163,7 @@ def test_py3_min_cuda_90_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_cuda_90_base(driver)
     # wait until container status is stopped
@@ -186,7 +186,7 @@ def test_py3_min_cuda_91_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_cuda_91_base(driver)
     # wait until container status is stopped
@@ -209,7 +209,7 @@ def test_py3_min_cuda_92_base(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(2)
+    time.sleep(4)
     # python 3 minimal base
     testutils.add_py3_min_cuda_92_base(driver)
     # wait until container status is stopped

@@ -31,10 +31,10 @@ def run_base(driver: selenium.webdriver, add_base):
     time.sleep(4)
     # Add base
     add_base(driver)
-    # Wait until container status is stopped
+    # Wait until container is stopped
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # Assert container status is stopped
+    # Assert container is stopped
     container_elts = testutils.ContainerStatus(driver)
     assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
 

@@ -105,6 +105,26 @@ class AddProjectBaseElements(UiElement):
         return self.driver.find_element_by_xpath(
             "//h6[contains(text(), 'R Tidyverse (+ Python3) in Jupyter Quickstart')]")
 
+    @property
+    def py3_minimal_cuda_10_base_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 10.0')]")
+
+    @property
+    def py3_minimal_cuda_8_base_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 8.0')]")
+
+    @property
+    def py3_minimal_cuda_90_base_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.0')]")
+
+    @property
+    def py3_minimal_cuda_91_base_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.1')]")
+
+    @property
+    def py3_minimal_cuda_92_base_button(self):
+        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.2')]")
+
 
 class EnvironmentElements(UiElement):
     @property

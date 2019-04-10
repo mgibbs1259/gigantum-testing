@@ -13,8 +13,6 @@ from testutils import elements
 from testutils import testutils
 
 
-
-# create project
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     Log in to Gigantum.
@@ -88,7 +86,6 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
     return unique_project_name
 
 
-# bases
 def add_py2_min_base(driver: selenium.webdriver):
     """
     Add a Python2 Minimal base.
@@ -169,7 +166,106 @@ def add_rtidy_base(driver: selenium.webdriver):
     r_base_elts.create_project_button.click()
 
 
-# environment
+def add_py3_min_cuda_10_base(driver: selenium.webdriver):
+    """
+    Add a Python3 Minimal CUDA 10.0 base.
+
+    Args:
+        driver
+    """
+    logging.info("Creating new project with Python3 Minimal CUDA 10.0 base")
+    py3_base_elts = elements.AddProjectBaseElements(driver)
+    try:
+        py3_base_elts.py3_tab_button.click()
+    except:
+        pass
+    while not py3_base_elts.py3_minimal_cuda_10_base_button.is_displayed():
+        logging.info("Searching for Python3 Minimal CUDA 10.0 base...")
+        py3_base_elts.arrow_button.click()
+    py3_base_elts.py3_minimal_cuda_10_base_button.click()
+    py3_base_elts.create_project_button.click()
+
+
+def add_py3_min_cuda_8_base(driver: selenium.webdriver):
+    """
+    Add a Python3 Minimal CUDA 8.0 base.
+
+    Args:
+        driver
+    """
+    logging.info("Creating new project with Python3 Minimal CUDA 8.0 base")
+    py3_base_elts = elements.AddProjectBaseElements(driver)
+    try:
+        py3_base_elts.py3_tab_button.click()
+    except:
+        pass
+    while not py3_base_elts.py3_minimal_cuda_8_base_button.is_displayed():
+        logging.info("Searching for Python3 Minimal CUDA 8.0 base...")
+        py3_base_elts.arrow_button.click()
+    py3_base_elts.py3_minimal_cuda_8_base_button.click()
+    py3_base_elts.create_project_button.click()
+
+
+def add_py3_min_cuda_90_base(driver: selenium.webdriver):
+    """
+    Add a Python3 Minimal CUDA 10.0 base.
+
+    Args:
+        driver
+    """
+    logging.info("Creating new project with Python3 Minimal CUDA 9.0 base")
+    py3_base_elts = elements.AddProjectBaseElements(driver)
+    try:
+        py3_base_elts.py3_tab_button.click()
+    except:
+        pass
+    while not py3_base_elts.py3_minimal_cuda_90_base_button.is_displayed():
+        logging.info("Searching for Python3 Minimal CUDA 9.0 base...")
+        py3_base_elts.arrow_button.click()
+    py3_base_elts.py3_minimal_cuda_90_base_button.click()
+    py3_base_elts.create_project_button.click()
+
+
+def add_py3_min_cuda_91_base(driver: selenium.webdriver):
+    """
+    Add a Python3 Minimal CUDA 9.1 base.
+
+    Args:
+        driver
+    """
+    logging.info("Creating new project with Python3 Minimal CUDA 9.1 base")
+    py3_base_elts = elements.AddProjectBaseElements(driver)
+    try:
+        py3_base_elts.py3_tab_button.click()
+    except:
+        pass
+    while not py3_base_elts.py3_minimal_cuda_91_base_button.is_displayed():
+        logging.info("Searching for Python3 Minimal CUDA 9.1 base...")
+        py3_base_elts.arrow_button.click()
+    py3_base_elts.py3_minimal_cuda_91_base_button.click()
+    py3_base_elts.create_project_button.click()
+
+
+def add_py3_min_cuda_92_base(driver: selenium.webdriver):
+    """
+    Add a Python3 Minimal CUDA 9.2 base.
+
+    Args:
+        driver
+    """
+    logging.info("Creating new project with Python3 Minimal CUDA 9.2 base")
+    py3_base_elts = elements.AddProjectBaseElements(driver)
+    try:
+        py3_base_elts.py3_tab_button.click()
+    except:
+        pass
+    while not py3_base_elts.py3_minimal_cuda_92_base_button.is_displayed():
+        logging.info("Searching for Python3 Minimal CUDA 9.2 base...")
+        py3_base_elts.arrow_button.click()
+    py3_base_elts.py3_minimal_cuda_92_base_button.click()
+    py3_base_elts.create_project_button.click()
+
+
 def add_pip_package(driver: selenium.webdriver):
     """
     Add pip packages.

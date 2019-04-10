@@ -34,7 +34,7 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Creating a new branch")
     branch_elts = testutils.BranchElements(driver)
     branch_elts.create_branch_button.click()
-    branch_elts.branch_name_input.send_keys("branch")
+    branch_elts.branch_name_input.send_keys("my-test-branch")
     branch_elts.create_button.click()
     time.sleep(5)
     logging.info("Checking that the new branch is local only")

@@ -13,7 +13,7 @@ jobs:
             wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
             sudo dpkg -i google-chrome*.deb && \
             sudo apt-get -y install -f && \
-            sudo apt-get -y install xvfb && \
+            sudo apt-get install xvfb && \
             sudo rm -f chromedriver chromedriver_linux64.zip ~/bin/chromedriver /usr/bin/chromedriver /usr/local/bin/chromedriver && \
             wget https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip && \
             unzip chromedriver_linux64.zip && chmod +x chromedriver && \
@@ -33,6 +33,7 @@ jobs:
       - run:
           name: Activate virtual env and run Gigantum
           command: |
+            sudo mv .circleci/Arial.ttf /usr/share/fonts
             docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
             python3.6 -m venv test-env && \
             source test-env/bin/activate && \
@@ -41,5 +42,5 @@ jobs:
             gigantum install -e && \
             gigantum start -e && \
             sleep 10 && \
-            python3 driver.py
+            python3 driver.py 
 

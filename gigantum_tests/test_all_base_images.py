@@ -28,7 +28,7 @@ def run_base(driver: selenium.webdriver, add_base):
     time.sleep(2)
     testutils.remove_guide(driver)
     testutils.create_project_without_base(driver)
-    time.sleep(4)
+    time.sleep(2)
     # Add base
     add_base(driver)
     # Wait until container is stopped

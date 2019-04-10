@@ -112,6 +112,9 @@ def run_playbook(path, headless, firefox):
             render_log(t.__name__, fail_type)
         finally:
             driver.quit()
+            stop_project_containers(docker_client)
+            logging.info("Cleaning up...")
+            testutils.cleanup()
             time.sleep(1)
 
     return test_collect

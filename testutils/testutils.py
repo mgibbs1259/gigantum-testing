@@ -116,11 +116,20 @@ def cleanup():
         except Exception as e:
             logging.info(f"Error deleting {project_path}: {e}")
 
-    dataset_paths = glob.glob(f'{workdir}/*/labbooks/selenium-dataset-*')
+    dataset_paths = glob.glob(f'{workdir}/*/datasets/selenium-dataset-*')
     for dataset_path in dataset_paths:
         try:
             shutil.rmtree(dataset_path)
-            logging.info(f'  Deleted project path {dataset_path}')
+            logging.info(f'  Deleted dataset path {dataset_path}')
         except Exception as e:
             logging.info(f"Error deleting {dataset_path}: {e}")
+
+    cache_root = os.path.join(os.environ['GIGANTUM_HOME'], '.labmanager', 'datasets')
+    ds_cache_paths = glob.glob(f'{cache_root}/*/*/selenium-dataset-*')
+    for ds_cache_path in ds_cache_paths:
+        try:
+            shutil.rmtree(ds_cache_path)
+            logging.info(f'  Deleted dataset path {ds_cache_path}')
+        except Exception as e:
+            logging.info(f"Error deleting {ds_cache_path}: {e}")
 

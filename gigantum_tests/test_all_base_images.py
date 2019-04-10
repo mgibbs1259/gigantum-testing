@@ -11,7 +11,33 @@ from selenium.webdriver.support import expected_conditions as EC
 # Local packages
 import testutils
 
+
 logging.basicConfig(level=logging.INFO)
+
+
+def run_base(driver: selenium.webdriver, add_base):
+    """
+    Create a project with a specified base.
+
+    Args:
+        driver
+        add_base_image: add base image method from actions.py
+    """
+    # Project set up
+    testutils.log_in(driver)
+    time.sleep(2)
+    testutils.remove_guide(driver)
+    testutils.create_project_without_base(driver)
+    time.sleep(4)
+    # Add base
+    add_base(driver)
+    # Wait until container status is stopped
+    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+    # Assert container status is stopped
+    container_elts = testutils.ContainerStatus(driver)
+    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+
 
 def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):
     """
@@ -20,20 +46,8 @@ def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 2 minimal base
-    testutils.add_py2_min_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py2_min_base)
+
 
 
 def test_py3_min_base(driver: selenium.webdriver, *args, **kwargs):
@@ -43,20 +57,7 @@ def test_py3_min_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_base)
 
 
 def test_py3_ds_base(driver: selenium.webdriver, *args, **kwargs):
@@ -66,20 +67,7 @@ def test_py3_ds_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 data science base
-    testutils.add_py3_ds_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_ds_base)
 
 
 def test_rtidy_base(driver: selenium.webdriver, *args, **kwargs):
@@ -89,20 +77,7 @@ def test_rtidy_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # R tidyverse base
-    testutils.add_rtidy_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_rtidy_base)
 
 
 def test_py3_min_cuda_10_base(driver: selenium.webdriver, *args, **kwargs):
@@ -112,20 +87,7 @@ def test_py3_min_cuda_10_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_cuda_10_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_cuda_10_base)
 
 
 def test_py3_min_cuda_8_base(driver: selenium.webdriver, *args, **kwargs):
@@ -135,20 +97,7 @@ def test_py3_min_cuda_8_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_cuda_8_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_cuda_8_base)
 
 
 def test_py3_min_cuda_90_base(driver: selenium.webdriver, *args, **kwargs):
@@ -158,20 +107,7 @@ def test_py3_min_cuda_90_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_cuda_90_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_cuda_90_base)
 
 
 def test_py3_min_cuda_91_base(driver: selenium.webdriver, *args, **kwargs):
@@ -181,20 +117,7 @@ def test_py3_min_cuda_91_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_cuda_91_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_cuda_91_base)
 
 
 def test_py3_min_cuda_92_base(driver: selenium.webdriver, *args, **kwargs):
@@ -204,17 +127,5 @@ def test_py3_min_cuda_92_base(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(4)
-    # python 3 minimal base
-    testutils.add_py3_min_cuda_92_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # assert container status is stopped
-    container_elts = testutils.ContainerStatus(driver)
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    run_base(driver, testutils.add_py3_min_cuda_92_base)
+

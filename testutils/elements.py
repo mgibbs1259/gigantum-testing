@@ -260,6 +260,10 @@ class PublishProjectElements(UiElement):
         return self.driver.find_element_by_css_selector(".VisibilityModal__buttons>button")
 
     @property
+    def project_page_tab(self):
+        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
+
+    @property
     def cloud_tab(self):
         return self.driver.find_element_by_css_selector(".Labbooks__nav-item--cloud")
 
@@ -284,6 +288,22 @@ class PublishProjectElements(UiElement):
         return self.driver.find_element_by_css_selector(".ButtonLoader")
 
     @property
+
+    def publish_continue_button(self):
+        return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
+
+    @property
+    def publish_private_project_button(self):
+        return self.driver.find_element_by_xpath("//label[@for='project_private']")
+
+    @property
+    def publish_private_dataset_button(self):
+        return self.driver.find_element_by_xpath("//label[@class='PublishDatasetsModal__private-label']")
+
+    @property
+    def publish_all_button(self):
+        return self.driver.find_element_by_xpath("//button[contains(text(), 'Publish All')]")
+
     def collaborators_button(self):
         return self.driver.find_element_by_css_selector(".Collaborators__btn")
 

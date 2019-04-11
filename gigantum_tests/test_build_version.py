@@ -8,8 +8,6 @@ import json
 import selenium
 from selenium.webdriver.common.by import By
 
-# Local imports
-import testutils
 
 def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     """

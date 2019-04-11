@@ -170,17 +170,20 @@ def add_pip_package(driver: selenium.webdriver):
     logging.info("Adding pip packages")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
-    time.sleep(3)
+    time.sleep(2)
     driver.execute_script("window.scrollBy(0, -400);")
     driver.execute_script("window.scrollBy(0, 400);")
     environment.add_packages_button.click()
     pip_list = ["pandas", "numpy", "matplotlib"]
     for pip_pack in pip_list:
         environment.package_name_input.send_keys(pip_pack)
-        time.sleep(3)
+        time.sleep(2)
         environment.add_button.click()
-        time.sleep(3)
+        time.sleep(2)
     environment.install_packages_button.click()
+    time.sleep(5)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 def add_conda3_package(driver: selenium.webdriver):
@@ -278,6 +281,24 @@ def delete_project(driver: selenium.webdriver, project_name):
     time.sleep(2)
     del_proj_elts.delete_text_input.send_keys(project_name)
     del_proj_elts.delete_project_button.click()
+    time.sleep(5)
+
+
+def create_jupyter_notebook(driver: selenium.webdriver):
+    """
+    Open JupyterLab.
+
+    Args:
+        driver
+    """
+    logging.info("Switching to JupyterLab")
+    jupyterlab_elts = elements.JupyterLabElements(driver)
+    jupyterlab_elts.jupyterlab_button.click()
+    time.sleep(10)
+    window_handles = driver.window_handles
+    driver.switch_to.window(window_handles[1])
+    time.sleep(5)
+    jupyterlab_elts.jupyter_notebook_button.click()
     time.sleep(5)
 
 

@@ -27,7 +27,6 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Getting selenium edge build version")
     driver.get("http://localhost:10000/api/ping/")
     if "chrome" in driver.name:
-
         selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
     else:
         driver.find_element_by_css_selector("#rawdata-tab").click()

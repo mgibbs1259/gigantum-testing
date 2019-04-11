@@ -132,6 +132,10 @@ class EnvironmentElements(UiElement):
         return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
 
     @property
+    def package_info_table(self):
+        return self.driver.find_element_by_css_selector(".PackageDependencies__table")
+
+    @property
     def pip_tab_button(self):
         return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
 
@@ -327,3 +331,24 @@ class DeleteProjectElements(UiElement):
     def delete_project_button(self):
         return self.driver.find_element_by_css_selector(".DeleteLabbook>.ButtonLoader")
 
+
+class JupyterLabElements(UiElement):
+    @property
+    def jupyterlab_button(self):
+        return self.driver.find_element_by_css_selector(".DevTools__btn--launch")
+
+    @property
+    def jupyter_notebook_button(self):
+        return self.driver.find_element_by_css_selector(".jp-LauncherCard-label")
+
+    @property
+    def code_input(self):
+        return self.driver.find_element_by_css_selector(".CodeMirror-line")
+
+    @property
+    def run_button(self):
+        return self.driver.find_element_by_css_selector(".jp-RunIcon")
+
+    @property
+    def code_output(self):
+        return self.driver.find_element_by_css_selector()

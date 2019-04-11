@@ -13,56 +13,46 @@ from testutils import elements
 from testutils import testutils
 
 
-def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
+def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
-    Log in to Gigantum.
+    Log in to Gigantum and remove 'Got it!', guide, and helper.
 
     Args:
         driver
         user_index: An offset into credentials.txt.
 
     Returns:
-
-        Username of user that just logged in.
+        Username of user that logged in.
     """
     driver.get("http://localhost:10000/projects/local#")
-    auth0_elts = elements.Auth0LoginElements(driver)
-    auth0_elts.login_green_button.click()
+    login_elts = elements.LoginElements(driver)
+    login_elts.login_green_button.click()
     time.sleep(2)
     try:
-        if auth0_elts.auth0_lock_button:
+        if login_elts.auth0_lock_button:
             logging.info("Clicking 'Not your account?'")
-            auth0_elts.not_your_account_button.click()
+            login_elts.not_your_account_button.click()
     except:
         pass
-    time.sleep(2)
     username, password = testutils.load_credentials(user_index=user_index)
     logging.info(f"Logging in as {username}")
-    auth0_elts.username_input.click()
-    auth0_elts.username_input.send_keys(username)
-    auth0_elts.password_input.click()
-    auth0_elts.password_input.send_keys(password)
+    login_elts.username_input.click()
+    login_elts.username_input.send_keys(username)
+    login_elts.password_input.click()
+    login_elts.password_input.send_keys(password)
     try:
-        auth0_elts.login_grey_button.click()
+        login_elts.login_grey_button.click()
     except:
         pass
-
-    return username.strip()
-
-
-def remove_guide(driver: selenium.webdriver):
-    """
-    Remove'Got it!', guide, and helper.
-
-    Args:
-        driver
-    """
+    time.sleep(2)
     logging.info("Getting rid of 'Got it!'")
     guide_elts = elements.GuideElements(driver)
     guide_elts.got_it_button.click()
     logging.info("Turning off guide and helper")
     guide_elts.guide_button.click()
     guide_elts.helper_button.click()
+
+    return username.strip()
 
 
 def create_project_without_base(driver: selenium.webdriver) -> str:
@@ -73,7 +63,7 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
         driver
     
     Returns:
-        Name of project that was just created.
+        Name of project that was created.
     """
     unique_project_name = testutils.unique_project_name()
     logging.info(f"Creating a new project: {unique_project_name}")
@@ -84,10 +74,10 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
     project_elts.project_description_input.click()
     project_elts.project_description_input.send_keys(testutils.unique_project_description())
     project_elts.project_continue_button.click()
+
     return unique_project_name
 
 
-# bases
 def add_py2_min_base(driver: selenium.webdriver):
     """
     Add a Python2 Minimal base.
@@ -126,6 +116,8 @@ def add_py3_min_base(driver: selenium.webdriver):
         py3_base_elts.arrow_button.click()
     py3_base_elts.py3_minimal_base_button.click()
     py3_base_elts.create_project_button.click()
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 def add_py3_ds_base(driver: selenium.webdriver):
@@ -168,7 +160,6 @@ def add_rtidy_base(driver: selenium.webdriver):
     r_base_elts.create_project_button.click()
 
 
-# environment
 def add_pip_package(driver: selenium.webdriver):
     """
     Add pip packages.
@@ -268,6 +259,26 @@ def add_invalid_custom_docker(driver: selenium.webdriver):
     environment.custom_docker_text_input.send_keys(testutils.invalid_custom_docker_instruction())
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
+
+
+def delete_project(driver: selenium.webdriver, project_name):
+    """
+    Delete a project.
+
+    Args:
+        driver
+        project_name (str): Name of project to be deleted.
+    """
+    logging.info("Navigating to 'Delete Project'")
+    del_proj_elts = elements.DeleteProjectElements(driver)
+    del_proj_elts.actions_button.click()
+    time.sleep(2)
+    logging.info(f"Deleting project {project_name}")
+    del_proj_elts.actions_delete_button.click()
+    time.sleep(2)
+    del_proj_elts.delete_text_input.send_keys(project_name)
+    del_proj_elts.delete_project_button.click()
+    time.sleep(5)
 
 
 def create_dataset(driver: selenium.webdriver) -> str:

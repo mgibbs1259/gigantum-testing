@@ -5,7 +5,7 @@ class UiElement(object):
         self.driver = driver
 
 
-class Auth0LoginElements(UiElement):
+class LoginElements(UiElement):
     @property
     def login_green_button(self):
         return self.driver.find_element_by_css_selector(".Login__button")
@@ -310,4 +310,20 @@ class InputDataElements(UiElement):
         return self.driver.find_element_by_css_selector("#inputData")
 
 
+class DeleteProjectElements(UiElement):
+    @property
+    def actions_button(self):
+        return self.driver.find_element_by_css_selector(".ActionsMenu__btn")
+
+    @property
+    def actions_delete_button(self):
+        return self.driver.find_element_by_css_selector(".ActionsMenu__item--delete")
+
+    @property
+    def delete_text_input(self):
+        return self.driver.find_element_by_css_selector("#deleteInput")
+
+    @property
+    def delete_project_button(self):
+        return self.driver.find_element_by_css_selector(".DeleteLabbook>.ButtonLoader")
 

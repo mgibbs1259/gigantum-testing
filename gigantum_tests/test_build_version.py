@@ -16,12 +16,14 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
+    # Get requests edge build version
     logging.info("Getting requests edge build version")
     r = requests.get("http://localhost:10000/api/ping")
     if r.status_code != 200:
         logging.error("Gigantum is not found at localhost:10000")
         sys.exit(1)
     requests_edge_build_version = json.loads(r.text)
+    # Get selenium edge build version
     logging.info("Getting selenium edge build version")
     driver.get("http://localhost:10000/api/ping/")
     selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)

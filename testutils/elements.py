@@ -65,7 +65,7 @@ class AddProjectElements(UiElement):
 
 class AddProjectBaseElements(UiElement):
     @property
-    def arrow_button(self):
+    def scroll_button(self):
         return self.driver.find_element_by_css_selector(".slick-arrow slick-next")
 
     @property
@@ -73,57 +73,41 @@ class AddProjectBaseElements(UiElement):
         return self.driver.find_element_by_css_selector(".ButtonLoader ")
 
     @property
-    def projects_page_button(self):
-        return self.driver.find_element_by_css_selector(".SideBar__icon")
-
-    @property
-    def py2_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'python2')]")
-
-    @property
-    def py2_minimal_base_button(self):
+    def py2_min_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python2 Minimal')]")
 
     @property
-    def py3_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'python3')]")
-
-    @property
-    def py3_minimal_base_button(self):
+    def py3_min_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal')]")
 
     @property
-    def py3_data_science_base_button(self):
+    def py3_ds_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Data Science Quick-Start')]")
 
     @property
-    def r_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'R')]")
-
-    @property
-    def r_tidyverse_base_button(self):
-        return self.driver.find_element_by_xpath(
-            "//h6[contains(text(), 'R Tidyverse (+ Python3) in Jupyter Quickstart')]")
-
-    @property
-    def py3_minimal_cuda_10_base_button(self):
+    def py3_min_cuda_10_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 10.0')]")
 
     @property
-    def py3_minimal_cuda_8_base_button(self):
+    def py3_min_cuda_8_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 8.0')]")
 
     @property
-    def py3_minimal_cuda_90_base_button(self):
+    def py3_min_cuda_90_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.0')]")
 
     @property
-    def py3_minimal_cuda_91_base_button(self):
+    def py3_min_cuda_91_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.1')]")
 
     @property
-    def py3_minimal_cuda_92_base_button(self):
+    def py3_min_cuda_92_base_button(self):
         return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal w/ CUDA 9.2')]")
+
+    @property
+    def r_tidy_base_button(self):
+        return self.driver.find_element_by_xpath(
+            "//h6[contains(text(), 'R Tidyverse (+ Python3) in Jupyter Quickstart')]")
 
 
 class EnvironmentElements(UiElement):

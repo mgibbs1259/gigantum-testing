@@ -93,16 +93,12 @@ def add_py2_min_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python2 Minimal base")
+    logging.info("Adding a Python2 Minimal base")
     py2_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py2_base_elts.py2_tab_button.click()
-    except:
-        pass
-    while not py2_base_elts.py2_minimal_base_button.is_displayed():
+    while not py2_base_elts.py2_min_base_button.is_displayed():
         logging.info("Searching for Python2 Minimal base...")
-        py2_base_elts.arrow_button.click()
-    py2_base_elts.py2_minimal_base_button.click()
+        py2_base_elts.scroll_button.click()
+    py2_base_elts.py2_min_base_button.click()
     py2_base_elts.create_project_button.click()
 
 
@@ -113,16 +109,12 @@ def add_py3_min_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal base")
+    logging.info("Adding a Python3 Minimal base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_base_button.is_displayed():
+    while not py3_base_elts.py3_min_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -133,16 +125,12 @@ def add_py3_ds_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Data Science Quick-start base")
+    logging.info("Adding a Python3 Data Science Quick-start base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_base_button.is_displayed():
+    while not py3_base_elts.py3_min_base_button.is_displayed():
         logging.info("Searching for Python3 Data Science Quick-start base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_data_science_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_ds_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -153,16 +141,12 @@ def add_rtidy_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with R Tidyverse base")
+    logging.info("Adding a R Tidyverse base")
     r_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        r_base_elts.r_tab_button.click()
-    except:
-        pass
-    while not r_base_elts.r_tidyverse_base_button.is_displayed():
+    while not r_base_elts.r_tidy_base_button.is_displayed():
         logging.info("Searching for R Tidyverse base...")
-        r_base_elts.arrow_button.click()
-    r_base_elts.r_tidyverse_base_button.click()
+        r_base_elts.scroll_button.click()
+    r_base_elts.r_tidy_base_button.click()
     r_base_elts.create_project_button.click()
 
 
@@ -173,16 +157,12 @@ def add_py3_min_cuda_10_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal CUDA 10.0 base")
+    logging.info("Adding a Python3 Minimal CUDA 10.0 base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_cuda_10_base_button.is_displayed():
+    while not py3_base_elts.py3_min_cuda_10_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal CUDA 10.0 base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_cuda_10_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_cuda_10_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -193,16 +173,12 @@ def add_py3_min_cuda_8_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal CUDA 8.0 base")
+    logging.info("Adding a Python3 Minimal CUDA 8.0 base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_cuda_8_base_button.is_displayed():
+    while not py3_base_elts.py3_min_cuda_8_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal CUDA 8.0 base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_cuda_8_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_cuda_8_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -213,16 +189,12 @@ def add_py3_min_cuda_90_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal CUDA 9.0 base")
+    logging.info("Adding a Python3 Minimal CUDA 9.0 base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_cuda_90_base_button.is_displayed():
+    while not py3_base_elts.py3_min_cuda_90_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal CUDA 9.0 base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_cuda_90_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_cuda_90_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -233,16 +205,12 @@ def add_py3_min_cuda_91_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal CUDA 9.1 base")
+    logging.info("Adding a Python3 Minimal CUDA 9.1 base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_cuda_91_base_button.is_displayed():
+    while not py3_base_elts.py3_min_cuda_91_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal CUDA 9.1 base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_cuda_91_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_cuda_91_base_button.click()
     py3_base_elts.create_project_button.click()
 
 
@@ -253,16 +221,12 @@ def add_py3_min_cuda_92_base(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Creating new project with Python3 Minimal CUDA 9.2 base")
+    logging.info("Adding a Python3 Minimal CUDA 9.2 base")
     py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_cuda_92_base_button.is_displayed():
+    while not py3_base_elts.py3_min_cuda_92_base_button.is_displayed():
         logging.info("Searching for Python3 Minimal CUDA 9.2 base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_cuda_92_base_button.click()
+        py3_base_elts.scroll_button.click()
+    py3_base_elts.py3_min_cuda_92_base_button.click()
     py3_base_elts.create_project_button.click()
 
 

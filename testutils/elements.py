@@ -351,4 +351,5 @@ class JupyterLabElements(UiElement):
 
     @property
     def code_output(self):
-        return self.driver.find_element_by_css_selector()
+        return self.driver.find_element_by_css_selector(".jp-OutputArea-output > pre")
+

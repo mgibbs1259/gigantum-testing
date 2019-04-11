@@ -13,18 +13,17 @@ from testutils import elements
 from testutils import testutils
 
 
-
-# create project
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     Log in to Gigantum.
 
     Args:
         driver
-        user_index: an offset into credentials.txt
+        user_index: An offset into credentials.txt.
 
     Returns:
-        Username of user just logged in
+
+        Username of user that just logged in.
     """
     driver.get("http://localhost:10000/projects/local#")
     auth0_elts = elements.Auth0LoginElements(driver)
@@ -74,7 +73,7 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
         driver
     
     Returns:
-        Name of project just created
+        Name of project that was just created.
     """
     unique_project_name = testutils.unique_project_name()
     logging.info(f"Creating a new project: {unique_project_name}")

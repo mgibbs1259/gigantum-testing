@@ -134,22 +134,6 @@ def add_py3_ds_base(driver: selenium.webdriver):
     py3_base_elts.create_project_button.click()
 
 
-def add_rtidy_base(driver: selenium.webdriver):
-    """
-    Add a R Tidyverse base.
-
-    Args:
-        driver
-    """
-    logging.info("Adding a R Tidyverse base")
-    r_base_elts = elements.AddProjectBaseElements(driver)
-    while not r_base_elts.r_tidy_base_button.is_displayed():
-        logging.info("Searching for R Tidyverse base...")
-        r_base_elts.scroll_button.click()
-    r_base_elts.r_tidy_base_button.click()
-    r_base_elts.create_project_button.click()
-
-
 def add_py3_min_cuda_10_base(driver: selenium.webdriver):
     """
     Add a Python3 Minimal CUDA 10.0 base.
@@ -228,6 +212,22 @@ def add_py3_min_cuda_92_base(driver: selenium.webdriver):
         py3_base_elts.scroll_button.click()
     py3_base_elts.py3_min_cuda_92_base_button.click()
     py3_base_elts.create_project_button.click()
+
+
+def add_rtidy_base(driver: selenium.webdriver):
+    """
+    Add a R Tidyverse base.
+
+    Args:
+        driver
+    """
+    logging.info("Adding a R Tidyverse base")
+    r_base_elts = elements.AddProjectBaseElements(driver)
+    while not r_base_elts.r_tidy_base_button.is_displayed():
+        logging.info("Searching for R Tidyverse base...")
+        r_base_elts.scroll_button.click()
+    r_base_elts.r_tidy_base_button.click()
+    r_base_elts.create_project_button.click()
 
 
 def add_pip_package(driver: selenium.webdriver):

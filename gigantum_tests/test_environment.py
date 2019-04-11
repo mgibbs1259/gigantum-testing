@@ -5,6 +5,8 @@ import time
 # Library imports
 import selenium
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
 # Local packages
@@ -66,8 +68,11 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     testutils.add_py3_min_base(driver)
     # Add a valid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
-    assert driver.find_element_by_css_selector(".flex>.Stopped").is_displayed(), "Expected stopped container status"
+    container_status = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
+    assert container_status, "Expected stopped container status"
     footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
     assert "Successfully tagged" in footer_message_text, "Expected 'Successfully tagged' in footer message"
 
@@ -83,10 +88,13 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     testutils.log_in_remove_guide(driver)
     testutils.create_project_without_base(driver)
     testutils.add_py3_min_base(driver)
-    # Add a valid custom docker instruction
-    testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
+    # Add an invalid custom docker instruction
+    testutils.add_custom_docker_instructions(driver, testutils.invalid_custom_docker_instruction())
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Rebuild")))
 
-    assert driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed(), "Expected rebuild container status"
+    container_status = driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed()
+    assert container_status, "Expected rebuild container status"
     footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
     assert "Project failed to build" in footer_message_text, "Expected 'Project failed to build' in footer message"
 

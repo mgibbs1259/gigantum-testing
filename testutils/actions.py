@@ -246,8 +246,6 @@ def add_custom_docker_instructions(driver: selenium.webdriver, docker_instructio
     environment.custom_docker_text_input.send_keys(docker_instruction)
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
-    wait = WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 def delete_project(driver: selenium.webdriver, project_name):

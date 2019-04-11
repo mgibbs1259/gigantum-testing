@@ -66,7 +66,7 @@ class AddProjectElements(UiElement):
 class AddProjectBaseElements(UiElement):
     @property
     def arrow_button(self):
-        return self.driver.find_element_by_css_selector(".slick-arrow slick-next")
+        return self.driver.find_element_by_css_selector(".slick-arrow")
 
     @property
     def create_project_button(self):

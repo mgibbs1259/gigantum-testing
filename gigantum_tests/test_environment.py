@@ -20,6 +20,7 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
+    # Create project
     # project set up
     testutils.log_in(driver)
     time.sleep(2)

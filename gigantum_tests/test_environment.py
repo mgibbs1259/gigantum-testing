@@ -68,7 +68,7 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
 
     assert driver.find_element_by_css_selector(".flex>.Stopped").is_displayed(), "Expected stopped container status"
-    footer_message__text = driver.find_element_by_css_selector(".Footer__message-title").text
+    footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
     assert "Successfully tagged" in footer_message_text, "Expected 'Successfully tagged' in footer message"
 
 

@@ -24,6 +24,17 @@ $ brew install chromedriver
 $ brew install geckodriver
 ```
 
+#### Starting Gigantum "Client-Under_test"
+
+Before running the harness, ensure the Gigantum client is installed and running
+
+```
+# Testing the stable build
+$ pip3 install gigantum && gigantum install && gigantum start
+
+# Testing the "edge" build
+$ pip3 install gigantum && gigantum install -e && gigantum start -e
+```
 
 ## Usage
 
@@ -31,6 +42,10 @@ To run ALL tests, using regular Chrome driver.
 Note, this may take a while.
 
 ```
+# Put a valid username and password into the untracked credentials.txt
+$ echo -e "my_username\nmy_password" > credentials.txt
+
+# Now, run the driver!
 $ python3 driver.py
 ```
 

@@ -1,16 +1,13 @@
-# Builtin imports
 import logging
 import time
 import os
 
-# Library imports
 import docker
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 import testutils
 
 
@@ -40,7 +37,7 @@ def test_delete_project(driver: selenium.webdriver, *args, **kwargs):
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username,
                                 username, 'labbooks', project_name)
     assert os.path.exists(project_path), \
-           f"Project {project_name} should exist at {project_path}"
+        f"Project {project_name} should exist at {project_path}"
     logging.info("Finding project Docker image")
     dc = docker.from_env()
     project_img = []
@@ -73,6 +70,4 @@ def test_delete_project(driver: selenium.webdriver, *args, **kwargs):
                 logging.error(f'Docker tag {t} still exists for deleted project {project_name}')
                 project_img.append(img)
     assert len(project_img) == 0, \
-           f"Docker image for {project_path}: {project_img[0]} still exists"
-
-
+        f"Docker image for {project_path}: {project_img[0]} still exists"

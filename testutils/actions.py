@@ -55,6 +55,27 @@ def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     return username.strip()
 
 
+def import_project_via_project_link(driver: selenium.webdriver, project_link):
+    """
+    Import a project via project link.
+
+    Args:
+        driver
+        project_link (str): Link of project to be imported.
+    """
+    logging.info(f"Importing featured public project: {project_link}")
+    import_project_elts = elements.ImportProjectElements(driver)
+    import_project_elts.import_existing_button.click()
+    time.sleep(2)
+    import_project_elts.project_url_input.send_keys(project_link)
+    time.sleep(2)
+    import_project_elts.import_button.click()
+    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#overview")))
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+    logging.info(f"Featured public project {project_link} was imported successfully")
+
+
 def create_project_without_base(driver: selenium.webdriver) -> str:
     """
     Create a project without a base.

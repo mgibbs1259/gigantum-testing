@@ -46,7 +46,6 @@ def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Importing tidyverse and creating a basic graph")
     code_input = driver.find_element_by_css_selector(".CodeMirror-line")
     actions = ActionChains(driver)
-    logging.info("Import tidyverse")
     actions.move_to_element(code_input).click(code_input).send_keys('library(tidyverse)\n'
                                                                     "attach(mtcars)\n"
                                                                     "plot(wt, mpg)\n"

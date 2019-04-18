@@ -49,6 +49,11 @@ def unique_project_description():
     return ''.join([str(uuid.uuid4())[:6] for num in range(30)])
 
 
+def unique_branch_name(prefix: str = "test-branch"):
+    """ Return a universally-unique project description """
+    return f'{prefix}-{uuid.uuid4().hex[:8]}'
+
+
 def load_credentials(path: str = 'credentials.txt', user_index: int = 0):
     """ Return tuple of username and password """
     assert os.path.exists(path), f"Specificy login credentials in {path}"

@@ -217,15 +217,15 @@ def add_conda3_package(driver: selenium.webdriver):
     logging.info("Adding conda3 package")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
-    time.sleep(3)
+    time.sleep(2)
     environment.conda3_tab_button.click()
     driver.execute_script("window.scrollBy(0, -400);")
     driver.execute_script("window.scrollBy(0, 400);")
     environment.add_packages_button.click()
     environment.package_name_input.send_keys("pyflakes")
-    time.sleep(3)
+    time.sleep(2)
     environment.add_button.click()
-    time.sleep(3)
+    time.sleep(2)
     environment.install_packages_button.click()
 
 
@@ -239,15 +239,15 @@ def add_apt_package(driver: selenium.webdriver):
     logging.info("Adding apt packages")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
-    time.sleep(3)
+    time.sleep(2)
     environment.apt_tab_button.click()
     driver.execute_script("window.scrollBy(0, -400);")
     driver.execute_script("window.scrollBy(0, 400);")
     environment.add_packages_button.click()
     environment.package_name_input.send_keys("apache2")
-    time.sleep(3)
+    time.sleep(2)
     environment.add_button.click()
-    time.sleep(3)
+    time.sleep(2)
     environment.install_packages_button.click()
 
 
@@ -269,29 +269,27 @@ def add_custom_docker_instructions(driver: selenium.webdriver, docker_instructio
     environment.custom_docker_save_button.click()
 
 
-def delete_project(driver: selenium.webdriver, project_name):
+def create_local_branch(driver: selenium.webdriver):
     """
-    Delete a project.
+    Create a local branch.
 
     Args:
         driver
-        project_name (str): Name of project to be deleted.
     """
-    logging.info("Navigating to 'Delete Project'")
-    del_proj_elts = elements.DeleteProjectElements(driver)
-    del_proj_elts.actions_button.click()
-    time.sleep(2)
-    logging.info(f"Deleting project {project_name}")
-    del_proj_elts.actions_delete_button.click()
-    time.sleep(2)
-    del_proj_elts.delete_text_input.send_keys(project_name)
-    del_proj_elts.delete_project_button.click()
+    branch_elts = elements.BranchElements(driver)
+    branch_elts.create_branch_button.click()
+    branch_name = testutils.unique_branch_name()
+    logging.info(f"Creating local branch {branch_name}")
+    branch_elts.branch_name_input.send_keys(branch_name)
+    branch_elts.create_button.click()
     time.sleep(5)
+
+    return branch_name
 
 
 def create_jupyter_notebook(driver: selenium.webdriver):
     """
-    Open JupyterLab.
+    Open JupyterLab and create a Jupyter notebook.
 
     Args:
         driver
@@ -351,6 +349,26 @@ def publish_dataset(driver: selenium.webdriver):
     dataset_elts.dataset_cloud_page.click()
     wait = WebDriverWait(driver, 200)
     wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".VisibilityModal__buttons")))
+
+
+def delete_project(driver: selenium.webdriver, project_name):
+    """
+    Delete a project.
+
+    Args:
+        driver
+        project_name (str): Name of project to be deleted.
+    """
+    logging.info("Navigating to 'Delete Project'")
+    del_proj_elts = elements.DeleteProjectElements(driver)
+    del_proj_elts.actions_button.click()
+    time.sleep(2)
+    logging.info(f"Deleting project {project_name}")
+    del_proj_elts.actions_delete_button.click()
+    time.sleep(2)
+    del_proj_elts.delete_text_input.send_keys(project_name)
+    del_proj_elts.delete_project_button.click()
+    time.sleep(5)
 
 
 def log_out(driver: selenium.webdriver):

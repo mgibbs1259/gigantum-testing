@@ -78,7 +78,7 @@ def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, 
     logging.info("Navigating to Data")
     driver.find_element_by_css_selector("#data").click()
     logging.info("Dragging and dropping file into Data")
-    testutils.file_drag_drop(driver)
+    testutils.file_drag_drop(driver, project=False)
     time.sleep(3)
 
     data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text

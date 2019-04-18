@@ -5,24 +5,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Chrome and ChromeDriver
-          command: |
-            sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt-get update && \
-            sudo apt-get -y install python3 python3.6 python3.6-venv && \
-            sudo apt-get -y install libxss1 libappindicator1 libindicator7 libappindicator3-1 && \
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-            sudo dpkg -i google-chrome*.deb && \
-            sudo apt-get -y install -f && \
-            sudo apt-get install xvfb && \
-            sudo rm -f chromedriver chromedriver_linux64.zip ~/bin/chromedriver /usr/bin/chromedriver /usr/local/bin/chromedriver && \
-            wget https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip && \
-            unzip chromedriver_linux64.zip && chmod +x chromedriver && \
-            sudo mv -f chromedriver /usr/local/share/chromedriver && \
-            sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver && \
-            sudo ln -s /usr/local/share/chromedriver /usr/bin/chromedriver && \
-            chromedriver --version
-
-      - run:
           name: Set up credentials.txt for test user (circleci)
           command: |
             echo $TEST_USERNAME > credentials.txt
@@ -31,16 +13,19 @@ jobs:
             echo $COLLAB_PASSWORD >> credentials.txt
 
       - run:
-          name: Activate virtual env and run Gigantum
+          name: Run the setup and preparation script
           command: |
-            sudo mv .circleci/Arial.ttf /usr/share/fonts
-            docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD
-            python3.6 -m venv test-env && \
-            source test-env/bin/activate && \
-            pip install -r requirements.txt && \
-            pip install gigantum && \
-            gigantum install -e && \
-            gigantum start -e && \
-            sleep 10 && \
+            bash .circleci/ubuntu1404-install.sh
+
+      - run:
+          name: Run Tests
+          command: |
+            python3.6 -m venv test-env
+            source test-env/bin/activate
+            pip install -r requirements.txt
+            pip install gigantum
+            gigantum install -e
+            gigantum start -e
+            sleep 10
             python3 driver.py 
 

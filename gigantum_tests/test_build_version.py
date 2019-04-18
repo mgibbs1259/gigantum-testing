@@ -1,10 +1,8 @@
-# Builtin imports
 import logging
 import requests
 import sys
 import json
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 
@@ -34,4 +32,5 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
 
     assert requests_edge_build_version == selenium_edge_build_version, "requests edge build version does not match " \
                                                                        "selenium edge build version"
+
 

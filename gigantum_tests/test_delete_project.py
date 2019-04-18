@@ -1,13 +1,10 @@
-# Builtin imports
 import logging
 import os
 
-# Library imports
 import docker
 import selenium
 from selenium.webdriver.common.by import By
 
-# Local packages
 import testutils
 
 

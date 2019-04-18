@@ -1,16 +1,15 @@
-# Builtin imports
 import logging
 import time
+import os
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 from testutils import elements
 from testutils import testutils
+from .graphql import list_remote_projects, delete_remote_project
 
 
 def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
@@ -24,6 +23,7 @@ def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     Returns:
         Username of user that logged in.
     """
+    # Log in
     driver.get("http://localhost:10000/projects/local#")
     login_elts = elements.LoginElements(driver)
     login_elts.login_green_button.click()
@@ -45,12 +45,29 @@ def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     except:
         pass
     time.sleep(2)
+
+    # Set the ID and ACCESS TOKENS -- Used as headers for GraphQL mutations
+    access_token = driver.execute_script("return window.localStorage.getItem('access_token')")
+    id_token = driver.execute_script("return window.localStorage.getItem('id_token')")
+    active_username = driver.execute_script("return window.localStorage.getItem('username')")
+
+    assert active_username == username, \
+        f"Username from credentials.txt ({username}) must match chrome cache ({active_username})"
+
+    os.environ['GIGANTUM_USERNAME'] = active_username
+    os.environ['ACCESS_TOKEN'] = access_token
+    os.environ['ID_TOKEN'] = id_token
+    assert os.environ['ACCESS_TOKEN'], "ACCESS_TOKEN could not be retrieved"
+    assert os.environ['ID_TOKEN'], "ID_TOKEN could not be retrieved"
+
+    # Get rid of 'Got it!', guide, and helper
     logging.info("Getting rid of 'Got it!'")
     guide_elts = elements.GuideElements(driver)
     guide_elts.got_it_button.click()
     logging.info("Turning off guide and helper")
     guide_elts.guide_button.click()
     guide_elts.helper_button.click()
+    time.sleep(5)
 
     return username.strip()
 
@@ -316,9 +333,12 @@ def create_dataset(driver: selenium.webdriver) -> str:
         Name of dataset just created
     """
     unique_dataset_name = testutils.unique_dataset_name()
-    logging.info(f"Creating a new dataset: {unique_dataset_name}")
+    logging.info(f"Creating a new dataset: {unique_dataset_name}...")
+
+    wait = WebDriverWait(driver, 200)
     dataset_elts = elements.AddDatasetElements(driver)
     dataset_elts.dataset_page_tab.click()
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn--import')))
     dataset_elts.create_new_button.click()
     dataset_elts.dataset_title_input.click()
     dataset_elts.dataset_title_input.send_keys(unique_dataset_name)
@@ -327,14 +347,14 @@ def create_dataset(driver: selenium.webdriver) -> str:
     dataset_elts.dataset_continue_button.click()
     dataset_elts.gigantum_cloud_button.click()
     dataset_elts.create_dataset_button.click()
-    wait = WebDriverWait(driver, 200)
+
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".TitleSection")))
     return unique_dataset_name
 
 
 def publish_dataset(driver: selenium.webdriver):
     """
-    Publish a dataset to cloud.
+    Publish a dataset to cloud and navigate to the cloud.
 
     Args:
         driver
@@ -371,6 +391,89 @@ def delete_project(driver: selenium.webdriver, project_name):
     time.sleep(5)
 
 
+def link_dataset(driver: selenium.webdriver):
+    """
+    Link a dataset to a project.
+
+    Args:
+        driver
+
+    """
+    # Link the dataset
+    logging.info("Linking the dataset to project")
+    driver.find_element_by_css_selector(".Navigation__list-item--inputData").click()
+    driver.find_element_by_css_selector(".FileBrowser__button--add-dataset").click()
+    driver.find_element_by_css_selector(".LinkCard__details").click()
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".Footer__message-title")))
+    driver.find_element_by_css_selector(".ButtonLoader ").click()
+    # wait the linking window to disappear
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".LinkModal__container")))
+
+
+def publish_project(driver: selenium.webdriver):
+    """
+        Publish a project to cloud.
+
+        Args:
+            driver
+
+        """
+    logging.info("Publishing project")
+    publish_elts = elements.PublishProjectElements(driver)
+    publish_elts.publish_project_button.click()
+    publish_elts.publish_confirm_button.click()
+    time.sleep(5)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+
+
+def delete_dataset_cloud(driver: selenium.webdriver, dataset_title):
+    """
+    Delete a dataset from cloud.
+
+    Args:
+        driver
+        dataset
+
+    """
+    logging.info(f"Removing dataset {dataset_title} from cloud")
+    driver.find_element_by_xpath("//a[contains(text(), 'Datasets')]").click()
+    driver.find_element_by_css_selector(".Datasets__nav-item--cloud").click()
+    time.sleep(2)
+    driver.find_element_by_css_selector(".RemoteDatasets__icon--delete").click()
+    driver.find_element_by_css_selector("#deleteInput").send_keys(dataset_title)
+    time.sleep(2)
+    driver.find_element_by_css_selector(".ButtonLoader").click()
+    time.sleep(5)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".DeleteDataset")))
+
+
+def delete_project_cloud(driver: selenium.webdriver, project_title):
+    """
+    Delete a project from cloud.
+
+    Args:
+        driver
+        project
+
+    """
+    logging.info(f"Removing project {project_title} from cloud")
+    publish_elts = elements.PublishProjectElements(driver)
+    publish_elts.project_page_tab.click()
+    publish_elts.cloud_tab.click()
+    time.sleep(2)
+    publish_elts.delete_project_button.click()
+    time.sleep(2)
+    publish_elts.delete_project_input.send_keys(project_title)
+    time.sleep(2)
+    publish_elts.delete_confirm_button.click()
+    time.sleep(5)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".DeleteLabbook")))
+
+
 def log_out(driver: selenium.webdriver):
     """
     Log out of Gigantum.
@@ -385,4 +488,3 @@ def log_out(driver: selenium.webdriver):
     time.sleep(2)
     side_bar_elts.logout_button.click()
     time.sleep(2)
-

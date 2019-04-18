@@ -1,17 +1,13 @@
-# Builtin imports
 import logging
 import time
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 import testutils
 
-logging.basicConfig(level=logging.INFO)
 
 def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):
     """

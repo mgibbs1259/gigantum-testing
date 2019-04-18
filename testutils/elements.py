@@ -42,7 +42,7 @@ class GuideElements(UiElement):
 
     @property
     def helper_button(self):
-        return self.driver.find_element_by_css_selector(".Helper__button--side-view")
+        return self.driver.find_element_by_css_selector(".Helper__button")
 
 
 class AddProjectElements(UiElement):
@@ -70,7 +70,7 @@ class AddProjectBaseElements(UiElement):
 
     @property
     def create_project_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader ")
+        return self.driver.find_element_by_css_selector("button[data-selenium-id = 'ButtonLoader']")
 
     @property
     def py2_min_base_button(self):

@@ -24,13 +24,11 @@ def create_project_with_base(driver: selenium.webdriver, add_project_base):
     time.sleep(2)
     # Add base
     add_project_base(driver)
-    # Wait until container is stopped
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # Assert container is stopped
-    container_elts = testutils.ContainerStatus(driver)
 
-    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+    stopped_container_status = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
+    assert stopped_container_status, "Expected stopped container status"
 
 
 def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):

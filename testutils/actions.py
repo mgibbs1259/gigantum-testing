@@ -11,6 +11,7 @@ from testutils import elements
 from testutils import testutils
 from .graphql import list_remote_projects, delete_remote_project
 
+
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     Log in to Gigantum.

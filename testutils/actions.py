@@ -60,16 +60,25 @@ def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     assert os.environ['ACCESS_TOKEN'], "ACCESS_TOKEN could not be retrieved"
     assert os.environ['ID_TOKEN'], "ID_TOKEN could not be retrieved"
 
-    # Get rid of 'Got it!', guide, and helper
-    logging.info("Getting rid of 'Got it!'")
-    guide_elts = elements.GuideElements(driver)
-    guide_elts.got_it_button.click()
-    logging.info("Turning off guide and helper")
-    guide_elts.guide_button.click()
-    guide_elts.helper_button.click()
-    time.sleep(5)
-
     return username.strip()
+
+
+def remove_guide(driver: selenium.webdriver):
+    """
+    Remove'Got it!', guide, and helper.
+
+    Args:
+        driver
+    """
+    try:
+        logging.info("Getting rid of 'Got it!'")
+        guide_elts = elements.GuideElements(driver)
+        guide_elts.got_it_button.click()
+        logging.info("Turning off guide and helper")
+        guide_elts.guide_button.click()
+        guide_elts.helper_button.click()
+    except Exception as e:
+        logging.warning(e)
 
 
 def import_project_via_project_link(driver: selenium.webdriver, project_link):

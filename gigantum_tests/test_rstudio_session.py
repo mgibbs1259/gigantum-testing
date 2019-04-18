@@ -39,9 +39,11 @@ def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
     driver.switch_to.window(window_handles[1])
     time.sleep(3)
     # Create R notebook
+    logging.info("Creating R notebook")
     driver.find_element_by_css_selector("div[title = 'R']>.jp-LauncherCard-icon").click()
     time.sleep(3)
     # Import tidyverse and create graph
+    logging.info("Importing tidyverse and creating a basic graph")
     code_input = driver.find_element_by_css_selector(".CodeMirror-line")
     actions = ActionChains(driver)
     logging.info("Import tidyverse")
@@ -51,5 +53,6 @@ def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
                                                                     "abline(lm(mpg~wt))\n"
                                                                     "title('Regression of MPG on Weight')").perform()
     driver.find_element_by_css_selector(".jp-RunIcon").click()
-    time.sleep(30)
+    time.sleep(10)
+
 

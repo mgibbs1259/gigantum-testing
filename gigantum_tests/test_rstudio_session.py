@@ -31,25 +31,25 @@ def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     # Open JupyterLab
     logging.info("Opening JupyterLab")
-    driver.find_element_by_css_selector(".Btn--text").click()
+    driver.find_element_by_css_selector(".ContainerStatus").click()
     time.sleep(5)
+    driver.find_element_by_css_selector(".DevTools__btn--launch").click()
+    time.sleep(10)
     window_handles = driver.window_handles
     driver.switch_to.window(window_handles[1])
     time.sleep(3)
     # Create R notebook
-    driver.find_element_by_css_selector("div[title = 'R] div[data-category = 'Notebook']").click()
+    driver.find_element_by_css_selector("div[title = 'R']>.jp-LauncherCard-icon").click()
     time.sleep(3)
-    # Import tidyverse
+    # Import tidyverse and create graph
     code_input = driver.find_element_by_css_selector(".CodeMirror-line")
     actions = ActionChains(driver)
     logging.info("Import tidyverse")
-    actions.move_to_element(code_input).click(code_input).send_keys('library(tidyverse)').perform()
-    driver.find_element_by_css_selector(".jp-RunIcon").click()
-    # Create graph
-    logging.info("Creating a graph")
-    actions.move_to_element(code_input).click(code_input).send_keys("attach(mtcars)\n"
+    actions.move_to_element(code_input).click(code_input).send_keys('library(tidyverse)\n'
+                                                                    "attach(mtcars)\n"
                                                                     "plot(wt, mpg)\n"
                                                                     "abline(lm(mpg~wt))\n"
                                                                     "title('Regression of MPG on Weight')").perform()
     driver.find_element_by_css_selector(".jp-RunIcon").click()
+    time.sleep(30)
 

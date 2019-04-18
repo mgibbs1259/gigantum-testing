@@ -70,7 +70,7 @@ class AddProjectBaseElements(UiElement):
 
     @property
     def create_project_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader")
+        return self.driver.find_element_by_css_selector("button[data-selenium-id = 'ButtonLoader']")
 
     @property
     def projects_page_button(self):

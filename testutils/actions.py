@@ -23,29 +23,30 @@ def log_in_remove_guide(driver: selenium.webdriver, user_index: int = 0) -> str:
     Returns:
         Username of user that logged in.
     """
-    # Log in
     driver.get("http://localhost:10000/projects/local#")
-    login_elts = elements.LoginElements(driver)
-    login_elts.login_green_button.click()
+    time.sleep(2)
+    auth0_elts = elements.LoginElements(driver)
+    auth0_elts.login_green_button.click()
     time.sleep(2)
     try:
-        if login_elts.auth0_lock_button:
+        if auth0_elts.auth0_lock_button:
             logging.info("Clicking 'Not your account?'")
-            login_elts.not_your_account_button.click()
-    except:
-        pass
-    username, password = testutils.load_credentials(user_index=user_index)
-    logging.info(f"Logging in as {username}")
-    login_elts.username_input.click()
-    login_elts.username_input.send_keys(username)
-    login_elts.password_input.click()
-    login_elts.password_input.send_keys(password)
-    try:
-        login_elts.login_grey_button.click()
+            auth0_elts.not_your_account_button.click()
     except:
         pass
     time.sleep(2)
+    username, password = testutils.load_credentials(user_index=user_index)
+    logging.info(f"Logging in as {username.rstrip()}")
+    auth0_elts.username_input.click()
+    auth0_elts.username_input.send_keys(username)
+    auth0_elts.password_input.click()
+    auth0_elts.password_input.send_keys(password)
+    try:
+        auth0_elts.login_grey_button.click()
+    except:
+        pass
 
+    time.sleep(5)
     # Set the ID and ACCESS TOKENS -- Used as headers for GraphQL mutations
     access_token = driver.execute_script("return window.localStorage.getItem('access_token')")
     id_token = driver.execute_script("return window.localStorage.getItem('id_token')")

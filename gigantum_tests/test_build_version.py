@@ -2,6 +2,7 @@ import logging
 import requests
 import sys
 import json
+import time
 
 import selenium
 from selenium.webdriver.common.by import By
@@ -24,6 +25,7 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     # Get selenium edge build version
     logging.info("Getting selenium edge build version")
     driver.get("http://localhost:10000/api/ping/")
+    time.sleep(2)
     if "chrome" in driver.name:
         selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
     else:

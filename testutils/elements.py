@@ -42,7 +42,7 @@ class GuideElements(UiElement):
 
     @property
     def helper_button(self):
-        return self.driver.find_element_by_css_selector(".Helper__button--side-view")
+        return self.driver.find_element_by_css_selector(".Helper__button")
 
 
 class AddProjectElements(UiElement):
@@ -209,15 +209,15 @@ class AddDatasetElements(UiElement):
 
     @property
     def dataset_continue_button(self):
-        return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
+        return self.driver.find_element_by_css_selector(".Btn--last")
 
     @property
     def gigantum_cloud_button(self):
-        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Gigantum Cloud')]")
+        return self.driver.find_element_by_css_selector(".BaseCard")
 
     @property
     def create_dataset_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader")
+        return self.driver.find_element_by_css_selector("button[data-selenium-id = 'ButtonLoader']")
 
     @property
     def publish_dataset_button(self):

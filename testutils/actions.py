@@ -311,7 +311,9 @@ def create_dataset(driver: selenium.webdriver) -> str:
     dataset_elts.dataset_description_input.click()
     dataset_elts.dataset_description_input.send_keys(testutils.unique_project_description())
     dataset_elts.dataset_continue_button.click()
+    time.sleep(2)
     dataset_elts.gigantum_cloud_button.click()
+    time.sleep(2)
     dataset_elts.create_dataset_button.click()
 
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".TitleSection")))

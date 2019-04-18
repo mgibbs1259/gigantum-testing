@@ -26,7 +26,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     time.sleep(2)
     testutils.add_py3_min_base(driver)
     wait = WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex > .Stopped")))
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     # Navigate to code
     logging.info("Navigating to Code")
     driver.find_element_by_css_selector("#code").click()
@@ -36,7 +36,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     time.sleep(3)
 
     code_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert code_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be first file in Code"
+    assert code_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file in Code"
 
     # Navigate to input data
     logging.info("Navigating to Input Data")
@@ -46,7 +46,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     time.sleep(3)
 
     input_data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert input_data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be first file " \
+    assert input_data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file " \
                                                                "in Input Data"
 
     # Navigate to output data
@@ -57,7 +57,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     time.sleep(3)
 
     output_data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert output_data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be first file " \
+    assert output_data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file " \
                                                                 "in Output Data"
 
 
@@ -82,6 +82,6 @@ def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, 
     time.sleep(3)
 
     data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be first file " \
+    assert data_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file " \
                                                          "in Data"
 

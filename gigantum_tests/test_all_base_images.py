@@ -1,13 +1,10 @@
-# Builtin imports
 import time
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 import testutils
 
 
@@ -32,6 +29,7 @@ def create_project_with_base(driver: selenium.webdriver, add_project_base):
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     # Assert container is stopped
     container_elts = testutils.ContainerStatus(driver)
+
     assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
 
 
@@ -43,7 +41,6 @@ def test_py2_min_base(driver: selenium.webdriver, *args, **kwargs):
         driver
     """
     create_project_with_base(driver, testutils.add_py2_min_base)
-
 
 
 def test_py3_min_base(driver: selenium.webdriver, *args, **kwargs):
@@ -124,4 +121,3 @@ def test_py3_min_cuda_92_base(driver: selenium.webdriver, *args, **kwargs):
         driver
     """
     create_project_with_base(driver, testutils.add_py3_min_cuda_92_base)
-

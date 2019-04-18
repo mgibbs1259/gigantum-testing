@@ -1,17 +1,15 @@
-# Builtin imports
 import logging
 import time
+import os
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 from testutils import elements
 from testutils import testutils
-
+from .graphql import list_remote_projects, delete_remote_project
 
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
@@ -25,6 +23,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
         Username of user just logged in
     """
     driver.get("http://localhost:10000/projects/local#")
+    time.sleep(2)
     auth0_elts = elements.Auth0LoginElements(driver)
     auth0_elts.login_green_button.click()
     time.sleep(2)
@@ -36,7 +35,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
         pass
     time.sleep(2)
     username, password = testutils.load_credentials(user_index=user_index)
-    logging.info(f"Logging in as {username}")
+    logging.info(f"Logging in as {username.rstrip()}")
     auth0_elts.username_input.click()
     auth0_elts.username_input.send_keys(username)
     auth0_elts.password_input.click()
@@ -45,6 +44,21 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
         auth0_elts.login_grey_button.click()
     except:
         pass
+
+    time.sleep(5)
+    # Set the ID and ACCESS TOKENS -- Used as headers for GraphQL mutations
+    access_token = driver.execute_script("return window.localStorage.getItem('access_token')")
+    id_token = driver.execute_script("return window.localStorage.getItem('id_token')")
+    active_username = driver.execute_script("return window.localStorage.getItem('username')")
+
+    assert active_username == username, \
+        f"Username from credentials.txt ({username}) must match chrome cache ({active_username})"
+
+    os.environ['GIGANTUM_USERNAME']  = active_username
+    os.environ['ACCESS_TOKEN'] = access_token
+    os.environ['ID_TOKEN'] = id_token
+    assert os.environ['ACCESS_TOKEN'], "ACCESS_TOKEN could not be retrieved"
+    assert os.environ['ID_TOKEN'], "ID_TOKEN could not be retrieved"
 
     return username.strip()
 
@@ -56,12 +70,15 @@ def remove_guide(driver: selenium.webdriver):
     Args:
         driver
     """
-    logging.info("Getting rid of 'Got it!'")
-    guide_elts = elements.GuideElements(driver)
-    guide_elts.got_it_button.click()
-    logging.info("Turning off guide and helper")
-    guide_elts.guide_button.click()
-    guide_elts.helper_button.click()
+    try:
+        logging.info("Getting rid of 'Got it!'")
+        guide_elts = elements.GuideElements(driver)
+        guide_elts.got_it_button.click()
+        logging.info("Turning off guide and helper")
+        guide_elts.guide_button.click()
+        guide_elts.helper_button.click()
+    except Exception as e:
+        logging.warning(e)
 
 
 def create_project_without_base(driver: selenium.webdriver) -> str:
@@ -342,9 +359,12 @@ def create_dataset(driver: selenium.webdriver) -> str:
         Name of dataset just created
     """
     unique_dataset_name = testutils.unique_dataset_name()
-    logging.info(f"Creating a new dataset: {unique_dataset_name}")
+    logging.info(f"Creating a new dataset: {unique_dataset_name}...")
+
+    wait = WebDriverWait(driver, 200)
     dataset_elts = elements.AddDatasetElements(driver)
     dataset_elts.dataset_page_tab.click()
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '.btn--import')))
     dataset_elts.create_new_button.click()
     dataset_elts.dataset_title_input.click()
     dataset_elts.dataset_title_input.send_keys(unique_dataset_name)
@@ -353,7 +373,7 @@ def create_dataset(driver: selenium.webdriver) -> str:
     dataset_elts.dataset_continue_button.click()
     dataset_elts.gigantum_cloud_button.click()
     dataset_elts.create_dataset_button.click()
-    wait = WebDriverWait(driver, 200)
+
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".TitleSection")))
     return unique_dataset_name
 
@@ -474,4 +494,3 @@ def log_out(driver: selenium.webdriver):
     time.sleep(2)
     side_bar_elts.logout_button.click()
     time.sleep(2)
-

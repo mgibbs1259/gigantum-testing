@@ -29,4 +29,5 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     driver.get("http://localhost:10000/api/ping/")
     selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
     # assert edge build versions match
-    assert requests_edge_build_version == selenium_edge_build_version, "requests edge build version does not match selenium edge build version"
+    assert requests_edge_build_version == selenium_edge_build_version, \
+        "requests edge build version does not match selenium edge build version"

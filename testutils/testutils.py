@@ -68,8 +68,8 @@ def invalid_custom_docker_instruction():
     return "RUN /bin/false"
 
 
-def is_container_stopped(driver):
-    """ Check if the container is stopped """
+def stopped_container_status(driver):
+    """ Check if the container status is stopped """
     return driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
 
 

@@ -38,11 +38,11 @@ class GuideElements(UiElement):
 
     @property
     def guide_button(self):
-        return self.driver.find_element_by_css_selector(".Helper")
+        return self.driver.find_element_by_css_selector(".Helper-guide-slider")
 
     @property
     def helper_button(self):
-        return self.driver.find_element_by_css_selector(".Helper__button--side-view")
+        return self.driver.find_element_by_css_selector(".Helper__button")
 
 
 class AddProjectElements(UiElement):

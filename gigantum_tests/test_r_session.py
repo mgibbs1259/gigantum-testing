@@ -10,7 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import testutils
 
 
-def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
+def test_rtidy_session(driver: selenium.webdriver, *args, **kwargs):
     """
     Test the creation of a project with a python 2 minimal base.
 
@@ -24,7 +24,7 @@ def test_rstudio_session(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.create_project_without_base(driver)
     time.sleep(2)
-    # R Tidy base
+    # RTidy base
     testutils.add_rtidy_base(driver)
     # Wait until stopped container status
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)

@@ -12,7 +12,7 @@ import testutils
 
 def test_rtidy_session(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test the creation of a project with a python 2 minimal base.
+    Test the creation of a basic R tidyverse session.
 
     Args:
         driver

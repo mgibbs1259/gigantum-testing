@@ -24,7 +24,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     Returns:
         Username of user just logged in
     """
-    driver.get("http://localhost:10000/projects/local#")
+    driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/local#")
     time.sleep(2)
     auth0_elts = elements.Auth0LoginElements(driver)
     auth0_elts.login_green_button.click()
@@ -56,7 +56,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     assert active_username == username, \
         f"Username from credentials.txt ({username}) must match chrome cache ({active_username})"
 
-    os.environ['GIGANTUM_USERNAME']  = active_username
+    os.environ['GIGANTUM_USERNAME'] = active_username
     os.environ['ACCESS_TOKEN'] = access_token
     os.environ['ID_TOKEN'] = id_token
     assert os.environ['ACCESS_TOKEN'], "ACCESS_TOKEN could not be retrieved"

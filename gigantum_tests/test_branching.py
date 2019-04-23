@@ -1,6 +1,7 @@
 # Builtin imports
 import logging
 import time
+import os
 
 # Library imports
 import selenium
@@ -10,6 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # Local packages
 import testutils
+from testutils.graphql import create_py3_minimal_project
 
 
 def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
@@ -20,17 +22,15 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
         driver
     """
     # Project set up
-    testutils.log_in(driver)
+    username = testutils.log_in(driver)
     time.sleep(2)
     testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(2)
-    # Python 3 minimal base
-    testutils.add_py3_min_base(driver)
-    time.sleep(2)
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex > .Stopped")))
-    # Select create branch
+
+    owner, proj_name = create_py3_minimal_project(testutils.unique_project_name())
+    driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{proj_name}')
+
+    time.sleep(4)
+
     logging.info("Creating a new branch")
     branch_elts = testutils.BranchElements(driver)
     branch_elts.create_branch_button.click()

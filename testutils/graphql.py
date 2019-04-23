@@ -7,7 +7,9 @@ from typing import List, Tuple
 
 from sgqlc.endpoint.http import HTTPEndpoint
 
-DEFAULT_HOST = 'http://localhost:10000/api/labbook/'
+
+def get_default_host():
+    return f'{os.environ["GIGANTUM_HOST"]}/api/labbook/'
 
 
 class GraphQLException(Exception):
@@ -25,7 +27,7 @@ def query(query_str, variables=None):
         'Identity': os.environ['ID_TOKEN'],
         'Authorization': f'Bearer {os.environ["ACCESS_TOKEN"]}'
     }
-    endpt = HTTPEndpoint(DEFAULT_HOST, base_headers=headers, method='POST')
+    endpt = HTTPEndpoint(get_default_host(), base_headers=headers, method='POST')
     response = endpt(query_str, variables or {})
 
     if 'errors' in response:

@@ -68,7 +68,7 @@ class TestRunner:
 
     @property
     def gigantum_version(self):
-        r = requests.get("http://localhost:10000/api/ping")
+        r = requests.get(f"{os.environ['GIGANTUM_HOST']}/api/ping")
         return json.loads(r.text)['revision']
 
     def __enter__(self):
@@ -103,6 +103,10 @@ class TestRunner:
 
         self.results.append(result)
         return result
+
+    @property
+    def success(self):
+        return all([r.result == 'PASS' for r in self.results])
 
     def render_results(self):
         pass_cnt = len(list(filter(lambda r: r.result == 'PASS', self.results)))

@@ -112,7 +112,7 @@ class EnvironmentElements(UiElement):
 
     @property
     def add_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__btn--round")
+        return self.driver.find_element_by_css_selector(".Btn--round")
 
     @property
     def install_packages_button(self):
@@ -132,7 +132,7 @@ class EnvironmentElements(UiElement):
 
     @property
     def custom_docker_edit_button(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__edit-button")
+        return self.driver.find_element_by_css_selector(".Btn__edit")
 
     @property
     def custom_docker_text_input(self):

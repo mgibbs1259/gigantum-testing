@@ -215,36 +215,20 @@ def add_apt_package(driver: selenium.webdriver):
     environment.install_packages_button.click()
 
 
-def add_valid_custom_docker(driver: selenium.webdriver):
+def add_custom_docker_instructions(driver: selenium.webdriver, docker_instruction):
     """
-    Add valid custom Docker.
+    Add custom Docker instructions.
 
     Args:
         driver
+        docker_instruction (str): Docker instruction from testutils.py.
     """
-    logging.info("Adding valid custom Docker")
+    logging.info("Adding custom Docker instruction")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
     driver.execute_script("window.scrollBy(0, 600);")
     environment.custom_docker_edit_button.click()
-    environment.custom_docker_text_input.send_keys(testutils.valid_custom_docker_instruction())
-    driver.execute_script("window.scrollBy(0, 300);")
-    environment.custom_docker_save_button.click()
-
-
-def add_invalid_custom_docker(driver: selenium.webdriver):
-    """
-    Add invalid custom Docker.
-
-    Args:
-        driver
-    """
-    logging.info("Adding invalid custom Docker")
-    environment = elements.EnvironmentElements(driver)
-    environment.environment_tab_button.click()
-    driver.execute_script("window.scrollBy(0, 600);")
-    environment.custom_docker_edit_button.click()
-    environment.custom_docker_text_input.send_keys(testutils.invalid_custom_docker_instruction())
+    environment.custom_docker_text_input.send_keys(docker_instruction)
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
 

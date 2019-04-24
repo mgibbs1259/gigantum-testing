@@ -29,6 +29,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     # Publish project, then wait until its rebuilt
     logging.info(f"Publishing private project {project_title}")
     publish_elts = testutils.PublishProjectElements(driver)
+    time.sleep(1)
     publish_elts.publish_project_button.click()
     time.sleep(1)
     publish_elts.publish_confirm_button.click()
@@ -43,6 +44,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
     sel = 'div[data-selenium-id="RemoteLabbookPanel"]:first-child'
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, sel)))
+    time.sleep(2)
 
 
     ssel = f'{sel} span'
@@ -63,7 +65,8 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
                                      f"{project_title}, but got {pub_stdout}"
 
     publish_elts.local_tab.click()
-    driver.find_element_by_css_selector(f"a[href='/projects/{username}/{project_title}']").click()
+    driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}')
+    time.sleep(3)
 
     # Add file to input data and sync project
     logging.info("Adding a file to the project")
@@ -72,17 +75,17 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title,
                               'input')
     shutil.copy(example_file.name, input_path)
-    time.sleep(2)
     logging.info(f"Syncing {project_title}")
     publish_elts.sync_project_button.click()
-    time.sleep(2)
+    time.sleep(3)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
-    sync_message = driver.find_element_by_css_selector(".Footer__message-list").text
+    sync_message = driver.find_element_by_css_selector(".Footer__message-item > p").text
     assert "Sync complete" in sync_message, "Expected 'Sync complete' in footer"
 
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.projects_icon.click()
+    time.sleep(1)
     publish_elts.cloud_tab.click()
     time.sleep(2)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))

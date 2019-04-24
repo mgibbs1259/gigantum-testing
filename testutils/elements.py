@@ -252,19 +252,19 @@ class PublishProjectElements(UiElement):
 
     @property
     def cloud_tab(self):
-        return self.driver.find_element_by_css_selector(".Labbooks__nav-item--cloud")
+        return self.driver.find_element_by_css_selector(".Tab--cloud")
 
     @property
     def local_tab(self):
-        return self.driver.find_element_by_css_selector(".Labbooks__nav-item--local")
+        return self.driver.find_element_by_css_selector(".Tab--local")
 
     @property
     def sync_project_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--upToDate")
+        return self.driver.find_element_by_css_selector(".Btn--branch--sync--upToDate")
 
     @property
     def delete_project_button(self):
-        return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--delete")
+        return self.driver.find_element_by_css_selector(".Button__icon--delete")
 
     @property
     def delete_project_input(self):

@@ -249,6 +249,24 @@ def add_invalid_custom_docker(driver: selenium.webdriver):
     environment.custom_docker_save_button.click()
 
 
+def create_jupyter_notebook(driver: selenium.webdriver):
+    """
+    Open JupyterLab and create a Jupyter notebook.
+
+    Args:
+        driver
+    """
+    logging.info("Switching to JupyterLab")
+    jupyterlab_elts = elements.JupyterLabElements(driver)
+    jupyterlab_elts.jupyterlab_button.click()
+    time.sleep(10)
+    window_handles = driver.window_handles
+    driver.switch_to.window(window_handles[1])
+    time.sleep(5)
+    jupyterlab_elts.jupyter_notebook_button.click()
+    time.sleep(5)
+
+
 def create_dataset(driver: selenium.webdriver) -> str:
     """
     Create a dataset.

@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # Local packages
 import testutils
-from testutils.graphql import create_py3_minimal_project
+from testutils import graphql
 
 
 def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
@@ -26,7 +26,7 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(2)
     testutils.remove_guide(driver)
 
-    owner, proj_name = create_py3_minimal_project(testutils.unique_project_name())
+    owner, proj_name = graphql.create_py3_minimal_project(testutils.unique_project_name())
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{proj_name}')
 
     time.sleep(4)

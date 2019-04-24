@@ -42,7 +42,7 @@ class GuideElements(UiElement):
 
     @property
     def helper_button(self):
-        return self.driver.find_element_by_css_selector(".Helper__button--side-view")
+        return self.driver.find_element_by_css_selector(".Helper__button--open")
 
 
 class AddProjectElements(UiElement):
@@ -77,33 +77,20 @@ class AddProjectBaseElements(UiElement):
         return self.driver.find_element_by_css_selector(".SideBar__icon")
 
     @property
-    def py2_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'python2')]")
-
-    @property
     def py2_minimal_base_button(self):
-        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python2 Minimal')]")
-
-    @property
-    def py3_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'python3')]")
+        return self.driver.find_element_by_css_selector("h6[data-name='python2-minimal']")
 
     @property
     def py3_minimal_base_button(self):
-        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Minimal')]")
+        return self.driver.find_element_by_css_selector("h6[data-name='python3-minimal']")
 
     @property
     def py3_data_science_base_button(self):
-        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Python3 Data Science Quick-Start')]")
-
-    @property
-    def r_tab_button(self):
-        return self.driver.find_element_by_xpath("//li[contains(text(), 'R')]")
+        return self.driver.find_element_by_css_selector("h6[data-name='python3-data-science']")
 
     @property
     def r_tidyverse_base_button(self):
-        return self.driver.find_element_by_xpath(
-            "//h6[contains(text(), 'R Tidyverse (+ Python3) in Jupyter Quickstart')]")
+        return self.driver.find_element_by_css_selector("h6[data-name='r-tidyverse']")
 
 
 class EnvironmentElements(UiElement):
@@ -160,7 +147,7 @@ class ContainerStatus(UiElement):
     @property
     def container_status_stop(self):
         return self.driver.find_element_by_css_selector(".flex>.Stopped")
-    
+
 
 class ImportProjectElements(UiElement):
     @property
@@ -235,7 +222,7 @@ class AddDatasetElements(UiElement):
 class BranchElements(UiElement):
     @property
     def create_branch_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__btn--create")
+        return self.driver.find_element_by_css_selector(".Btn--branch--create")
 
     @property
     def branch_name_input(self):
@@ -243,21 +230,21 @@ class BranchElements(UiElement):
 
     @property
     def create_button(self):
-        return self.driver.find_element_by_css_selector(".CreateBranch_navItem>.ButtonLoader")
+        return self.driver.find_element_by_css_selector(".CreateBranch__buttons .ButtonLoader")
 
     @property
     def manage_branches_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__buttons>.BranchMenu__btn--manage")
+        return self.driver.find_element_by_css_selector(".Btn--branch--manage")
 
 
 class PublishProjectElements(UiElement):
     @property
     def publish_project_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish")
+        return self.driver.find_element_by_css_selector(".Btn--branch--sync--publish")
 
     @property
     def publish_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons>button")
+        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons .Btn--last")
 
     @property
     def project_page_tab(self):

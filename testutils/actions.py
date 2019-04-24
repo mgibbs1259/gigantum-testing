@@ -12,6 +12,39 @@ from testutils import testutils
 from .graphql import list_remote_projects, delete_remote_project
 
 
+class ProjectPrepResponse(object):
+    def __init__(self, username, project_name):
+        self.username = username
+        self.project_name = project_name
+
+
+def prep_base(driver, base_button_check):
+    """Create a new project from the UI and wait until it builds successfully
+
+    Args:
+        driver: Selenium webdriver
+        base_button_check: Lambda which gives identifier to element in selection menu.
+    """
+    username = log_in(driver)
+    time.sleep(2)
+    remove_guide(driver)
+    proj_name = create_project_without_base(driver)
+    time.sleep(2)
+    select_project_base(driver, base_button_check())
+    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+    # assert container status is stopped
+    container_elts = elements.ContainerStatus(driver)
+    assert container_elts.container_status_stop.is_displayed(), "Expected stopped container"
+
+    return ProjectPrepResponse(username=username, project_name=proj_name)
+
+
+def prep_py3_minimal_base(driver):
+    b = lambda: elements.AddProjectBaseElements(driver).py3_minimal_base_button
+    return prep_base(driver, b)
+
+
 # create project
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
@@ -89,7 +122,7 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
 
     Args:
         driver
-    
+
     Returns:
         Name of project just created
     """
@@ -105,86 +138,14 @@ def create_project_without_base(driver: selenium.webdriver) -> str:
     return unique_project_name
 
 
-# bases
-def add_py2_min_base(driver: selenium.webdriver):
-    """
-    Add a Python2 Minimal base.
-
-    Args:
-        driver
-    """
-    logging.info("Creating new project with Python2 Minimal base")
-    py2_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py2_base_elts.py2_tab_button.click()
-    except:
-        pass
-    while not py2_base_elts.py2_minimal_base_button.is_displayed():
-        logging.info("Searching for Python2 Minimal base...")
-        py2_base_elts.arrow_button.click()
-    py2_base_elts.py2_minimal_base_button.click()
-    py2_base_elts.create_project_button.click()
-
-
-def add_py3_min_base(driver: selenium.webdriver):
-    """
-    Add a Python3 Minimal base.
-
-    Args:
-        driver
-    """
-    logging.info("Creating new project with Python3 Minimal base")
-    py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_base_button.is_displayed():
-        logging.info("Searching for Python3 Minimal base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_minimal_base_button.click()
-    py3_base_elts.create_project_button.click()
-
-
-def add_py3_ds_base(driver: selenium.webdriver):
-    """
-    Add a Python3 Data Science Quick-start base.
-
-    Args:
-        driver
-    """
-    logging.info("Creating new project with Python3 Data Science Quick-start base")
-    py3_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        py3_base_elts.py3_tab_button.click()
-    except:
-        pass
-    while not py3_base_elts.py3_minimal_base_button.is_displayed():
-        logging.info("Searching for Python3 Data Science Quick-start base...")
-        py3_base_elts.arrow_button.click()
-    py3_base_elts.py3_data_science_base_button.click()
-    py3_base_elts.create_project_button.click()
-
-
-def add_rtidy_base(driver: selenium.webdriver):
-    """
-    Add a R Tidyverse base.
-
-    Args:
-        driver
-    """
-    logging.info("Creating new project with R Tidyverse base")
-    r_base_elts = elements.AddProjectBaseElements(driver)
-    try:
-        r_base_elts.r_tab_button.click()
-    except:
-        pass
-    while not r_base_elts.r_tidyverse_base_button.is_displayed():
-        logging.info("Searching for R Tidyverse base...")
-        r_base_elts.arrow_button.click()
-    r_base_elts.r_tidyverse_base_button.click()
-    r_base_elts.create_project_button.click()
-
+def select_project_base(driver, button_elt):
+    base_elts = elements.AddProjectBaseElements(driver)
+    while not button_elt.is_displayed():
+        base_elts.arrow_button.click()
+        time.sleep(0.25)
+    button_elt.click()
+    time.sleep(0.25)
+    base_elts.create_project_button.click()
 
 # environment
 def add_pip_package(driver: selenium.webdriver):

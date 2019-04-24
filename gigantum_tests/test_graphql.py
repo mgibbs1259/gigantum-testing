@@ -2,9 +2,11 @@ import time
 import os
 
 import testutils
+from testutils import TestTags
 from testutils.graphql import create_py3_minimal_project
 
 
+@TestTags('graphql')
 def test_init_graphql(driver, *args, **kwargs):
     # Project set up
     username = testutils.log_in(driver)

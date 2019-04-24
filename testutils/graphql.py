@@ -9,7 +9,7 @@ from sgqlc.endpoint.http import HTTPEndpoint
 
 
 def get_default_host():
-    return f'{os.environ["GIGANTUM_HOST"]}/api/labbook/'
+    return 'http://localhost:10000/api/labbook/'
 
 
 class GraphQLException(Exception):
@@ -70,7 +70,7 @@ def create_py3_minimal_project(name: str):
 
     create_project_query = """
     mutation createProject($labbookName: String!,
-                           $baseId: String!, $revision: Int!, 
+                           $baseId: String!, $revision: Int!,
                            $repository: String!) {
         createLabbook(input: {
             name: $labbookName,
@@ -113,7 +113,7 @@ def list_remote_projects():
     if 'errors' in results:
         raise GraphQLException(json.dumps(results))
 
-    return [(r['node']['owner'], r['node']['name']) 
+    return [(r['node']['owner'], r['node']['name'])
             for r in results['data']['labbookList']['remoteLabbooks']['edges']]
 
 
@@ -162,7 +162,7 @@ def list_local_projects():
         raise GraphQLException(json.dumps(results))
 
     pprint.pprint(results)
-    return [(r['node']['owner'], r['node']['name']) 
+    return [(r['node']['owner'], r['node']['name'])
             for r in results['data']['labbookList']['localLabbooks']['edges']]
 
 
@@ -240,7 +240,7 @@ def publish_project(owner_name, project_name):
     logging.info(f'Publishing {owner_name}/{project_name}')
     publish_query = """
     mutation publish($owner: String!,
-                     $name: String!, 
+                     $name: String!,
                      $setPublic: Boolean) {
         publishLabbook(input: {
             owner: $owner,

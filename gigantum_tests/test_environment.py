@@ -66,6 +66,7 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     username, project_title = r.username, r.project_name
     # Add a valid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
+    time.sleep(5)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
@@ -88,6 +89,7 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     username, project_title = r.username, r.project_name
     # Add an invalid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.invalid_custom_docker_instruction())
+    time.sleep(5)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Rebuild")))
 
@@ -95,4 +97,4 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     assert container_status, "Expected rebuild container status"
 
     footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
-    assert "Project failed to build" in footer_message_text, "Expected 'Project failed to build' in footer message"
+    assert "Build canceled" in footer_message_text, "Expected 'Build canceled' in footer message"

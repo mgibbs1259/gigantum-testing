@@ -6,6 +6,7 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from testutils import elements
 from testutils import testutils
@@ -227,6 +228,8 @@ def add_custom_docker_instructions(driver: selenium.webdriver, docker_instructio
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
     driver.execute_script("window.scrollBy(0, 600);")
+    actions = ActionChains(driver)
+    actions.move_to_element(environment.custom_docker_edit_button).perform()
     environment.custom_docker_edit_button.click()
     environment.custom_docker_text_input.send_keys(docker_instruction)
     driver.execute_script("window.scrollBy(0, 300);")

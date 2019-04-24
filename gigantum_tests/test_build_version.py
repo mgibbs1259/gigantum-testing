@@ -30,11 +30,9 @@ def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     logging.info("Getting selenium edge build version")
     driver.get(host)
     time.sleep(2)
-    if "chrome" == driver.name:
-        selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
-    else:
-        driver.find_element_by_css_selector("#rawdata-tab").click()
-        selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
+    if driver.name == 'firefox':
+       driver.find_element_by_css_selector("#rawdata-tab").click()
+    selenium_edge_build_version = json.loads(driver.find_element_by_css_selector("pre").text)
 
     assert requests_edge_build_version == selenium_edge_build_version, "requests edge build version does not match " \
                                                                        "selenium edge build version"

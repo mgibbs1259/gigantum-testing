@@ -159,17 +159,20 @@ def add_pip_package(driver: selenium.webdriver):
     logging.info("Adding pip packages")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
-    time.sleep(3)
+    time.sleep(2)
     driver.execute_script("window.scrollBy(0, -400);")
     driver.execute_script("window.scrollBy(0, 400);")
     environment.add_packages_button.click()
     pip_list = ["pandas", "numpy", "matplotlib"]
     for pip_pack in pip_list:
         environment.package_name_input.send_keys(pip_pack)
-        time.sleep(3)
+        time.sleep(2)
         environment.add_button.click()
-        time.sleep(3)
+        time.sleep(2)
     environment.install_packages_button.click()
+    time.sleep(5)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 def add_conda3_package(driver: selenium.webdriver):

@@ -207,6 +207,10 @@ class AddDatasetElements(UiElement):
         return self.driver.find_element_by_css_selector("button[data-selenium-id = 'ButtonLoader']")
 
     @property
+    def data_tab(self):
+        return self.driver.find_element_by_css_selector("#data")
+
+    @property
     def publish_dataset_button(self):
         return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish")
 
@@ -318,11 +322,18 @@ class PublishProjectElements(UiElement):
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download")
 
+class CodeElements(UiElement):
+    @property
+    def code_tab(self):
+        return self.driver.find_element_by_css_selector("#code")
 
 class InputDataElements(UiElement):
     @property
     def input_data_tab(self):
         return self.driver.find_element_by_css_selector("#inputData")
 
-
+class OutputDataElements(UiElement):
+    @property
+    def output_data_tab(self):
+        return self.driver.find_element_by_css_selector("#outputData")
 

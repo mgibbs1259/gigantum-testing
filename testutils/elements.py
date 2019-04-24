@@ -119,6 +119,10 @@ class EnvironmentElements(UiElement):
         return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
 
     @property
+    def package_info_table(self):
+        return self.driver.find_element_by_css_selector(".PackageDependencies__table")
+
+    @property
     def pip_tab_button(self):
         return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
 

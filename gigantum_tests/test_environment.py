@@ -21,9 +21,8 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
         driver
     """
     # Create project
-    testutils.log_in_remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    testutils.add_py3_min_base(driver)
+    r = testutils.prep_py3_minimal_base(driver)
+    username, project_title = r.username, r.project_name
     # Add pip packages
     testutils.add_pip_package(driver)
     # Get environment package versions
@@ -63,9 +62,8 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
         driver
     """
     # Create project
-    testutils.log_in_remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    testutils.add_py3_min_base(driver)
+    r = testutils.prep_py3_minimal_base(driver)
+    username, project_title = r.username, r.project_name
     # Add a valid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
     wait = WebDriverWait(driver, 200)
@@ -85,23 +83,16 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # project set up
-    testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    testutils.create_project_without_base(driver)
-    time.sleep(2)
-    # python 2 minimal base
-    testutils.add_py3_min_base(driver)
-    # wait until container status is stopped
-    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    # add an invalid custom docker instruction
-    testutils.add_invalid_custom_docker(driver)
-    # wait until container status is stopped
+    # Create project
+    r = testutils.prep_py3_minimal_base(driver)
+    username, project_title = r.username, r.project_name
+    # Add an invalid custom docker instruction
+    testutils.add_custom_docker_instructions(driver, testutils.invalid_custom_docker_instruction())
+    wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Rebuild")))
-    time.sleep(2)
-    # assert container status is stopped and 'Successfully tagged' is in footer
-    assert driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed(), "Expected rebuild container status"
-    assert "Project failed to build" in driver.find_element_by_css_selector(".Footer__message-title").text, "Expected 'Project failed to build' in footer"
 
+    container_status = driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed()
+    assert container_status, "Expected rebuild container status"
+
+    footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
+    assert "Project failed to build" in footer_message_text, "Expected 'Project failed to build' in footer message"

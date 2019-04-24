@@ -1,5 +1,6 @@
 .idea/
 venv/
+testenv
 credentials.txt
 __pycache__
 geckodriver.log

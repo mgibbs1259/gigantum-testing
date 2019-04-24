@@ -18,20 +18,9 @@ def test_delete_project(driver: selenium.webdriver, *args, **kwargs):
         Args:
             driver
     """
-    # Project set up
-    username = testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    time.sleep(2)
-    project_name = testutils.create_project_without_base(driver)
-    # Python 3 minimal base
-    testutils.add_py3_min_base(driver)
-    wait = WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex > .Stopped")))
-    # Obtain project title
-    full_project_title = driver.find_element_by_css_selector(".TitleSection__namespace-title").text
-    project_title = full_project_title[full_project_title.index("/") + 1:]
-    
+    r = testutils.prep_py3_minimal_base(driver)
+    username, project_name = r.username, r.project_name
+
     # Check that project path exists on file system
     logging.info("Checking that the project exists in the file system")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username,
@@ -54,8 +43,8 @@ def test_delete_project(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(3)
     driver.find_element_by_css_selector(".ActionsMenu__item--delete").click()
     time.sleep(3)
-    driver.find_element_by_css_selector("#deleteInput").send_keys(project_title.lstrip())
-    driver.find_element_by_css_selector(".DeleteLabbook > .ButtonLoader").click()
+    driver.find_element_by_css_selector("#deleteInput").send_keys(project_name.lstrip())
+    driver.find_element_by_css_selector(".DeleteLabbook .ButtonLoader").click()
     time.sleep(5)
 
     # Check all post conditions for delete:

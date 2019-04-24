@@ -9,9 +9,23 @@ import uuid
 import sys
 import os
 
+from functools import wraps
+
 # Library imports
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
+
+def TestTags(*taglist):
+    """ This is used to append tags to tests, such that the driver
+     filters and only execute tests that match. """
+    print(taglist)
+    def wrapper(f, *ar, **kwar):
+        @wraps(f)
+        def wrapped(driver, *fargs, **fkwargs):
+            return f(driver, *ar, *kwar)
+        return wrapped
+    return wrapper
 
 
 def load_chrome_driver():
@@ -27,6 +41,7 @@ def load_chrome_driver_headless():
     options.add_argument("--headless")
     options.add_argument("--incognito")
     return webdriver.Chrome(options=options)
+
 
 def load_firefox_driver():
     """ Return Firefox webdriver """

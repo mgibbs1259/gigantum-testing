@@ -18,6 +18,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     # Project set up
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
+
     # Navigate to code
     logging.info("Navigating to Code")
     code_elts = testutils.CodeElements(driver)
@@ -42,17 +43,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     assert input_data_first_file_title == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Input Data"
 
-    # Navigate to output data
-    logging.info("Navigating to Output Data")
-    output_data_elts = testutils.elements.OutputDataElements(driver)
-    output_data_elts.output_data_tab.click()
-    logging.info("Dragging and dropping file into Output Data")
-    testutils.file_drag_drop(driver)
-    time.sleep(3)
-
-    output_data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert output_data_first_file_title == 'sample-upload.txt', \
-        "Expected sample-upload.txt to be the first file in Output Data"
+    # TODO - upload file to Output Data
 
 
 def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
@@ -73,7 +64,8 @@ def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, 
     dataset_elts = testutils.elements.AddDatasetElements(driver)
     dataset_elts.data_tab.click()
     logging.info("Dragging and dropping file into Data")
-    testutils.file_drag_drop(driver, project=False)
+    time.sleep(3)
+    testutils.file_drag_drop(driver)
     time.sleep(3)
 
     data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text

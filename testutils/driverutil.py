@@ -96,6 +96,7 @@ class TestRunner:
                                 fail_message=str(e))
         finally:
             try:
+                driver.get("about:blank")
                 self._cleanup(driver)
             except Exception as e:
                 logging.error(f"Error cleaning up: {e}")

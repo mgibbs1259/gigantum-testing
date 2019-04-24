@@ -14,6 +14,9 @@ from functools import wraps
 # Library imports
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def TestTags(*taglist):
@@ -93,7 +96,7 @@ def stop_container(driver):
     return driver.find_element_by_css_selector(".flex>.Running").click()
 
 
-def file_drag_drop(driver, project=True):
+def file_drag_drop(driver):
     """ Drag and drop a file into the file browser """
     js_script = """for (var b = arguments[0], k = arguments[1], l = arguments[2], c = b.ownerDocument, m = 0;;) {
             var e = b.getBoundingClientRect(),
@@ -161,22 +164,12 @@ def file_drag_drop(driver, project=True):
         c.documentElement.appendChild(a);
         a.getBoundingClientRect();
         return a;"""
-    if project:
-        drop_target = driver.find_element_by_css_selector(".FileBrowser")
-        logging.info("Adding a file")
-        file_path = '/tmp/sample-upload.txt'
-        with open(file_path, 'w') as example_file:
-            example_file.write('Sample Text')
-        file_input = driver.execute_script(js_script, drop_target, 0, 0)
-        file_input.send_keys(file_path)
-    else:
-        # two different selectors for project file browser vs dataset file browser
-        # below is the selector for dataset file browser
-        drop_target = driver.find_element_by_css_selector(".FileBrowser__empty")
-        logging.info("Adding a file")
-        file_path = '/tmp/sample-upload.txt'
-        with open(file_path, 'w') as example_file:
-            example_file.write('Sample Text')
-        file_input = driver.execute_script(js_script, drop_target, 0, 0)
-        file_input.send_keys(file_path)
-
+    drop_target = driver.find_element_by_css_selector(".FileBrowser")
+    logging.info("Adding file")
+    file_path = '/tmp/sample-upload.txt'
+    with open(file_path, 'w') as example_file:
+        example_file.write('Sample Text')
+    file_input = driver.execute_script(js_script, drop_target, 0, 0)
+    file_input.send_keys(file_path)
+    wait = WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".File__text div span")))

@@ -325,4 +325,25 @@ class InputDataElements(UiElement):
         return self.driver.find_element_by_css_selector("#inputData")
 
 
+class JupyterLabElements(UiElement):
+    @property
+    def jupyterlab_button(self):
+        return self.driver.find_element_by_css_selector(".DevTools__btn--launch")
+
+    @property
+    def jupyter_notebook_button(self):
+        return self.driver.find_element_by_css_selector(".jp-LauncherCard-label")
+
+    @property
+    def code_input(self):
+        return self.driver.find_element_by_css_selector(".CodeMirror-line")
+
+    @property
+    def run_button(self):
+        return self.driver.find_element_by_css_selector(".jp-RunIcon")
+
+    @property
+    def code_output(self):
+        return self.driver.find_element_by_css_selector(".jp-OutputArea-output > pre")
+
 

@@ -171,5 +171,5 @@ def file_drag_drop(driver):
         example_file.write('Sample Text')
     file_input = driver.execute_script(js_script, drop_target, 0, 0)
     file_input.send_keys(file_path)
-    wait = WebDriverWait(driver, 200)
+    wait = WebDriverWait(driver, 20)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".File__text div span")))

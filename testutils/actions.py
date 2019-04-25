@@ -256,7 +256,7 @@ def create_jupyter_notebook(driver: selenium.webdriver):
     logging.info("Switching to JupyterLab")
     jupyterlab_elts = elements.JupyterLabElements(driver)
     jupyterlab_elts.jupyterlab_launch_button.click()
-    time.sleep(12)
+    time.sleep(20)
     window_handles = driver.window_handles
     driver.switch_to.window(window_handles[1])
     time.sleep(5)

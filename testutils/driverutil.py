@@ -56,7 +56,7 @@ def load_playbook(path: str) -> Playbook:
     test_methods = [getattr(playbook_pkg, field)
                     for field in dir(playbook_pkg)
                     if callable(getattr(playbook_pkg, field))
-                    and 'test_' in field]
+                    and 'test_' == field[:5]]
     return Playbook(path=path, name=name, test_methods=test_methods)
 
 
@@ -182,7 +182,7 @@ def load_playbooks(test_root, path: Optional[str] = None) -> List[Playbook]:
     playbooks_dir = os.path.join(test_root, 'gigantum_tests')
     sys.path.append(playbooks_dir)
 
-    if path and 'test_' in path:
+    if path and 'test_' == path[:5]:
         yield load_playbook(path)
     else:
         # Else, get all test playbooks, but skip examples

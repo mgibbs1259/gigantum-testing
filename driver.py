@@ -17,6 +17,8 @@ if __name__ == '__main__':
                            help='Run using Firefox driver (Chrome default)')
     argparser.add_argument('--port', default=10000, type=int,
                            help='Port of GraphQL API (Default 10000)')
+    argparser.add_argument('--width', default=1440, type=int,
+                           help='Default width in px of the browser window')
     argparser.add_argument('test_path', nargs='?', type=str, default="",
                            help='Optional name of specific playbook')
     args = argparser.parse_args()
@@ -38,6 +40,7 @@ if __name__ == '__main__':
         for playbook in playbooks:
             for test_method in playbook.test_methods:
                 driver = driver_loader()
+                driver.set_window_size(args.width, 1000)
                 runner.execute_test(test_method, driver)
 
     runner.render_results()

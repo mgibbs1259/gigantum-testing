@@ -99,22 +99,13 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     publish_elts.delete_confirm_button.click()
     time.sleep(5)
 
-    # Test that the project is not the first project in the cloud tab
-    cloud_tab_first_project_title_delete = driver.find_element_by_css_selector(
-        ".RemoteLabbooks__panel-title:first-child span span").text
-    assert cloud_tab_first_project_title_delete != project_title, \
-        f"Expected {project_title} to not be the first project in the cloud tab"
+    # Assert project does not exist remotely (Via GraphQL).
+    # TODO - Put back in check for the UI in addition to this check.
+    remote_projects = graphql.list_remote_projects()
+    assert (username, project_title) not in remote_projects
 
-    publish_elts.local_tab.click()
-    time.sleep(2)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".LocalLabbooks__panel-title")))
-
-    # Test that the project is the first project in the local tab
-    local_tab_first_project_title = driver.find_element_by_css_selector(
-        ".LocalLabbooks__panel-title:first-child span span").text
-    assert local_tab_first_project_title == project_title, \
-        f"Expected {project_title} to be the first project in the local tab"
-
+    # Check that the actual Git repo in the project had the remote removed successfully
+    # Note! Use Git 2.20+
     git_get_remote_command_2 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
     del_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()

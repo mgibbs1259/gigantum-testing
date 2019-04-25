@@ -59,7 +59,9 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/local#")
     time.sleep(2)
+    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 5)
     auth0_elts = elements.Auth0LoginElements(driver)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".Login__button")))
     auth0_elts.login_green_button.click()
     time.sleep(2)
     try:
@@ -68,9 +70,9 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
             auth0_elts.not_your_account_button.click()
     except:
         pass
-    time.sleep(2)
     username, password = testutils.load_credentials(user_index=user_index)
     logging.info(f"Logging in as {username.rstrip()}")
+    wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.auth0-lock-input[name = username]')))
     auth0_elts.username_input.click()
     auth0_elts.username_input.send_keys(username)
     auth0_elts.password_input.click()
@@ -155,6 +157,7 @@ def add_pip_package(driver: selenium.webdriver):
     Args:
         driver
     """
+    # TODO - Refactor to Environment class in elements.py
     logging.info("Adding pip packages")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
@@ -225,9 +228,12 @@ def add_valid_custom_docker(driver: selenium.webdriver):
     logging.info("Adding valid custom Docker")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
+    time.sleep(1)
     driver.execute_script("window.scrollBy(0, 600);")
     environment.custom_docker_edit_button.click()
+    time.sleep(1)
     environment.custom_docker_text_input.send_keys(testutils.valid_custom_docker_instruction())
+    time.sleep(1)
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
 
@@ -242,9 +248,12 @@ def add_invalid_custom_docker(driver: selenium.webdriver):
     logging.info("Adding invalid custom Docker")
     environment = elements.EnvironmentElements(driver)
     environment.environment_tab_button.click()
+    time.sleep(1)
     driver.execute_script("window.scrollBy(0, 600);")
     environment.custom_docker_edit_button.click()
+    time.sleep(1)
     environment.custom_docker_text_input.send_keys(testutils.invalid_custom_docker_instruction())
+    time.sleep(1)
     driver.execute_script("window.scrollBy(0, 300);")
     environment.custom_docker_save_button.click()
 

@@ -92,7 +92,7 @@ def create_py3_minimal_project(name: str):
            create_project_results['data']['createLabbook']['labbook']['name']
 
 
-def list_remote_projects():
+def list_remote_projects() -> List[Tuple[str, str]]:
     labbook_list_query = """
     {
         labbookList {

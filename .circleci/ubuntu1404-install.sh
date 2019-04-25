@@ -20,7 +20,7 @@ function install_chrome_utils () {
     sudo apt-get -y install -f
     sudo apt-get install xvfb
     sudo rm -f chromedriver chromedriver_linux64.zip ~/bin/chromedriver /usr/bin/chromedriver /usr/local/bin/chromedriver
-    wget https://chromedriver.storage.googleapis.com/73.0.3683.68/chromedriver_linux64.zip
+    wget https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip
     unzip chromedriver_linux64.zip && chmod +x chromedriver
     sudo mv -f chromedriver /usr/local/share/chromedriver
     sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver

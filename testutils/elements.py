@@ -132,11 +132,11 @@ class EnvironmentElements(UiElement):
 
     @property
     def custom_docker_edit_button(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__edit-button")
+        return self.driver.find_element_by_css_selector(".CustomDockerfile__content .Btn")
 
     @property
     def custom_docker_text_input(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__textarea")
+        return self.driver.find_element_by_css_selector(".CustomDockerfile__content textarea")
 
     @property
     def custom_docker_save_button(self):

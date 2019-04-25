@@ -148,7 +148,7 @@ def select_project_base(driver, button_elt):
     time.sleep(0.25)
     base_elts.create_project_button.click()
 
-# environment
+
 def add_pip_package(driver: selenium.webdriver):
     """
     Add pip packages.
@@ -235,7 +235,8 @@ def add_custom_docker_instructions(driver: selenium.webdriver, docker_instructio
     actions.move_to_element(environment.custom_docker_edit_button).perform()
     environment.custom_docker_edit_button.click()
     environment.custom_docker_text_input.send_keys(docker_instruction)
-    driver.execute_script("window.scrollBy(0, 300);")
+    driver.execute_script("window.scrollBy(0, 400);")
+    time.sleep(2)
     environment.custom_docker_save_button.click()
 
 
@@ -248,8 +249,8 @@ def create_jupyter_notebook(driver: selenium.webdriver):
     """
     logging.info("Switching to JupyterLab")
     jupyterlab_elts = elements.JupyterLabElements(driver)
-    jupyterlab_elts.jupyterlab_button.click()
-    time.sleep(10)
+    jupyterlab_elts.jupyterlab_launch_button.click()
+    time.sleep(12)
     window_handles = driver.window_handles
     driver.switch_to.window(window_handles[1])
     time.sleep(5)

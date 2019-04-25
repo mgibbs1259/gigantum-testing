@@ -331,8 +331,8 @@ class InputDataElements(UiElement):
 
 class JupyterLabElements(UiElement):
     @property
-    def jupyterlab_button(self):
-        return self.driver.find_element_by_css_selector(".DevTools__btn--launch")
+    def jupyterlab_launch_button(self):
+        return self.driver.find_element_by_css_selector("div[data-selenium-id='DevTools'] div button")
 
     @property
     def jupyter_notebook_button(self):

@@ -29,10 +29,9 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     # Publish project, then wait until its rebuilt
     logging.info(f"Publishing private project {project_title}")
     publish_elts = testutils.PublishProjectElements(driver)
+    publish_elts.publish_project_button.wait().click()
     time.sleep(1)
-    publish_elts.publish_project_button.click()
-    time.sleep(1)
-    publish_elts.publish_confirm_button.click()
+    publish_elts.publish_confirm_button.wait().click()
     time.sleep(5)
     wait = WebDriverWait(driver, 15)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))

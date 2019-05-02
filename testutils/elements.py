@@ -1,51 +1,113 @@
+import logging
+from typing import List, Tuple
+import time
+
+import selenium
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+from .testutils import *
+from .graphql import list_remote_datasets, list_remote_projects
 
 
-class UiElement(object):
+class CssElement(object):
+    def __init__(self, driver, selector: str):
+        self.driver = driver
+        self.selector = selector
+
+    def __call__(self):
+        return self.find()
+
+    def find(self):
+        """Immediately try to find and return the element. """
+        return self.driver.find_element_by_css_selector(self.selector)
+
+    def wait(self, nsec: int = 10):
+        """Block until the element is visible, and then return it. """
+        t0 = time.time()
+        try:
+            wait = WebDriverWait(self.driver, nsec)
+            time.sleep(0.1)
+            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, self.selector)))
+            return self.find()
+        except Exception as e:
+            tf = time.time()
+            m = f'Timed out finding {self.selector} after {tf-t0:.1f}sec'
+            logging.error(m)
+            if not str(e).strip():
+                raise ValueError(m)
+            else:
+                raise e
+
+
+class UiComponent(object):
     def __init__(self, driver):
         self.driver = driver
 
 
-class Auth0LoginElements(UiElement):
+class Auth0LoginElements(UiComponent):
     @property
     def login_green_button(self):
-        return self.driver.find_element_by_css_selector(".Login__button")
+        return CssElement(self.driver, ".Login__button")
 
     @property
     def auth0_lock_button(self):
-        return self.driver.find_element_by_css_selector(".auth0-lock-social-button")
+        return CssElement(self.driver, ".auth0-lock-social-button")
 
     @property
     def not_your_account_button(self):
-        return self.driver.find_element_by_css_selector(".auth0-lock-alternative-link")
+        return CssElement(self.driver, ".auth0-lock-alternative-link")
 
     @property
     def username_input(self):
-        return self.driver.find_element_by_css_selector(".auth0-lock-input[name = username]")
+        return CssElement(self.driver, ".auth0-lock-input[name = username]")
 
     @property
     def password_input(self):
-        return self.driver.find_element_by_css_selector(".auth0-lock-input[name = password]")
+        return CssElement(self.driver, ".auth0-lock-input[name = password]")
 
     @property
     def login_grey_button(self):
-        return self.driver.find_element_by_css_selector(".auth0-lock-submit")
+        return CssElement(self.driver, ".auth0-lock-submit")
+
+    def do_login(self, username, password):
+        self.login_green_button.wait(10).click()
+        self.username_input.wait().click()
+        self.username_input().send_keys(username)
+        self.password_input.wait().click()
+        self.password_input().send_keys(password)
+        try:
+            self.login_grey_button.wait().click()
+        except:
+            pass
 
 
-class GuideElements(UiElement):
+class GuideElements(UiComponent):
     @property
     def got_it_button(self):
-        return self.driver.find_element_by_css_selector(".button--green")
+        return CssElement(self.driver, ".button--green")
 
     @property
     def guide_button(self):
-        return self.driver.find_element_by_css_selector(".Helper-guide-slider")
+        return CssElement(self.driver, ".Helper-guide-slider")
 
     @property
     def helper_button(self):
-        return self.driver.find_element_by_css_selector(".Helper__button--open")
+        return CssElement(self.driver, ".Helper__button--open")
+
+    def remove_guide(self):
+        try:
+            logging.info("Getting rid of 'Got it!'")
+            self.got_it_button.wait().click()
+            logging.info("Turning off guide and helper")
+            self.guide_button.wait(5).click()
+            self.helper_button.wait(5).click()
+        except Exception as e:
+            logging.warning(e)
 
 
-class AddProjectElements(UiElement):
+class AddProjectElements(UiComponent):
     @property
     def create_new_button(self):
         return self.driver.find_element_by_css_selector(".btn--import")
@@ -63,7 +125,7 @@ class AddProjectElements(UiElement):
         return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
 
 
-class AddProjectBaseElements(UiElement):
+class AddProjectBaseElements(UiComponent):
     @property
     def arrow_button(self):
         return self.driver.find_element_by_css_selector(".slick-arrow slick-next")
@@ -93,7 +155,7 @@ class AddProjectBaseElements(UiElement):
         return self.driver.find_element_by_css_selector("h6[data-name='r-tidyverse']")
 
 
-class EnvironmentElements(UiElement):
+class EnvironmentElements(UiComponent):
     @property
     def environment_tab_button(self):
         return self.driver.find_element_by_css_selector("#environment")
@@ -143,13 +205,7 @@ class EnvironmentElements(UiElement):
         return self.driver.find_element_by_css_selector(".CustomDockerfile__content-save-button")
 
 
-class ContainerStatus(UiElement):
-    @property
-    def container_status_stop(self):
-        return self.driver.find_element_by_css_selector(".flex>.Stopped")
-
-
-class ImportProjectElements(UiElement):
+class ImportProjectElements(UiComponent):
     @property
     def import_existing_button(self):
         return self.driver.find_element_by_css_selector(".btn--import~.btn--import")
@@ -163,7 +219,7 @@ class ImportProjectElements(UiElement):
         return self.driver.find_element_by_css_selector("button~button")
 
 
-class SideBarElements(UiElement):
+class SideBarElements(UiComponent):
     @property
     def projects_icon(self):
         return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
@@ -177,49 +233,92 @@ class SideBarElements(UiElement):
         return self.driver.find_element_by_css_selector("#logout")
 
 
-class AddDatasetElements(UiElement):
+class DatasetElements(UiComponent):
     @property
     def dataset_page_tab(self):
-        return self.driver.find_element_by_xpath("//a[contains(text(), 'Datasets')]")
+        return CssElement(self.driver, 'a[href="/datasets/local"]')
 
     @property
     def create_new_button(self):
-        return self.driver.find_element_by_css_selector(".btn--import")
+        return CssElement(self.driver, ".btn--import")
 
     @property
     def dataset_title_input(self):
-        return self.driver.find_element_by_css_selector(".CreateLabbook input")
+        return CssElement(self.driver, ".CreateLabbook input")
 
     @property
     def dataset_description_input(self):
-        return self.driver.find_element_by_css_selector(".CreateLabbook__description-input")
+        return CssElement(self.driver, ".CreateLabbook__description-input")
 
     @property
     def dataset_continue_button(self):
-        return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
+        return CssElement(self.driver, ".WizardModal__buttons .Btn--last")
 
     @property
-    def gigantum_cloud_button(self):
-        return self.driver.find_element_by_xpath("//h6[contains(text(), 'Gigantum Cloud')]")
+    def managed_cloud_card_selector(self):
+        # TODO - We need a better selector for this
+        return CssElement(self.driver, '.BaseCard-wrapper')
 
     @property
     def create_dataset_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader")
+        return CssElement(self.driver, '.ButtonLoader')
 
     @property
     def publish_dataset_button(self):
-        return self.driver.find_element_by_css_selector(".BranchMenu__btn--sync--publish")
+        return CssElement(self.driver, ".Btn--branch--sync--publish")
 
     @property
     def dataset_cloud_page(self):
-        return self.driver.find_element_by_css_selector(".Datasets__nav-item--cloud")
+        return CssElement(self.driver, ".Tab--cloud")
+
+    @property
+    def title(self):
+        return CssElement(self.driver, ".TitleSection__namespace-title")
+
+    @property
+    def sync_button(self):
+        return CssElement(self.driver, 'button[data-tooltip="Sync"]')
 
     @property
     def publish_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons>button")
+        return CssElement(self.driver, ".VisibilityModal__buttons .Btn--last")
+
+    def publish_dataset(self):
+        """
+        Publish a dataset to cloud and navigate to the cloud.
+        """
+        logging.info("Publish dataset to cloud")
+        self.publish_dataset_button.wait().click()
+        time.sleep(1)
+        self.publish_confirm_button.wait().click()
+        time.sleep(2)
+        self.sync_button.wait()
+        dss = list_remote_datasets()
+        owner, name = self.title().text.split('/')
+        owner = owner.strip()
+        name = name.strip()
+        assert (owner, name) in dss, f"Cannot find {owner}/{name} in remote datasets."
+        logging.info(f"Published dataset {owner}/{name}.")
+
+    def create_dataset(self, dataset_name: str) -> str:
+        logging.info(f"Creating a new dataset: {dataset_name}...")
+        self.driver.get(os.environ['GIGANTUM_HOST'] + '/datasets/local')
+        self.dataset_page_tab.wait().click()
+        self.create_new_button.wait().click()
+        self.dataset_title_input.wait().click()
+        self.dataset_title_input().send_keys(dataset_name)
+        self.dataset_description_input().click()
+        self.dataset_description_input().send_keys(unique_project_description())
+        self.dataset_continue_button().click()
+        self.managed_cloud_card_selector.wait().click()
+        self.create_dataset_button.wait().click()
+        wait = WebDriverWait(self.driver, 20)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".TitleSection")))
+        logging.info(f"Finished creating dataset {dataset_name}")
+        return dataset_name
 
 
-class BranchElements(UiElement):
+class BranchElements(UiComponent):
     @property
     def create_branch_button(self):
         return self.driver.find_element_by_css_selector(".Btn--branch--create")
@@ -237,14 +336,14 @@ class BranchElements(UiElement):
         return self.driver.find_element_by_css_selector(".Btn--branch--manage")
 
 
-class PublishProjectElements(UiElement):
+class PublishProjectElements(UiComponent):
     @property
     def publish_project_button(self):
-        return self.driver.find_element_by_css_selector(".Btn--branch--sync--publish")
+        return CssElement(self.driver, ".Btn--branch--sync--publish")
 
     @property
     def publish_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".VisibilityModal__buttons .Btn--last")
+        return CssElement(self.driver, ".VisibilityModal__buttons .Btn--last")
 
     @property
     def project_page_tab(self):
@@ -318,11 +417,51 @@ class PublishProjectElements(UiElement):
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download")
 
+    @property
+    def container_status_stopped(self):
+        return CssElement(self.driver, ".flex>.Stopped")
 
-class InputDataElements(UiElement):
+    @property
+    def owner_title(self) -> Tuple[str, str]:
+        text = CssElement(self.driver, ".TitleSection__namespace-title").wait(2).text.split('/')
+        return text[0].strip(), text[1].strip()
+
+    def publish_project(self):
+        """
+            Publish a project to cloud. Then assert it is in list_remote_labbooks
+            """
+        owner, title = self.owner_title
+        logging.info(f"Publishing project {owner}/{title}...")
+        self.publish_project_button.wait().click()
+        self.publish_confirm_button.wait().click()
+        logging.info("Waiting for container status to be stopped.")
+        self.container_status_stopped.wait(20)
+        time.sleep(4)
+        remote_projs = list_remote_projects()
+        print(remote_projs)
+        assert (owner, title) in remote_projs, \
+            "Expected {owner}/{title} in published project list"
+
+
+class ProjectFileBrowserElements(UiComponent):
     @property
     def input_data_tab(self):
-        return self.driver.find_element_by_css_selector("#inputData")
+        return CssElement(self.driver, "#inputData")
 
+    @property
+    def link_dataset_button(self):
+        return CssElement(self.driver, 'button[data-tooltip="Link Dataset"]')
 
+    def link_dataset(self, ds_owner: str, ds_name: str):
+        logging.info("Linking the dataset to project")
+        self.input_data_tab.wait().click()
+        self.link_dataset_button.wait().click()
+        time.sleep(4)
+        self.driver.find_element_by_css_selector(".LinkCard__details").click()
+        time.sleep(4)
+        wait = WebDriverWait(self.driver, 200)
+        wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".Footer__message-title")))
+        self.driver.find_element_by_css_selector(".ButtonLoader ").click()
+        # wait the linking window to disappear
+        wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".LinkModal__container")))
 

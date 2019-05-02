@@ -91,11 +91,14 @@ class TestRunner:
             logging.info(f"PASSED {test_method.__name__}")
         except Exception as e:
             logging.warning(f"FAILED {test_method.__name__}: {e}")
-            self._save_screenshot(driver, 'FAIL', e, test_method)
+            logging.exception(e)
             result = TestResult(test_method.__name__, 'FAIL', None, time.time()-t0,
                                 fail_message=str(e))
+            self._save_screenshot(driver, 'FAIL', e, test_method)
         finally:
             try:
+                driver.get(f"{os.environ['GIGANTUM_HOST']}/api/ping")
+                driver.execute_script(f'alert("{test_method.__name__} -- cleaning up");')
                 self._cleanup(driver)
             except Exception as e:
                 logging.error(f"Error cleaning up: {e}")

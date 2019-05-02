@@ -447,7 +447,7 @@ class PublishProjectElements(UiComponent):
             "Expected {owner}/{title} in published project list"
 
 
-class JupyterLabElements(UiElement):
+class JupyterLabElements(UiComponent):
     @property
     def jupyterlab_launch_button(self):
         return self.driver.find_element_by_css_selector("div[data-selenium-id='DevTools'] div button")

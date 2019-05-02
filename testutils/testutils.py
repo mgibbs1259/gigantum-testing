@@ -73,16 +73,6 @@ def load_credentials(path: str = 'credentials.txt', user_index: int = 0):
     return lines[2 * user_index].strip(), lines[(2 * user_index) + 1].strip()
 
 
-def valid_custom_docker_instruction():
-    """ Return a valid custom Docker instruction"""
-    return "RUN cd /tmp && git clone https://github.com/gigantum/confhttpproxy && cd /tmp/confhttpproxy && pip install -e."
-
-
-def invalid_custom_docker_instruction():
-    """ Return an invalid custom Docker instruction"""
-    return "RUN /bin/false"
-
-
 def is_container_stopped(driver):
     """ Check if the container is stopped """
     return driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
@@ -91,3 +81,14 @@ def is_container_stopped(driver):
 def stop_container(driver):
     """ Stop container after test is finished """
     return driver.find_element_by_css_selector(".flex>.Running").click()
+
+
+def invalid_custom_docker_instruction():
+    """ Return invalid custom docker instruction """
+    return "RUN /bin/false"
+
+
+def valid_custom_docker_instruction():
+    """ Return invalid custom docker instruction """
+    return "RUN cd /tmp && git clone https://github.com/gigantum/confhttpproxy && cd /tmp/confhttpproxy && pip install -e ."
+

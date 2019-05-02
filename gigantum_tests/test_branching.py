@@ -24,7 +24,7 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     # Project set up
     username = testutils.log_in(driver)
     time.sleep(2)
-    testutils.remove_guide(driver)
+    testutils.GuideElements(driver).remove_guide()
 
     owner, proj_name = graphql.create_py3_minimal_project(testutils.unique_project_name())
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{proj_name}')

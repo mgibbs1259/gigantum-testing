@@ -21,9 +21,7 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
     """
     # Project set up
     testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    time.sleep(2)
+    testutils.GuideElements(driver).remove_guide()
     # Import featured public projects
     import_project_elts = testutils.ImportProjectElements(driver)
     side_bar_elts = testutils.SideBarElements(driver)

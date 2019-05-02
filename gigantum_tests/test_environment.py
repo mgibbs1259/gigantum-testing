@@ -98,3 +98,5 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
 
     footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
     assert "Project failed to build" in footer_message_text, "Expected 'Project failed to build' in footer message"
+
+

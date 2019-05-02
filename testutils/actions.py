@@ -83,7 +83,6 @@ def prep_py3_minimal_base(driver, skip_login=False):
     return prep_base(driver, b, skip_login)
 
 
-# create project
 def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     """
     Log in to Gigantum.
@@ -116,33 +115,6 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     assert os.environ['ACCESS_TOKEN'], "ACCESS_TOKEN could not be retrieved"
     assert os.environ['ID_TOKEN'], "ID_TOKEN could not be retrieved"
     return username.strip()
-
-
-def add_pip_package(driver: selenium.webdriver):
-    """
-    Add pip packages.
-
-    Args:
-        driver
-    """
-    # TODO - Refactor to Environment class in elements.py
-    logging.info("Adding pip packages")
-    environment = elements.EnvironmentElements(driver)
-    environment.environment_tab_button.click()
-    time.sleep(2)
-    driver.execute_script("window.scrollBy(0, -400);")
-    driver.execute_script("window.scrollBy(0, 400);")
-    environment.add_packages_button.click()
-    pip_list = ["pandas", "numpy", "matplotlib"]
-    for pip_pack in pip_list:
-        environment.package_name_input.send_keys(pip_pack)
-        time.sleep(2)
-        environment.add_button.click()
-        time.sleep(2)
-    environment.install_packages_button.click()
-    time.sleep(5)
-    wait = WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 def add_conda3_package(driver: selenium.webdriver):

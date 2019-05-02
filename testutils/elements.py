@@ -6,6 +6,7 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from .testutils import *
 from .graphql import list_remote_datasets, list_remote_projects
@@ -207,6 +208,30 @@ class EnvironmentElements(UiComponent):
     @property
     def custom_docker_save_button(self):
         return self.driver.find_element_by_css_selector(".CustomDockerfile__content-save-button")
+
+    def add_pip_package(self):
+        """
+        Add pip packages.
+
+        Args:
+            driver
+        """
+        logging.info("Adding pip packages")
+        self.environment_tab_button.wait(30).click()
+        time.sleep(2)
+        self.driver.execute_script("window.scrollBy(0, -400);")
+        self.driver.execute_script("window.scrollBy(0, 400);")
+        self.add_packages_button.wait().click()
+        pip_list = ["pandas", "numpy", "matplotlib"]
+        for pip_pack in pip_list:
+            self.package_name_input.wait().send_keys(pip_pack)
+            time.sleep(2)
+            self.add_button.wait().click()
+            time.sleep(2)
+        self.install_packages_button.wait().click()
+        time.sleep(5)
+        wait = WebDriverWait(self.driver, 200)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
 
 class ImportProjectElements(UiComponent):

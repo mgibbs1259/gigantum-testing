@@ -24,11 +24,11 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Add pip packages
-    testutils.add_pip_package(driver)
+    env_elts = testutils.EnvironmentElements(driver)
+    env_elts.add_pip_package()
     time.sleep(3)
     # Get environment package versions
     logging.info("Getting package versions from environment")
-    env_elts = testutils.EnvironmentElements(driver)
     environment_package_table = env_elts.package_info_table.text
     environment_package_text = environment_package_table.split("\n")[1::3]
     environment_package_parse = [x.split(" ") for x in environment_package_text]
@@ -51,7 +51,7 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     jupyterlab_package_output = jupyterlab_elts.code_output.text.split(" ")
     jupyterlab_package_versions = dict(zip(jupyterlab_package_output[::2], jupyterlab_package_output[1::2]))
 
-    assert environment_package_versions == jupyterlab_package_versions, \
+    assert environment_package_versions == jupyterlab_package_versions,\
         "Environment and JupyterLab package versions do not match"
 
 

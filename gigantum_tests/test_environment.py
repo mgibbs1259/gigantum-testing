@@ -1,15 +1,13 @@
-# Builtin imports
+
 import logging
 import time
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-# Local packages
 import testutils
 
 
@@ -41,12 +39,12 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
                      " 'numpy',numpy.__version__," \
                      " 'matplotlib', matplotlib.__version__)"
     actions = ActionChains(driver)
-    actions.
-    jupyterlab_elts.run_button.click()
+    actions.move_to_element(jupyterlab_elts.code_input.find()).click(jupyterlab_elts.code_input.find()).send_keys(package_script).perform()
+    jupyterlab_elts.run_button.find().click()
     time.sleep(3)
     # Get JupyterLab package versions
     logging.info("Extracting package versions from JupyterLab")
-    jupyterlab_package_output = jupyterlab_elts.code_output.text.split(" ")
+    jupyterlab_package_output = jupyterlab_elts.code_output.find().text.split(" ")
     jupyterlab_package_versions = dict(zip(jupyterlab_package_output[::2], jupyterlab_package_output[1::2]))
     logging.info(f"Environment package version {environment_package_versions} \n "
                  f"JupyteLab package version {jupyterlab_package_versions}")

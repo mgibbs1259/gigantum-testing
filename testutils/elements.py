@@ -210,6 +210,7 @@ class EnvironmentElements(UiComponent):
             self.add_button.wait().click()
             time.sleep(3)
         self.install_packages_button.wait().click()
+        time.sleep(3)
         wait = selenium.webdriver.support.ui.WebDriverWait(self.driver, 30)
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
@@ -223,7 +224,6 @@ class EnvironmentElements(UiComponent):
         self.custom_docker_text_input.find().send_keys(docker_instruction)
         time.sleep(1)
         self.driver.execute_script("window.scrollBy(0, 400);")
-        time.sleep(2)
         self.custom_docker_save_button.wait().click()
 
 

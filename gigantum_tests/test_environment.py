@@ -24,9 +24,14 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Add pip packages
+<<<<<<< HEAD
     env_elts = testutils.EnvironmentElements(driver)
     env_elts.add_pip_package()
     time.sleep(3)
+=======
+    testutils.add_pip_package(driver)
+    time.sleep(5)
+>>>>>>> parent of e5c3237... tested
     # Get environment package versions
     logging.info("Getting package versions from environment")
     environment_package_table = env_elts.package_info_table.text

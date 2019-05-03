@@ -65,12 +65,12 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     # Create project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
+    wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
+    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     # Add a valid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
-    time.sleep(5)
-    wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    time.sleep(3)
+    time.sleep(2)
 
     container_status = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
     assert container_status, "Expected stopped container status"
@@ -88,10 +88,9 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     username, project_title = r.username, r.project_name
     # Add an invalid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.invalid_custom_docker_instruction())
-    time.sleep(5)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Rebuild")))
-    time.sleep(3)
+    time.sleep(2)
 
     container_status = driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed()
     assert container_status, "Expected rebuild container status"

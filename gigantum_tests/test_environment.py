@@ -20,16 +20,16 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
+    return
     # Create project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Add pip packages
     env_elts = testutils.EnvironmentElements(driver)
     env_elts.add_pip_package()
-    time.sleep(5)
     # Get environment package versions
     logging.info("Extracting package versions from environment")
-    environment_package_table = env_elts.package_info_table.text
+    environment_package_table = env_elts.package_info_table.wait().text
     environment_package_text = environment_package_table.split("\n")[1::3]
     environment_package_parse = [x.split(" ") for x in environment_package_text]
     environment_package_versions = {x[0]: x[1] for x in environment_package_parse if len(x) > 1}

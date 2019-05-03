@@ -206,9 +206,7 @@ class EnvironmentElements(UiComponent):
         pip_list = ["pandas", "numpy", "matplotlib"]
         for pip_pack in pip_list:
             self.package_name_input.find().send_keys(pip_pack)
-            time.sleep(3)
             self.add_button.wait().click()
-            time.sleep(3)
         self.install_packages_button.wait().click()
         time.sleep(5)
         wait = selenium.webdriver.support.ui.WebDriverWait(self.driver, 30)

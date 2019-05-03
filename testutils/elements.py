@@ -6,7 +6,6 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 
 from .testutils import *
 from .graphql import list_remote_datasets, list_remote_projects
@@ -206,7 +205,7 @@ class EnvironmentElements(UiComponent):
         self.add_packages_button.wait().click()
         pip_list = ["pandas", "numpy", "matplotlib"]
         for pip_pack in pip_list:
-            self.package_name_input.wait().send_keys(pip_pack)
+            self.package_name_input.find().send_keys(pip_pack)
             time.sleep(3)
             self.add_button.wait().click()
             time.sleep(3)
@@ -219,10 +218,9 @@ class EnvironmentElements(UiComponent):
         self.environment_tab_button.wait().click()
         time.sleep(1)
         self.driver.execute_script("window.scrollBy(0, 600);")
-        self.custom_docker_edit_button.wait().click()
-        self.custom_docker_edit_button.wait().click()
+        self.custom_docker_edit_button.find().click()
         time.sleep(1)
-        self.custom_docker_text_input.wait().click().send_keys(docker_instruction)
+        self.custom_docker_text_input.find().send_keys(docker_instruction)
         time.sleep(1)
         self.driver.execute_script("window.scrollBy(0, 400);")
         time.sleep(2)

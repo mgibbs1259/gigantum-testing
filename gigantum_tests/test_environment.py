@@ -20,7 +20,6 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    return
     # Create project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
@@ -37,13 +36,12 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     jupyterlab_elts = testutils.JupyterLabElements(driver)
     jupyterlab_elts.create_jupyter_notebook()
     logging.info("Running script to import packages and print package versions")
-    actions = ActionChains(driver)
     package_script = "import pandas\nimport numpy\nimport matplotlib\n" \
                      "print('pandas', pandas.__version__," \
                      " 'numpy',numpy.__version__," \
                      " 'matplotlib', matplotlib.__version__)"
-    actions.move_to_element(jupyterlab_elts.code_input)
-    actions.click(jupyterlab_elts.code_input).send_keys(package_script).perform()
+    actions = ActionChains(driver)
+    actions.
     jupyterlab_elts.run_button.click()
     time.sleep(3)
     # Get JupyterLab package versions
@@ -71,9 +69,9 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     env_elts.add_custom_docker_instructions("RUN cd /tmp && "
                                             "git clone https://github.com/gigantum/confhttpproxy && "
                                             "cd /tmp/confhttpproxy && pip install -e.")
-    wait = WebDriverWait(driver, 60)
+    time.sleep(3)
+    wait = WebDriverWait(driver, 90)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    time.sleep(2)
 
     container_status = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
     assert container_status, "Expected stopped container status"
@@ -91,9 +89,9 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     username, project_name = r.username, r.project_name
     env_elts = testutils.EnvironmentElements(driver)
     env_elts.add_custom_docker_instructions("RUN /bin/false")
-    wait = WebDriverWait(driver, 60)
+    time.sleep(3)
+    wait = WebDriverWait(driver, 90)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Rebuild")))
-    time.sleep(2)
 
     container_status = driver.find_element_by_css_selector(".flex>.Rebuild").is_displayed()
     assert container_status, "Expected rebuild container status"

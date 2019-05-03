@@ -24,14 +24,10 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Add pip packages
-<<<<<<< HEAD
-    env_elts = testutils.EnvironmentElements(driver)
-    env_elts.add_pip_package()
-    time.sleep(3)
-=======
+
     testutils.add_pip_package(driver)
     time.sleep(5)
->>>>>>> parent of e5c3237... tested
+
     # Get environment package versions
     logging.info("Getting package versions from environment")
     environment_package_table = env_elts.package_info_table.text
@@ -75,7 +71,6 @@ def test_valid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
     # Add a valid custom docker instruction
     testutils.add_custom_docker_instructions(driver, testutils.valid_custom_docker_instruction())
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    time.sleep(2)
 
     container_status = driver.find_element_by_css_selector(".flex>.Stopped").is_displayed()
     assert container_status, "Expected stopped container status"
@@ -102,5 +97,4 @@ def test_invalid_custom_docker(driver: selenium.webdriver, *args, **kwargs):
 
     footer_message_text = driver.find_element_by_css_selector(".Footer__message-title").text
     assert "Project failed to build" in footer_message_text, "Expected 'Project failed to build' in footer message"
-
 

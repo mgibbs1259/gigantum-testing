@@ -210,7 +210,7 @@ class EnvironmentElements(UiComponent):
             self.add_button.wait().click()
             time.sleep(3)
         self.install_packages_button.wait().click()
-        time.sleep(3)
+        time.sleep(5)
         wait = selenium.webdriver.support.ui.WebDriverWait(self.driver, 30)
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 

@@ -18,7 +18,6 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     # Project set up
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-
     # Navigate to code
     logging.info("Navigating to Code")
     project_file_browser_elts = testutils.ProjectFileBrowserElements(driver)
@@ -54,14 +53,12 @@ def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, 
     """
     # Dataset set up
     testutils.log_in(driver)
-    time.sleep(2)
-    testutils.remove_guide(driver)
-    time.sleep(2)
-    testutils.create_dataset(driver)
+    testutils.GuideElements(driver).remove_guide()
+    dataset_elts = testutils.DatasetElements(driver)
+    dataset_elts.create_dataset(testutils.unique_dataset_name())
     # Navigate to data
     logging.info("Navigating to Data")
-    dataset_elts = testutils.elements.AddDatasetElements(driver)
-    dataset_elts.data_tab.click()
+    dataset_elts.data_tab.wait().click()
     logging.info("Dragging and dropping file into Data")
     time.sleep(3)
     testutils.file_drag_drop(driver)

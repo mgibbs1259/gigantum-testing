@@ -263,7 +263,7 @@ class DatasetElements(UiComponent):
 
     @property
     def data_tab(self):
-        return self.driver.find_element_by_css_selector("#data")
+        return CssElement(self.driver, '#data')
 
     @property
     def managed_cloud_card_selector(self):
@@ -273,7 +273,6 @@ class DatasetElements(UiComponent):
     @property
     def create_dataset_button(self):
         return CssElement(self.driver, '.ButtonLoader')
-
 
     @property
     def publish_dataset_button(self):
@@ -428,41 +427,6 @@ class PublishProjectElements(UiComponent):
     @property
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
-
-
-class ProjectFileBrowserElements(UiElement):
-    @property
-    def code_tab(self):
-        return self.driver.find_element_by_css_selector("#code")
-
-    @property
-    def container_status_stopped(self):
-        return CssElement(self.driver, ".flex>.Stopped")
-
-    @property
-    def owner_title(self) -> Tuple[str, str]:
-        text = CssElement(self.driver, ".TitleSection__namespace-title").wait(5).text.split('/')
-        return text[0].strip(), text[1].strip()
-
-    def publish_project(self):
-        """
-            Publish a project to cloud. Then assert it is in list_remote_labbooks
-            """
-        owner, title = self.owner_title
-        logging.info(f"Publishing project {owner}/{title}...")
-        self.publish_project_button.wait().click()
-        self.publish_confirm_button.wait().click()
-        logging.info("Waiting for container status to be stopped.")
-        self.container_status_stopped.wait(20)
-        time.sleep(4)
-        remote_projs = list_remote_projects()
-        print(remote_projs)
-        assert (owner, title) in remote_projs, \
-            "Expected {owner}/{title} in published project list"
-
-    @property
-    def output_data_tab(self):
-        return self.driver.find_element_by_css_selector("#outputData")
 
 
 class ProjectFileBrowserElements(UiComponent):

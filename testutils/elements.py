@@ -157,51 +157,104 @@ class AddProjectBaseElements(UiComponent):
 class EnvironmentElements(UiComponent):
     @property
     def environment_tab_button(self):
-        return self.driver.find_element_by_css_selector("#environment")
+        return CssElement(self.driver, "#environment")
 
     @property
     def add_packages_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__addPackage")
+        return CssElement(self.driver, ".PackageDependencies__addPackage")
 
     @property
     def package_name_input(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__input")
+        return CssElement(self.driver, ".PackageDependencies__input")
 
     @property
     def version_name_input(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__input--version")
+        return CssElement(self.driver, ".PackageDependencies__input--version")
 
     @property
     def add_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__btn--round")
+        return CssElement(self.driver, ".Btn--round")
 
     @property
     def install_packages_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
+        return CssElement(self.driver, ".PackageDependencies__btn--absolute")
 
     @property
-    def pip_tab_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__btn--absolute")
-
-    @property
-    def apt_tab_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__tab:nth-child(3)")
-
-    @property
-    def conda3_tab_button(self):
-        return self.driver.find_element_by_css_selector(".PackageDependencies__tab:nth-child(2)")
+    def package_info_table(self):
+        return CssElement(self.driver, ".PackageDependencies__table")
 
     @property
     def custom_docker_edit_button(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__content .Btn")
+        return CssElement(self.driver, ".CustomDockerfile__content .Btn")
 
     @property
     def custom_docker_text_input(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__content textarea")
+        return CssElement(self.driver, ".CustomDockerfile__content textarea")
 
     @property
     def custom_docker_save_button(self):
-        return self.driver.find_element_by_css_selector(".CustomDockerfile__content-save-button")
+        return CssElement(self.driver, ".CustomDockerfile__content-save-button")
+
+    def add_pip_packages(self, *pip_packages):
+        logging.info("Adding pip packages")
+        self.environment_tab_button.wait().click()
+        time.sleep(3)
+        self.driver.execute_script("window.scrollBy(0, -400);")
+        self.driver.execute_script("window.scrollBy(0, 400);")
+        self.add_packages_button.wait().click()
+        for pip_pack in pip_packages:
+            logging.info(f"Adding pip package {pip_pack}")
+            self.package_name_input.find().send_keys(pip_pack)
+            self.add_button.wait().click()
+        self.install_packages_button.wait().click()
+        time.sleep(5)
+        wait = selenium.webdriver.support.ui.WebDriverWait(self.driver, 30)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+
+    def add_custom_docker_instructions(self, docker_instruction):
+        logging.info("Adding custom Docker instruction")
+        self.environment_tab_button.wait().click()
+        time.sleep(1)
+        self.driver.execute_script("window.scrollBy(0, 600);")
+        self.custom_docker_edit_button.find().click()
+        time.sleep(1)
+        self.custom_docker_text_input.find().send_keys(docker_instruction)
+        time.sleep(1)
+        self.driver.execute_script("window.scrollBy(0, 400);")
+        self.custom_docker_save_button.wait().click()
+
+
+class JupyterLabElements(UiComponent):
+    @property
+    def jupyterlab_launch_button(self):
+        return CssElement(self.driver, "div[data-selenium-id='DevTools'] div button")
+
+    @property
+    def jupyter_notebook_button(self):
+        return CssElement(self.driver, ".jp-LauncherCard-label")
+
+    @property
+    def code_input(self):
+        return CssElement(self.driver, ".CodeMirror-line")
+
+    @property
+    def run_button(self):
+        return CssElement(self.driver, ".jp-RunIcon")
+
+    @property
+    def code_output(self):
+        return CssElement(self.driver, ".jp-OutputArea-output>pre")
+
+    def create_jupyter_notebook(self):
+        logging.info("Switching to JupyterLab")
+        self.jupyterlab_launch_button.wait().click()
+        # The time it takes to open JupyterLab is inconsistent, so a long wait is necessary
+        time.sleep(35)
+        window_handles = self.driver.window_handles
+        self.driver.switch_to.window(window_handles[1])
+        time.sleep(5)
+        self.jupyter_notebook_button.wait().click()
+        time.sleep(5)
 
 
 class ImportProjectElements(UiComponent):

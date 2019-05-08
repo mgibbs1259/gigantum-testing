@@ -431,6 +431,10 @@ class PublishProjectElements(UiComponent):
 
 class ProjectFileBrowserElements(UiComponent):
     @property
+    def code_tab(self):
+        return CssElement(self.driver, "#code")
+
+    @property
     def input_data_tab(self):
         return CssElement(self.driver, "#inputData")
 

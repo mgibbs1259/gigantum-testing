@@ -21,7 +21,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     # Navigate to code
     logging.info("Navigating to Code")
     project_file_browser_elts = testutils.ProjectFileBrowserElements(driver)
-    project_file_browser_elts.code_tab.click()
+    project_file_browser_elts.code_tab.wait().click()
     time.sleep(2)
     logging.info("Dragging and dropping file into code")
     testutils.file_drag_drop(driver)
@@ -32,7 +32,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
 
     # Navigate to input data
     logging.info("Navigating to Input Data")
-    project_file_browser_elts.input_data_tab.click()
+    project_file_browser_elts.input_data_tab.wait().click()
     logging.info("Dragging and dropping file into Input Data")
     testutils.file_drag_drop(driver)
     time.sleep(3)

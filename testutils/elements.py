@@ -249,6 +249,7 @@ class JupyterLabElements(UiComponent):
     def create_jupyter_notebook(self):
         logging.info("Switching to JupyterLab")
         self.jupyterlab_launch_button.wait().click()
+        # The time it takes to open JupyterLab is inconsistent, so a long wait is necessary
         time.sleep(35)
         window_handles = self.driver.window_handles
         self.driver.switch_to.window(window_handles[1])

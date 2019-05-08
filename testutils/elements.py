@@ -72,7 +72,6 @@ class Auth0LoginElements(UiComponent):
         return CssElement(self.driver, ".auth0-lock-submit")
 
     def do_login(self, username, password):
-        self.login_green_button.wait(10).click()
         self.username_input.wait().click()
         self.username_input().send_keys(username)
         self.password_input.wait().click()
@@ -420,7 +419,7 @@ class PublishProjectElements(UiComponent):
 
     @property
     def add_collaborators_button(self):
-        return self.driver.find_element_by_css_selector(".CollaboratorsModal__btn--add")
+        return self.driver.find_element_by_css_selector(".Btn__plus")
 
     @property
     def close_collaborators_button(self):
@@ -428,7 +427,7 @@ class PublishProjectElements(UiComponent):
 
     @property
     def import_first_cloud_project_button(self):
-        return self.driver.find_element_by_css_selector(".RemoteLabbooks__icon--cloud-download")
+        return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
 
 
 class ProjectFileBrowserElements(UiElement):
@@ -442,7 +441,7 @@ class ProjectFileBrowserElements(UiElement):
 
     @property
     def owner_title(self) -> Tuple[str, str]:
-        text = CssElement(self.driver, ".TitleSection__namespace-title").wait(2).text.split('/')
+        text = CssElement(self.driver, ".TitleSection__namespace-title").wait(5).text.split('/')
         return text[0].strip(), text[1].strip()
 
     def publish_project(self):

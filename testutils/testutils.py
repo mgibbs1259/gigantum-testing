@@ -163,3 +163,4 @@ def file_drag_drop(driver):
     file_input.send_keys(file_path)
     wait = WebDriverWait(driver, 20)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".File__text div span")))
+    # TODO - refactor and select better CSS selectors

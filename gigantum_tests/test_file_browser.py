@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 import testutils
 
 
-def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
+def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     """
     Test that a file can be dragged and dropped into code, input data,
     and output data in a project.
@@ -44,7 +44,7 @@ def test_file_drag_drop_project_file_browser(driver: selenium.webdriver, *args, 
     # TODO - upload file to Output Data
 
 
-def test_file_drag_drop_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
+def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
     """
     Test that a file can be dragged and dropped into data in a dataset.
 

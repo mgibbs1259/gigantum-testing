@@ -439,6 +439,10 @@ class ProjectFileBrowserElements(UiComponent):
         return CssElement(self.driver, "#inputData")
 
     @property
+    def container_status_stopped(self):
+        return CssElement(self.driver, ".flex>.Stopped")
+
+    @property
     def link_dataset_button(self):
         return CssElement(self.driver, 'button[data-tooltip="Link Dataset"]')
 

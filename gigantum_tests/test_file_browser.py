@@ -41,7 +41,7 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     assert input_data_first_file_title == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Input Data"
 
-    # TODO - upload file to Output Data
+    # TODO - upload file to Output Data, need to deal with untracked directory
 
 
 def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):

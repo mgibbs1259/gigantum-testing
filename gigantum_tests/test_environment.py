@@ -22,7 +22,7 @@ def test_pip_packages(driver: selenium.webdriver, *args, **kwargs):
     username, project_title = r.username, r.project_name
     # Add pip packages
     env_elts = testutils.EnvironmentElements(driver)
-    env_elts.add_pip_package()
+    env_elts.add_pip_packages("pandas", "numpy", "matplotlib")
     # Get environment package versions
     logging.info("Extracting package versions from environment")
     environment_package_table = env_elts.package_info_table.wait().text

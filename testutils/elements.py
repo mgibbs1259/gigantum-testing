@@ -196,15 +196,15 @@ class EnvironmentElements(UiComponent):
     def custom_docker_save_button(self):
         return CssElement(self.driver, ".CustomDockerfile__content-save-button")
 
-    def add_pip_package(self):
+    def add_pip_packages(self, *pip_packages):
         logging.info("Adding pip packages")
         self.environment_tab_button.wait().click()
         time.sleep(3)
         self.driver.execute_script("window.scrollBy(0, -400);")
         self.driver.execute_script("window.scrollBy(0, 400);")
         self.add_packages_button.wait().click()
-        pip_list = ["pandas", "numpy", "matplotlib"]
-        for pip_pack in pip_list:
+        for pip_pack in pip_packages:
+            logging.info(f"Adding pip package {pip_pack}")
             self.package_name_input.find().send_keys(pip_pack)
             self.add_button.wait().click()
         self.install_packages_button.wait().click()

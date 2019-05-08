@@ -19,11 +19,11 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Navigate to code
-    logging.info("Navigating to Code")
+    logging.info(f"Navigating to Code for project {project_title}")
     project_file_browser_elts = testutils.ProjectFileBrowserElements(driver)
     project_file_browser_elts.code_tab.wait().click()
     time.sleep(2)
-    logging.info("Dragging and dropping file into code")
+    logging.info(f"Dragging and dropping file into code for project {project_title}")
     testutils.file_drag_drop(driver)
     time.sleep(3)
 
@@ -31,9 +31,9 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     assert code_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file in Code"
 
     # Navigate to input data
-    logging.info("Navigating to Input Data")
+    logging.info(f"Navigating to Input Data for project {project_title}")
     project_file_browser_elts.input_data_tab.wait().click()
-    logging.info("Dragging and dropping file into Input Data")
+    logging.info(f"Dragging and dropping file into Input Data for project {project_title}")
     testutils.file_drag_drop(driver)
     time.sleep(3)
 
@@ -55,11 +55,10 @@ def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
     testutils.log_in(driver)
     testutils.GuideElements(driver).remove_guide()
     dataset_elts = testutils.DatasetElements(driver)
-    dataset_elts.create_dataset(testutils.unique_dataset_name())
-    # Navigate to data
-    logging.info("Navigating to Data")
+    dataset_title = dataset_elts.create_dataset(testutils.unique_dataset_name())
+    logging.info(f"Navigating to Data for dataset {dataset_title}")
     dataset_elts.data_tab.wait().click()
-    logging.info("Dragging and dropping file into Data")
+    logging.info(f"Dragging and dropping file into Data for dataset {dataset_title}")
     time.sleep(3)
     testutils.file_drag_drop(driver)
     time.sleep(3)

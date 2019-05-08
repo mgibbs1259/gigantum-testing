@@ -307,6 +307,18 @@ class DatasetElements(UiComponent):
         return CssElement(self.driver, ".WizardModal__buttons .Btn--last")
 
     @property
+    def gigantum_cloud_button(self):
+        return self.driver.find_element_by_css_selector(".BaseCard")
+
+    @property
+    def create_dataset_button(self):
+        return self.driver.find_element_by_css_selector("button[data-selenium-id = 'ButtonLoader']")
+
+    @property
+    def data_tab(self):
+        return CssElement(self.driver, '#data')
+
+    @property
     def managed_cloud_card_selector(self):
         # TODO - We need a better selector for this
         return CssElement(self.driver, '.BaseCard-wrapper')
@@ -469,36 +481,19 @@ class PublishProjectElements(UiComponent):
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
 
-    @property
-    def container_status_stopped(self):
-        return CssElement(self.driver, ".flex>.Stopped")
-
-    @property
-    def owner_title(self) -> Tuple[str, str]:
-        text = CssElement(self.driver, ".TitleSection__namespace-title").wait(5).text.split('/')
-        return text[0].strip(), text[1].strip()
-
-    def publish_project(self):
-        """
-            Publish a project to cloud. Then assert it is in list_remote_labbooks
-            """
-        owner, title = self.owner_title
-        logging.info(f"Publishing project {owner}/{title}...")
-        self.publish_project_button.wait().click()
-        self.publish_confirm_button.wait().click()
-        logging.info("Waiting for container status to be stopped.")
-        self.container_status_stopped.wait(20)
-        time.sleep(4)
-        remote_projs = list_remote_projects()
-        print(remote_projs)
-        assert (owner, title) in remote_projs, \
-            "Expected {owner}/{title} in published project list"
-
 
 class ProjectFileBrowserElements(UiComponent):
     @property
+    def code_tab(self):
+        return CssElement(self.driver, "#code")
+
+    @property
     def input_data_tab(self):
         return CssElement(self.driver, "#inputData")
+
+    @property
+    def container_status_stopped(self):
+        return CssElement(self.driver, ".flex>.Stopped")
 
     @property
     def link_dataset_button(self):
@@ -516,5 +511,6 @@ class ProjectFileBrowserElements(UiComponent):
         self.driver.find_element_by_css_selector(".ButtonLoader ").click()
         # wait the linking window to disappear
         wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".LinkModal__container")))
+
 
 

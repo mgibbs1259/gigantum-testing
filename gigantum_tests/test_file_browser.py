@@ -15,10 +15,8 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # Project set up
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-    # Navigate to code
     logging.info(f"Navigating to Code for project: {project_title}")
     file_browser_elts = testutils.FileBrowserElements(driver)
     file_browser_elts.code_tab.wait().click()
@@ -29,7 +27,6 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Code"
 
-    # Navigate to input data
     logging.info(f"Navigating to Input Data for project: {project_title}")
     file_browser_elts.input_data_tab.wait().click()
     time.sleep(2)
@@ -49,7 +46,6 @@ def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # Dataset set up
     testutils.log_in(driver)
     testutils.GuideElements(driver).remove_guide()
     dataset_elts = testutils.DatasetElements(driver)

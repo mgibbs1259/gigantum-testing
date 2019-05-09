@@ -33,7 +33,7 @@ def test_linked_published_dataset_then_publish(driver: selenium.webdriver, *args
     r = testutils.prep_py3_minimal_base(driver, skip_login=True)
     username, project_name = r.username, r.project_name
 
-    filebrowser_elts = testutils.ProjectFileBrowserElements(driver)
+    filebrowser_elts = testutils.FileBrowserElements(driver)
     filebrowser_elts.link_dataset('a', 'b')
 
     time.sleep(4)

@@ -409,7 +409,9 @@ class PublishProjectElements(UiComponent):
     def publish_confirm_button(self):
         return CssElement(self.driver, ".VisibilityModal__buttons .Btn--last")
 
-
+    @property
+    def first_cloud_project(self):
+        return CssElement(self.driver, ".RemoteLabbooks__panel-title span span")
 
 
     @property

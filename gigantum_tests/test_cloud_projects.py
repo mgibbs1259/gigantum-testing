@@ -27,19 +27,12 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     container_elts.container_status_stopped.wait()
     logging.info(f"Navigating to {username}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
+    publish_project_elts.first_cloud_project.wait()
+    first_cloud_project_cloud_tab = publish_project_elts.first_cloud_project.find().text
+    logging.info(f"Found first cloud project in {username}'s Cloud tab: {first_cloud_project_cloud_tab}")
 
-    sel = 'div[data-selenium-id="RemoteLabbookPanel"]:first-child'
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, sel)))
-    time.sleep(2)
-
-
-    ssel = f'{sel} span'
-    cloud_tab_first_project_title_publish = driver.find_element_by_css_selector(ssel).text
-    logging.info(f"!!!!! {cloud_tab_first_project_title_publish}")
-
-    assert cloud_tab_first_project_title_publish == project_title, \
-        f"Expected {project_title} to be the first project in the cloud tab"
-
+    assert first_cloud_project_cloud_tab == project_title, \
+        f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab"
 
     logging.info("Testing git remotes to check if set...")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,

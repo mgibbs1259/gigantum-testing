@@ -536,4 +536,10 @@ class FileBrowserElements(UiComponent):
         wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".LinkModal__container")))
 
 
+class ContainerElements(UiComponent):
+    @property
+    def container_status_stopped(self):
+        return CssElement(self.driver, ".flex>.Stopped")
+
+
 

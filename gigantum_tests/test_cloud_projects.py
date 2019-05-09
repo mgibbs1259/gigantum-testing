@@ -20,13 +20,12 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     logging.info(f"Publishing private project: {project_title}")
-    publish_elts = testutils.PublishProjectElements(driver)
-    publish_elts.publish_project_button.wait().click()
-    publish_elts.publish_confirm_button.wait().click()
+    publish_project_elts = testutils.PublishProjectElements(driver)
+    publish_project_elts.publish_project_button.wait().click()
+    publish_project_elts.publish_confirm_button.wait().click()
     time.sleep(5)
-    wait = WebDriverWait(driver, 15)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    time.sleep(5)
+    container_elts = testutils.ContainerElements(driver)
+    container_elts.container_status_stopped.wait()
 
     # Navigate to cloud tab
     logging.info(f"Navigating to {username}'s' cloud view")

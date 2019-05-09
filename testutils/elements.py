@@ -481,6 +481,10 @@ class PublishProjectElements(UiComponent):
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
 
+    def publish_project(self):
+        self.publish_project_button.wait().click()
+        self.publish_confirm_button.wait().click()
+
 
 class FileBrowserElements(UiComponent):
     @property

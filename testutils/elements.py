@@ -511,8 +511,8 @@ class FileBrowserElements(UiComponent):
     def link_dataset_button(self):
         return CssElement(self.driver, 'button[data-tooltip="Link Dataset"]')
 
-    def file_drag_drop(self):
-        logging.info("Dragging and dropping a file")
+    def drag_drop_file_in_drop_zone(self):
+        logging.info("Dragging and dropping a file into the drop zone")
         with open("testutils/file_browser_drag_drop_script.js", "r") as js_file:
             js_script = js_file.read()
         file_path = "/tmp/sample-upload.txt"

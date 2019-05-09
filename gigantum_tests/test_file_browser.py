@@ -15,33 +15,28 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # Project set up
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-    # Navigate to code
-    logging.info(f"Navigating to Code for project {project_title}")
-    project_file_browser_elts = testutils.ProjectFileBrowserElements(driver)
-    project_file_browser_elts.code_tab.wait().click()
+    logging.info(f"Navigating to Code for project: {project_title}")
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.code_tab.wait().click()
     time.sleep(2)
-    logging.info(f"Dragging and dropping file into code for project {project_title}")
-    testutils.file_drag_drop(driver)
-    time.sleep(3)
+    logging.info(f"Dragging and dropping file into code for project: {project_title}")
+    file_browser_elts.drag_drop_file_in_drop_zone()
 
-    code_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert code_first_file_title == 'sample-upload.txt', "Expected sample-upload.txt to be the first file in Code"
+    assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
+        "Expected sample-upload.txt to be the first file in Code"
 
-    # Navigate to input data
-    logging.info(f"Navigating to Input Data for project {project_title}")
-    project_file_browser_elts.input_data_tab.wait().click()
-    logging.info(f"Dragging and dropping file into Input Data for project {project_title}")
-    testutils.file_drag_drop(driver)
-    time.sleep(3)
+    logging.info(f"Navigating to Input Data for project: {project_title}")
+    file_browser_elts.input_data_tab.wait().click()
+    time.sleep(2)
+    logging.info(f"Dragging and dropping file into Input Data for project: {project_title}")
+    file_browser_elts.drag_drop_file_in_drop_zone()
 
-    input_data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert input_data_first_file_title == 'sample-upload.txt', \
+    assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Input Data"
 
-    # TODO - upload file to Output Data, need to deal with untracked directory
+    # TODO - Upload file to Output Data, need to deal with untracked directory
 
 
 def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
@@ -51,19 +46,18 @@ def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
     Args:
         driver
     """
-    # Dataset set up
     testutils.log_in(driver)
     testutils.GuideElements(driver).remove_guide()
     dataset_elts = testutils.DatasetElements(driver)
     dataset_title = dataset_elts.create_dataset(testutils.unique_dataset_name())
-    logging.info(f"Navigating to Data for dataset {dataset_title}")
-    dataset_elts.data_tab.wait().click()
-    logging.info(f"Dragging and dropping file into Data for dataset {dataset_title}")
+    logging.info(f"Navigating to Data for dataset: {dataset_title}")
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.data_tab.wait().click()
+    logging.info(f"Dragging and dropping file into Data for dataset: {dataset_title}")
     time.sleep(3)
-    testutils.file_drag_drop(driver)
+    file_browser_elts.drag_drop_file_in_drop_zone()
     time.sleep(3)
 
-    data_first_file_title = driver.find_element_by_css_selector(".File__text div span").text
-    assert data_first_file_title == 'sample-upload.txt', \
+    assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Data"
 

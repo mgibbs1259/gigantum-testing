@@ -19,21 +19,21 @@ def test_project_file_browser(driver: selenium.webdriver, *args, **kwargs):
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     # Navigate to code
-    logging.info(f"Navigating to Code for project {project_title}")
+    logging.info(f"Navigating to Code for project: {project_title}")
     file_browser_elts = testutils.FileBrowserElements(driver)
     file_browser_elts.code_tab.wait().click()
     time.sleep(2)
-    logging.info(f"Dragging and dropping file into code for project {project_title}")
+    logging.info(f"Dragging and dropping file into code for project: {project_title}")
     file_browser_elts.file_drag_drop()
 
     assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
         "Expected sample-upload.txt to be the first file in Code"
 
     # Navigate to input data
-    logging.info(f"Navigating to Input Data for project {project_title}")
+    logging.info(f"Navigating to Input Data for project: {project_title}")
     file_browser_elts.input_data_tab.wait().click()
     time.sleep(2)
-    logging.info(f"Dragging and dropping file into Input Data for project {project_title}")
+    logging.info(f"Dragging and dropping file into Input Data for project: {project_title}")
     file_browser_elts.file_drag_drop()
 
     assert file_browser_elts.file_information.find().text == 'sample-upload.txt', \
@@ -54,10 +54,10 @@ def test_dataset_file_browser(driver: selenium.webdriver, *args, **kwargs):
     testutils.GuideElements(driver).remove_guide()
     dataset_elts = testutils.DatasetElements(driver)
     dataset_title = dataset_elts.create_dataset(testutils.unique_dataset_name())
-    logging.info(f"Navigating to Data for dataset {dataset_title}")
+    logging.info(f"Navigating to Data for dataset: {dataset_title}")
     file_browser_elts = testutils.FileBrowserElements(driver)
     file_browser_elts.data_tab.wait().click()
-    logging.info(f"Dragging and dropping file into Data for dataset {dataset_title}")
+    logging.info(f"Dragging and dropping file into Data for dataset: {dataset_title}")
     time.sleep(3)
     file_browser_elts.file_drag_drop()
     time.sleep(3)

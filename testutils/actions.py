@@ -40,7 +40,7 @@ def prep_base(driver, base_button_check, skip_login=False):
     wait = selenium.webdriver.support.ui.WebDriverWait(driver, 200)
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
     # assert container status is stopped
-    container_elts = elements.ProjectFileBrowserElements(driver)
+    container_elts = elements.FileBrowserElements(driver)
     assert container_elts.container_status_stopped.wait().is_displayed(), "Expected stopped container"
 
     return ProjectPrepResponse(username=username, project_name=proj_name)

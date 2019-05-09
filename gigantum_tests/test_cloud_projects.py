@@ -16,17 +16,12 @@ from testutils import graphql
 def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs):
     """
         Test that a project in Gigantum can be published, synced, and deleted.
-
-        Args:
-            driver
     """
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-    # Publish project
-    logging.info(f"Publishing private project {project_title}")
+    logging.info(f"Publishing private project: {project_title}")
     publish_elts = testutils.PublishProjectElements(driver)
     publish_elts.publish_project_button.wait().click()
-    time.sleep(1)
     publish_elts.publish_confirm_button.wait().click()
     time.sleep(5)
     wait = WebDriverWait(driver, 15)

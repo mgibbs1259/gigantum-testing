@@ -21,15 +21,12 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     username, project_title = r.username, r.project_name
     logging.info(f"Publishing private project: {project_title}")
     publish_project_elts = testutils.PublishProjectElements(driver)
-    publish_project_elts.publish_project_button.wait().click()
-    publish_project_elts.publish_confirm_button.wait().click()
+    publish_project_elts.publish_project()
     time.sleep(5)
     container_elts = testutils.ContainerElements(driver)
     container_elts.container_status_stopped.wait()
-
-    # Navigate to cloud tab
-    logging.info(f"Navigating to {username}'s' cloud view")
-    driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/cloud')
+    logging.info(f"Navigating to {username}'s Cloud tab")
+    driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
 
     sel = 'div[data-selenium-id="RemoteLabbookPanel"]:first-child'
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, sel)))

@@ -409,17 +409,8 @@ class PublishProjectElements(UiComponent):
     def publish_confirm_button(self):
         return CssElement(self.driver, ".VisibilityModal__buttons .Btn--last")
 
-    @property
-    def project_page_tab(self):
-        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
 
-    @property
-    def cloud_tab(self):
-        return self.driver.find_element_by_css_selector(".Tab--cloud")
 
-    @property
-    def local_tab(self):
-        return self.driver.find_element_by_css_selector(".Tab--local")
 
     @property
     def sync_project_button(self):

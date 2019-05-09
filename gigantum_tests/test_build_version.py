@@ -1,4 +1,3 @@
-# Builtin imports
 import logging
 import requests
 import sys
@@ -6,7 +5,6 @@ import os
 import json
 import time
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
 
@@ -14,19 +12,14 @@ from selenium.webdriver.common.by import By
 def test_edge_build_versions(driver: selenium.webdriver, *args, **kwargs):
     """
     Test that the requests edge build version matches the selenium edge build version.
-
-    Args:
-        driver
     """
     host = f"{os.environ['GIGANTUM_HOST']}/api/ping"
-    # Get requests edge build version
     logging.info("Getting requests edge build version")
     r = requests.get(host)
     if r.status_code != 200:
         logging.error(f"Gigantum is not found at {host}")
         sys.exit(1)
     requests_edge_build_version = json.loads(r.text)
-    # Get selenium edge build version
     logging.info("Getting selenium edge build version")
     driver.get(host)
     time.sleep(2)

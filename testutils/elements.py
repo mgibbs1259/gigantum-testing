@@ -415,6 +415,12 @@ class BranchElements(UiComponent):
     def manage_branches_local_only(self):
         return CssElement(self.driver, ".Branches__details>div[data-tooltip='Local only']")
 
+    def create_local_branch(self, branch_name):
+        logging.info("Creating a new local branch")
+        self.create_branch_button.wait().click()
+        self.branch_name_input.find().send_keys(branch_name)
+        self.create_button.wait().click()
+
 
 class PublishProjectElements(UiComponent):
     @property

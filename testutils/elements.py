@@ -482,7 +482,7 @@ class PublishProjectElements(UiComponent):
         return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
 
 
-class ProjectFileBrowserElements(UiComponent):
+class FileBrowserElements(UiComponent):
     @property
     def code_tab(self):
         return CssElement(self.driver, "#code")
@@ -492,12 +492,34 @@ class ProjectFileBrowserElements(UiComponent):
         return CssElement(self.driver, "#inputData")
 
     @property
+    def data_tab(self):
+        return CssElement(self.driver, "#data")
+
+    @property
+    def file_browser_area(self):
+        return CssElement(self.driver, ".FileBrowser")
+
+    @property
+    def file_information(self):
+        return CssElement(self.driver, ".File__text div span")
+
+    @property
     def container_status_stopped(self):
         return CssElement(self.driver, ".flex>.Stopped")
 
     @property
     def link_dataset_button(self):
         return CssElement(self.driver, 'button[data-tooltip="Link Dataset"]')
+
+    def file_drag_drop(self):
+        logging.info("Dragging and dropping a file")
+        js_script = open("file_drag_drop_script.txt", "r")
+        file_path = "/tmp/sample-upload.txt"
+        with open(file_path, "w") as example_file:
+            example_file.write("Sample Text")
+        file_input = self.driver.execute_script(js_script, self.file_browser_area.find(), 0, 0)
+        file_input.send_keys(file_path)
+        self.file_information.wait()
 
     def link_dataset(self, ds_owner: str, ds_name: str):
         logging.info("Linking the dataset to project")

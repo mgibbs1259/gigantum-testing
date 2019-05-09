@@ -385,19 +385,41 @@ class DatasetElements(UiComponent):
 class BranchElements(UiComponent):
     @property
     def create_branch_button(self):
-        return self.driver.find_element_by_css_selector(".Btn--branch--create")
+        return CssElement(self.driver, ".Btn--branch--create")
 
     @property
     def branch_name_input(self):
-        return self.driver.find_element_by_css_selector("#CreateBranchName")
+        return CssElement(self.driver, "#CreateBranchName")
 
     @property
     def create_button(self):
-        return self.driver.find_element_by_css_selector(".CreateBranch__buttons .ButtonLoader")
+        return CssElement(self.driver, ".CreateBranch__buttons .ButtonLoader")
+
+    @property
+    def upper_left_branch_name(self):
+        return CssElement(self.driver, ".BranchMenu__dropdown-text")
+
+    @property
+    def upper_left_branch_local_only(self):
+        return CssElement(self.driver, ".BranchMenu__dropdown-btn>div[data-tooltip='Local only']")
 
     @property
     def manage_branches_button(self):
-        return self.driver.find_element_by_css_selector(".Btn--branch--manage")
+        return CssElement(self.driver, ".Btn--branch--manage")
+
+    @property
+    def manage_branches_branch_name(self):
+        return CssElement(self.driver, ".Branches__branchname")
+
+    @property
+    def manage_branches_local_only(self):
+        return CssElement(self.driver, ".Branches__details>div[data-tooltip='Local only']")
+
+    def create_local_branch(self, branch_name):
+        logging.info("Creating a new local branch")
+        self.create_branch_button.wait().click()
+        self.branch_name_input.find().send_keys(branch_name)
+        self.create_button.wait().click()
 
 
 class PublishProjectElements(UiComponent):

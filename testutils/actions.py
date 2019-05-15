@@ -127,49 +127,6 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     return username.strip()
 
 
-def add_conda3_package(driver: selenium.webdriver):
-    """
-    Add conda3 packages.
-
-    Args:
-        driver
-    """
-    logging.info("Adding conda3 package")
-    environment = elements.EnvironmentElements(driver)
-    environment.environment_tab_button.click()
-    time.sleep(3)
-    environment.conda3_tab_button.click()
-    driver.execute_script("window.scrollBy(0, -400);")
-    driver.execute_script("window.scrollBy(0, 400);")
-    environment.add_packages_button.click()
-    environment.package_name_input.send_keys("pyflakes")
-    time.sleep(3)
-    environment.add_button.click()
-    time.sleep(3)
-    environment.install_packages_button.click()
-
-
-def add_apt_package(driver: selenium.webdriver):
-    """
-    Add apt packages.
-
-    Args:
-        driver
-    """
-    logging.info("Adding apt packages")
-    environment = elements.EnvironmentElements(driver)
-    environment.environment_tab_button.click()
-    time.sleep(3)
-    environment.apt_tab_button.click()
-    driver.execute_script("window.scrollBy(0, -400);")
-    driver.execute_script("window.scrollBy(0, 400);")
-    environment.add_packages_button.click()
-    environment.package_name_input.send_keys("apache2")
-    time.sleep(3)
-    environment.add_button.click()
-    time.sleep(3)
-    environment.install_packages_button.click()
-
 def delete_dataset_cloud(driver: selenium.webdriver, dataset_title):
     """
     Delete a dataset from cloud.
@@ -190,33 +147,6 @@ def delete_dataset_cloud(driver: selenium.webdriver, dataset_title):
     time.sleep(5)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".DeleteDataset")))
-
-
-def delete_project_cloud(driver: selenium.webdriver, project_title):
-    """
-    Delete a project from cloud.
-
-    Args:
-        driver
-        project
-
-    """
-    logging.info(f"Removing project {project_title} from cloud")
-    publish_elts = elements.PublishProjectElements(driver)
-    publish_elts.project_page_tab.click()
-    time.sleep(2)
-    publish_elts.cloud_tab.click()
-    time.sleep(2)
-    wait = WebDriverWait(driver, 200)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
-    publish_elts.delete_project_button.click()
-    time.sleep(2)
-    publish_elts.delete_project_input.send_keys(project_title)
-    time.sleep(2)
-    publish_elts.delete_confirm_button.click()
-    time.sleep(5)
-    wait = WebDriverWait(driver, 200)
-    wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".DeleteLabbook")))
 
 
 def log_out(driver: selenium.webdriver):

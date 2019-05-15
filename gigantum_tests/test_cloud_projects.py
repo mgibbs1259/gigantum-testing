@@ -1,7 +1,6 @@
 import logging
 import time
 import os
-import shutil
 from subprocess import Popen, PIPE
 
 import selenium
@@ -17,68 +16,57 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     """
         Test that a project in Gigantum can be published, synced, and deleted.
     """
-    # Create and publish a project
+    # Create and publish project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-    logging.info(f"Publishing private project: {project_title}")
     publish_project_elts = testutils.PublishProjectElements(driver)
-    publish_project_elts.publish_project()
-    time.sleep(5)
-    container_elts = testutils.ContainerElements(driver)
-    container_elts.container_status_stopped.wait()
+    publish_project_elts.publish_private_project(project_title)
     logging.info(f"Navigating to {username}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
     publish_project_elts.first_cloud_project_cloud_tab.wait()
     first_cloud_project_cloud_tab = publish_project_elts.first_cloud_project_cloud_tab.find().text
-    logging.info(f"Found first cloud project: {first_cloud_project_cloud_tab}")
+    logging.info(f"Found first cloud project {first_cloud_project_cloud_tab}")
 
     assert project_title == first_cloud_project_cloud_tab, \
         f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
         f"but instead got {first_cloud_project_cloud_tab}"
 
-    logging.info(f"Checking if a remote is set for {project_title}")
+    logging.info(f"Checking if a remote is set for project {project_title}")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
                                 'labbooks', project_title)
     git_get_remote_command_1 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
     cloud_project_stdout = git_get_remote_command_1.stdout.readline().decode('utf-8').strip()
 
-    assert "https://" in cloud_project_stdout, f"Expected to see a remote set for {project_title}, " \
+    assert "https://" in cloud_project_stdout, f"Expected to see a remote set for project {project_title}, " \
                                                f"but got {pub_stdout}"
 
+    # Add a file and sync cloud project
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
     time.sleep(3)
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.drag_drop_file_in_drop_zone()
+    publish_project_elts.sync_cloud_project(project_title)
 
-    # Add a file to the project and sync
-    logging.info(f"Adding a file to {project_title}")
-    with open('/tmp/sample-upload.txt', 'w') as example_file:
-        example_file.write('Sample Text')
-    input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title,
-                              'input')
-    shutil.copy(example_file.name, input_path)
+    assert "Sync complete" in publish_project_elts.sync_project_message.find().text, \
+        "Expected 'Sync complete' in footer"
 
-    logging.info(f"Syncing {project_title}")
-    publish_elts.sync_project_button.click()
-    time.sleep(5)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+    # Delete cloud project
+    publish_project_elts.delete_cloud_project(project_title)
 
-    sync_message = driver.find_element_by_css_selector(".Footer__message-item > p").text
-    assert "Sync complete" in sync_message, "Expected 'Sync complete' in footer"
-
-    testutils.delete_project_cloud(driver, project_title)
-
-    # Assert project does not exist remotely (Via GraphQL).
-    # TODO - Put back in check for the UI in addition to this check.
+    # Assert project does not exist remotely (via GraphQL)
+    # TODO - put back in check for the UI in addition to this check
     remote_projects = graphql.list_remote_projects()
+
     assert (username, project_title) not in remote_projects
 
-    # Check that the actual Git repo in the project had the remote removed successfully
-    # Note! Use Git 2.20+
+    # Assert that project does not have remote Git repo (use Git 2.20+)
     git_get_remote_command_2 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
-    del_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()
+    del_cloud_project_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()
 
-    assert "fatal" in del_stderr, f"Expected to not see a remote set for {project_title}, but got {del_stderr}"
+    assert "fatal" in del_cloud_project_stderr, f"Expected to not see a remote set for project {project_title}, " \
+                                                f"but got {del_cloud_project_stderr}"
 
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):

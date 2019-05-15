@@ -492,6 +492,10 @@ class PublishProjectElements(UiComponent):
         return self.driver.find_element_by_css_selector(".Modal__close")
 
     @property
+    def overview_project_title(self):
+        return CssElement(self.driver, ".TitleSection__namespace-title")
+
+    @property
     def import_first_cloud_project_button(self):
         return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
 

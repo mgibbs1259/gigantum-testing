@@ -137,7 +137,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
 
     # Test that after import, the shared project opens to overview page
-    shared_project_title = publish_elts.owner_title
+    shared_project_title = publish_elts.overview_project_title.find().text
     assert project_title in shared_project_title, \
         f"After import, expected shared project {project_title} to open to overview page"
 

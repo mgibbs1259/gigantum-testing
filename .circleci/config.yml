@@ -10,7 +10,7 @@ jobs:
             echo $TEST_USERNAME > credentials.txt
             echo $TEST_PASSWORD >> credentials.txt
             echo $TEST_USERNAME_2 >> credentials.txt
-            echo $TEST_PASSWORD >> credentials.txt
+            echo $TEST_PASSWORD_2 >> credentials.txt
 
       - run:
           name: Run the setup and preparation script

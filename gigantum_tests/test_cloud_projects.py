@@ -17,6 +17,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     """
         Test that a project in Gigantum can be published, synced, and deleted.
     """
+    # Create and publish a project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     logging.info(f"Publishing private project: {project_title}")
@@ -35,26 +36,27 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
         f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
         f"but instead got {first_cloud_project_cloud_tab}"
 
-    logging.info("Testing git remotes to check if set...")
+    logging.info(f"Checking if a remote is set for {project_title}")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
                                 'labbooks', project_title)
     git_get_remote_command_1 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
-    pub_stdout = git_get_remote_command_1.stdout.readline().decode('utf-8').strip()
-    assert "https://" in pub_stdout, f"Expected to see a remote set for private project " \
-                                     f"{project_title}, but got {pub_stdout}"
+    cloud_project_stdout = git_get_remote_command_1.stdout.readline().decode('utf-8').strip()
 
-    publish_elts.local_tab.click()
-    driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}')
+    assert "https://" in cloud_project_stdout, f"Expected to see a remote set for {project_title}, " \
+                                               f"but got {pub_stdout}"
+
+    driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
     time.sleep(3)
 
-    # Add file to input data and sync project
-    logging.info("Adding a file to the project")
+    # Add a file to the project and sync
+    logging.info(f"Adding a file to {project_title}")
     with open('/tmp/sample-upload.txt', 'w') as example_file:
         example_file.write('Sample Text')
     input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title,
                               'input')
     shutil.copy(example_file.name, input_path)
+
     logging.info(f"Syncing {project_title}")
     publish_elts.sync_project_button.click()
     time.sleep(5)

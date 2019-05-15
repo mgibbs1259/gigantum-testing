@@ -435,7 +435,6 @@ class PublishProjectElements(UiComponent):
     def first_cloud_project_cloud_tab(self):
         return CssElement(self.driver, ".RemoteLabbooks__panel-title span span")
 
-
     @property
     def sync_project_button(self):
         return self.driver.find_element_by_css_selector(".Btn--branch--sync--upToDate")

@@ -453,11 +453,11 @@ class PublishProjectElements(UiComponent):
 
     @property
     def delete_project_input(self):
-        return self.driver.find_element_by_css_selector("#deleteInput")
+        return CssElement(self.driver, "#deleteInput")
 
     @property
     def delete_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader")
+        return CssElement(self.driver, ".ButtonLoader")
 
     '''@property
     def publish_continue_button(self):

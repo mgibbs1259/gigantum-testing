@@ -505,7 +505,7 @@ class CloudProjectElements(UiComponent):
         container_elts = ContainerElements(self.driver)
         container_elts.container_status_stopped.wait()
 
-    def add_collaborator_cloud_project(self, project_title):
+    def add_collaborator_read_permissions(self, project_title):
         logging.info(f"Adding a collaborator to project {project_title}")
         self.open_collaborators_button.find().click()
         username2 = load_credentials(user_index=1)[0].rstrip()

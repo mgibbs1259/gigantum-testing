@@ -82,8 +82,8 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     username, project_title = r.username, r.project_name
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
-    # Add collaborator to cloud project
-    cloud_project_elts.add_collaborator_cloud_project(project_title)
+    # Add collaborator with read permissions to cloud project
+    cloud_project_elts.add_collaborator_read_permissions(project_title)
     # Log out
     
     testutils.log_out(driver)

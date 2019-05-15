@@ -19,16 +19,16 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     # Create and publish project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-    publish_project_elts = testutils.PublishProjectElements(driver)
-    publish_project_elts.publish_private_project(project_title)
+    cloud_project_elts = testutils.CloudProjectElements(driver)
+    cloud_project_elts.publish_private_project(project_title)
     logging.info(f"Navigating to {username}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
-    publish_project_elts.first_cloud_project_cloud_tab.wait()
-    first_cloud_project_cloud_tab = publish_project_elts.first_cloud_project_cloud_tab.find().text
+    cloud_project_elts.first_cloud_project_cloud_tab.wait()
+    first_cloud_project_cloud_tab = cloud_project_elts.first_cloud_project_cloud_tab.find().text
     logging.info(f"Found first cloud project {first_cloud_project_cloud_tab}")
 
     assert project_title == first_cloud_project_cloud_tab, \
-        f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
+        "Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
         f"but instead got {first_cloud_project_cloud_tab}"
 
     logging.info(f"Checking if a remote is set for project {project_title}")
@@ -46,16 +46,20 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     time.sleep(3)
     file_browser_elts = testutils.FileBrowserElements(driver)
     file_browser_elts.drag_drop_file_in_drop_zone()
-    publish_project_elts.sync_cloud_project(project_title)
+    cloud_project_elts.sync_cloud_project(project_title)
 
-    assert "Sync complete" in publish_project_elts.sync_project_message.find().text, \
+    assert "Sync complete" in cloud_project_elts.sync_project_message.find().text, \
         "Expected 'Sync complete' in footer"
 
     # Delete cloud project
-    publish_project_elts.delete_cloud_project(project_title)
+    cloud_project_elts.delete_cloud_project(project_title)
+
+    # Assert project does not exist in cloud tab
+    assert project_title != first_cloud_project_cloud_tab, \
+        f"Expected {project_title} to not be the first cloud project in {username}'s Cloud tab, " \
+        f"but instead got {first_cloud_project_cloud_tab}"
 
     # Assert project does not exist remotely (via GraphQL)
-    # TODO - put back in check for the UI in addition to this check
     remote_projects = graphql.list_remote_projects()
 
     assert (username, project_title) not in remote_projects
@@ -72,33 +76,16 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     """
         Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
-
-        Args:
-            driver
     """
+    # Create and publish project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
-
-    # Publish project, then wait until its rebuilt
-    logging.info(f"Publishing private project {project_title}")
-    publish_elts = testutils.PublishProjectElements(driver)
-    publish_elts.publish_project_button.wait().click()
-    time.sleep(1)
-    publish_elts.publish_confirm_button.wait().click()
-    time.sleep(5)
-    wait = WebDriverWait(driver, 15)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
-    time.sleep(5)
-
-    # Add collaborator
-    logging.info(f"Adding a collaborator to private project {project_title}")
-    publish_elts.collaborators_button.click()
-    time.sleep(2)
-    username2 = testutils.load_credentials(user_index=1)[0].rstrip()
-    publish_elts.collaborators_input.send_keys(username2)
-    publish_elts.add_collaborators_button.click()
-    time.sleep(2)
-    publish_elts.close_collaborators_button.click()
+    cloud_project_elts = testutils.CloudProjectElements(driver)
+    cloud_project_elts.publish_private_project(project_title)
+    # Add collaborator to cloud project
+    cloud_project_elts.add_collaborator_cloud_project(project_title)
+    # Log out
+    
     testutils.log_out(driver)
 
     # Collaborator checks that the project is in the cloud tab and that the project imports successfully

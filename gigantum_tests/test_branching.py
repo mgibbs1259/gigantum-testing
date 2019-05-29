@@ -36,3 +36,11 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
     assert branch_elts.manage_branches_local_only.find(), "Expected my-test-branch to be local only, manage branches"
 
 
+def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
+    """
+    Test that files created on the master branch, deleted in a local branch, and then merged back into the
+    master branch do not appear in the master branch.
+    """
+
+
+

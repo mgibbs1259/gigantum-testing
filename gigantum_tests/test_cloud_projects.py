@@ -87,7 +87,6 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     # Owner logs out
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.do_logout()
-
     # Collaborator logs in and imports cloud project
     logging.info(f"Logging in as {collaborator}")
     testutils.log_in(driver, user_index=1)
@@ -96,6 +95,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
         testutils.GuideElements.remove_guide(driver)
     except:
         pass
+    time.sleep(2)
     logging.info(f"Navigating to {collaborator}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
     cloud_project_elts.first_cloud_project.wait()
@@ -109,16 +109,16 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts.import_first_cloud_project_button.find().click()
     container_elts = testutils.ContainerElements(driver)
     container_elts.container_status_stopped.wait()
-    shared_project_title = cloud_project_elts.project_overview_project_title.find().text
 
     # Assert imported cloud project opens to project overview page
+    shared_project_title = cloud_project_elts.project_overview_project_title.find().text
+
     assert project_title in shared_project_title, \
         f"After import, expected project {project_title} to open to project overview page"
 
     # Collaborator logs out
     side_bar_elts.do_logout()
-
-    # Owner logs in
+    # Owner logs in and deletes cloud project
     logging.info(f"Logging in as {username}")
     testutils.log_in(driver)
     time.sleep(2)
@@ -127,21 +127,19 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     except:
         pass
     time.sleep(2)
-    testutils.delete_project_cloud(driver, project_title)
+    cloud_project_elts.delete_cloud_project(project_title)
 
-    # Assert project does not exist remotely (Via GraphQL).
-    # TODO - Put back in check for the UI in addition to this check.
+    # Assert cloud project does not exist remotely (via GraphQL)
     remote_projects = graphql.list_remote_projects()
+
     assert (username, project_title) not in remote_projects
 
-    # Check that the actual Git repo in the project had the remote removed successfully
-    # Note! Use Git 2.20+
-    logging.info("Testing git remotes to check if set...")
-    project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
-                                'labbooks', project_title)
+    # Assert that cloud project does not have remote Git repo (use Git 2.20+)
     git_get_remote_command_2 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
-    del_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()
+    del_cloud_project_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()
 
-    assert "fatal" in del_stderr, f"Expected to not see a remote set for {project_title}, but got {del_stderr}"
+    assert "fatal" in del_cloud_project_stderr, f"Expected to not see a remote set for project {project_title}, " \
+                                                f"but got {del_cloud_project_stderr}"
+
 

@@ -89,9 +89,10 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     side_bar_elts.do_logout()
 
     # Collaborator logs in
+    logging.info(f"Logging in as {username2}")
     username2 = testutils.load_credentials(user_index=1)[0].rstrip()
     publish_elts.collaborators_input.send_keys(username2)
-    logging.info(f"Logging in as {username2}")
+
     testutils.log_in(driver, user_index=1)
     time.sleep(2)
     try:

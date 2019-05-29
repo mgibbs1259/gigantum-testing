@@ -4,9 +4,6 @@ import os
 from subprocess import Popen, PIPE
 
 import selenium
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 import testutils
 from testutils import graphql
@@ -135,6 +132,8 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert (username, project_title) not in remote_projects
 
     # Assert that cloud project does not have remote Git repo (use Git 2.20+)
+    project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
+                                'labbooks', project_title)
     git_get_remote_command_2 = Popen(['git', 'remote', 'get-url', 'origin'],
                                      cwd=project_path, stdout=PIPE, stderr=PIPE)
     del_cloud_project_stderr = git_get_remote_command_2.stderr.readline().decode('utf-8').strip()

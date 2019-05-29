@@ -518,11 +518,12 @@ class CloudProjectElements(UiComponent):
     def add_collaborator_read_permissions(self, project_title):
         logging.info(f"Adding a collaborator to project {project_title}")
         self.open_collaborators_button.find().click()
-        username2 = load_credentials(user_index=1)[0].rstrip()
-        self.collaborator_input.find().send_keys(username2)
+        collaborator = load_credentials(user_index=1)[0].rstrip()
+        self.collaborator_input.find().send_keys(collaborator)
         self.add_collaborator_button.wait().click()
         time.sleep(2)
         self.close_collaborators_button.find().click()
+        return collaborator
 
     def sync_cloud_project(self, project_title):
         logging.info(f"Syncing cloud project {project_title}")

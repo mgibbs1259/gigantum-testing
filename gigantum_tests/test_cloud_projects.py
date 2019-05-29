@@ -83,13 +83,15 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
     # Add collaborator
-    cloud_project_elts.add_collaborator_read_permissions(project_title)
+    collaborator = cloud_project_elts.add_collaborator_read_permissions(project_title)
     # Owner logs out
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.do_logout()
 
     # Collaborator logs in
-    logging.info(f"Logging in as {username2}")
+
+
+    logging.info(f"Logging in as {collaborator}")
     username2 = testutils.load_credentials(user_index=1)[0].rstrip()
     publish_elts.collaborators_input.send_keys(username2)
 

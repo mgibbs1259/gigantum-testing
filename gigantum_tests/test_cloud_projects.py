@@ -39,7 +39,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     cloud_project_stdout = git_get_remote_command_1.stdout.readline().decode('utf-8').strip()
 
     assert "https://" in cloud_project_stdout, f"Expected to see a remote set for project {project_title}, " \
-                                               f"but got {pub_stdout}"
+                                               f"but got {cloud_project_stdout}"
 
     # Add a file and sync cloud project
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
@@ -82,13 +82,13 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     username, project_title = r.username, r.project_name
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
-    # Add collaborator with read permissions to cloud project
+    # Add collaborator
     cloud_project_elts.add_collaborator_read_permissions(project_title)
-    # Log out
-    
-    testutils.log_out(driver)
+    # Owner logs out
+    side_bar_elts = testutils.SideBarElements(driver)
+    side_bar_elts.do_logout()
 
-    # Collaborator checks that the project is in the cloud tab and that the project imports successfully
+    # Collaborator logs in
     logging.info(f"Logging in as {username2}")
     testutils.log_in(driver, user_index=1)
     time.sleep(2)

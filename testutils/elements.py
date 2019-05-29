@@ -82,6 +82,29 @@ class Auth0LoginElements(UiComponent):
             pass
 
 
+class SideBarElements(UiComponent):
+    @property
+    def projects_icon(self):
+        return CssElement(self.driver, ".SideBar__nav-item--labbooks")
+
+    @property
+    def datasets_icon(self):
+        return CssElement(self.driver, ".SideBar__icon--datasets")
+
+    @property
+    def username_button(self):
+        return CssElement(self.driver, "#username")
+
+    @property
+    def logout_button(self):
+        return CssElement(self.driver, "#logout")
+
+    def do_logout(self):
+        logging.info("Logging out")
+        self.username_button.wait().click()
+        self.logout_button.wait().click()
+
+
 class GuideElements(UiComponent):
     @property
     def got_it_button(self):
@@ -269,20 +292,6 @@ class ImportProjectElements(UiComponent):
     @property
     def import_button(self):
         return self.driver.find_element_by_css_selector("button~button")
-
-
-class SideBarElements(UiComponent):
-    @property
-    def projects_icon(self):
-        return CssElement(self.driver, ".SideBar__nav-item--labbooks")
-
-    @property
-    def username_button(self):
-        return self.driver.find_element_by_css_selector("#username")
-
-    @property
-    def logout_button(self):
-        return self.driver.find_element_by_css_selector("#logout")
 
 
 class DatasetElements(UiComponent):

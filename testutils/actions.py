@@ -147,19 +147,3 @@ def delete_dataset_cloud(driver: selenium.webdriver, dataset_title):
     time.sleep(5)
     wait = WebDriverWait(driver, 200)
     wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".DeleteDataset")))
-
-
-def log_out(driver: selenium.webdriver):
-    """
-    Log out of Gigantum.
-
-    Args:
-     driver
-    """
-    logging.info("Logging out")
-    time.sleep(2)
-    side_bar_elts = elements.SideBarElements(driver)
-    side_bar_elts.username_button.click()
-    time.sleep(2)
-    side_bar_elts.logout_button.click()
-    time.sleep(2)

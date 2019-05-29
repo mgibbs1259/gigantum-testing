@@ -23,13 +23,13 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     cloud_project_elts.publish_private_project(project_title)
     logging.info(f"Navigating to {username}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
-    cloud_project_elts.first_cloud_project_cloud_tab.wait()
-    first_cloud_project_cloud_tab = cloud_project_elts.first_cloud_project_cloud_tab.find().text
-    logging.info(f"Found first cloud project {first_cloud_project_cloud_tab}")
+    cloud_project_elts.first_cloud_project.wait()
+    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
+    logging.info(f"Found first cloud project {first_cloud_project}")
 
-    assert project_title == first_cloud_project_cloud_tab, \
-        "Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
-        f"but instead got {first_cloud_project_cloud_tab}"
+    assert project_title == first_cloud_project, \
+        f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
+        f"but instead got {first_cloud_project}"
 
     logging.info(f"Checking if a remote is set for project {project_title}")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
@@ -48,16 +48,16 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     file_browser_elts.drag_drop_file_in_drop_zone()
     cloud_project_elts.sync_cloud_project(project_title)
 
-    assert "Sync complete" in cloud_project_elts.sync_project_message.find().text, \
+    assert "Sync complete" in cloud_project_elts.sync_cloud_project_message.find().text, \
         "Expected 'Sync complete' in footer"
 
     # Delete cloud project
     cloud_project_elts.delete_cloud_project(project_title)
 
     # Assert project does not exist in cloud tab
-    assert project_title != first_cloud_project_cloud_tab, \
+    assert project_title != first_cloud_project, \
         f"Expected {project_title} to not be the first cloud project in {username}'s Cloud tab, " \
-        f"but instead got {first_cloud_project_cloud_tab}"
+        f"but instead got {first_cloud_project}"
 
     # Assert project does not exist remotely (via GraphQL)
     remote_projects = graphql.list_remote_projects()
@@ -88,42 +88,37 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.do_logout()
 
-    # Collaborator logs in
-
-
+    # Collaborator logs in and imports cloud project
     logging.info(f"Logging in as {collaborator}")
-    username2 = testutils.load_credentials(user_index=1)[0].rstrip()
-    publish_elts.collaborators_input.send_keys(username2)
-
     testutils.log_in(driver, user_index=1)
     time.sleep(2)
     try:
         testutils.GuideElements.remove_guide(driver)
     except:
         pass
-    time.sleep(2)
-    publish_elts.cloud_tab.click()
-    time.sleep(2)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".RemoteLabbooks__panel-title")))
+    logging.info(f"Navigating to {collaborator}'s Cloud tab")
+    driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
+    cloud_project_elts.first_cloud_project.wait()
+    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
 
-    # Test that shared cloud project is in cloud tab
-    cloud_tab_first_project_title_delete = driver.find_element_by_css_selector(
-        ".RemoteLabbooks__panel-title:first-child span span").text
-    assert cloud_tab_first_project_title_delete == project_title, \
-        f"Expected shared cloud project {project_title} in cloud tab"
+    # Assert cloud project imports successfully
+    assert project_title == first_cloud_project, \
+        f"Expected {project_title} to be the first cloud project in {collaborator}'s Cloud tab, " \
+        f"but instead got {first_cloud_project}"
 
-    publish_elts.import_first_cloud_project_button.click()
-    time.sleep(2)
-    wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+    cloud_project_elts.import_first_cloud_project_button.find().click()
+    container_elts = testutils.ContainerElements(driver)
+    container_elts.container_status_stopped.wait()
+    shared_project_title = cloud_project_elts.project_overview_project_title.find().text
 
-    # Test that after import, the shared project opens to overview page
-    shared_project_title = publish_elts.overview_project_title.find().text
+    # Assert imported cloud project opens to project overview page
     assert project_title in shared_project_title, \
-        f"After import, expected shared project {project_title} to open to overview page"
+        f"After import, expected project {project_title} to open to project overview page"
 
-    testutils.log_out(driver)
+    # Collaborator logs out
+    side_bar_elts.do_logout()
 
-    # Delete cloud project
+    # Owner logs in
     logging.info(f"Logging in as {username}")
     testutils.log_in(driver)
     time.sleep(2)

@@ -470,11 +470,11 @@ class CloudProjectElements(UiComponent):
         return CssElement(self.driver, ".Modal__close")
 
     @property
-    def sync_project_button(self):
+    def sync_cloud_project_button(self):
         return CssElement(self.driver, ".Btn--branch--sync--upToDate")
 
     @property
-    def sync_project_message(self):
+    def sync_cloud_project_message(self):
         return CssElement(self.driver, ".Footer__message-item>p")
 
     @property
@@ -494,18 +494,16 @@ class CloudProjectElements(UiComponent):
         return CssElement(self.driver, ".Tab--cloud")
 
     @property
-    def first_cloud_project_cloud_tab(self):
+    def first_cloud_project(self):
         return CssElement(self.driver, ".RemoteLabbooks__panel-title span span")
-
-
-    @property
-    def overview_project_title(self):
-        return CssElement(self.driver, ".TitleSection__namespace-title")
 
     @property
     def import_first_cloud_project_button(self):
-        return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
+        return CssElement(self.driver, ".Button__icon--cloud-download")
 
+    @property
+    def project_overview_project_title(self):
+        return CssElement(self.driver, ".TitleSection__namespace-title")
 
     def publish_private_project(self, project_title):
         logging.info(f"Publishing private project {project_title}")
@@ -527,7 +525,7 @@ class CloudProjectElements(UiComponent):
 
     def sync_cloud_project(self, project_title):
         logging.info(f"Syncing cloud project {project_title}")
-        self.sync_project_button.find().click()
+        self.sync_cloud_project_button.find().click()
         time.sleep(5)
         container_elts = ContainerElements(self.driver)
         container_elts.container_status_stopped.wait()
@@ -537,7 +535,7 @@ class CloudProjectElements(UiComponent):
         side_bar_elts = SideBarElements(self.driver)
         side_bar_elts.projects_icon.find().click()
         self.cloud_tab.wait().click()
-        self.first_cloud_project_cloud_tab.wait()
+        self.first_cloud_project.wait()
         self.delete_cloud_project_button.find().click()
         self.delete_cloud_project_input.find().send_keys(project_title)
         self.delete_cloud_project_confirm_button.wait().click()

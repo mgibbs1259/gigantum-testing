@@ -539,8 +539,7 @@ class CloudProjectElements(UiComponent):
         self.cloud_tab.wait().click()
         self.first_cloud_project.wait()
         self.delete_cloud_project_button.find().click()
-        time.sleep(2)
-        self.delete_cloud_project_input.find().send_keys(project_title)
+        self.delete_cloud_project_input.wait().send_keys(project_title)
         self.delete_cloud_project_confirm_button.wait().click()
         time.sleep(10)
 

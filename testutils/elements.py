@@ -103,6 +103,7 @@ class SideBarElements(UiComponent):
         logging.info("Logging out")
         self.username_button.wait().click()
         self.logout_button.wait().click()
+        time.sleep(2)
 
 
 class GuideElements(UiComponent):
@@ -512,12 +513,13 @@ class CloudProjectElements(UiComponent):
         time.sleep(5)
         container_elts = ContainerElements(self.driver)
         container_elts.container_status_stopped.wait()
+        time.sleep(5)
 
     def add_collaborator_read_permissions(self, project_title):
         logging.info(f"Adding a collaborator to project {project_title}")
         self.open_collaborators_button.find().click()
         collaborator = load_credentials(user_index=1)[0].rstrip()
-        self.collaborator_input.find().send_keys(collaborator)
+        self.collaborator_input.wait().send_keys(collaborator)
         self.add_collaborator_button.wait().click()
         time.sleep(2)
         self.close_collaborators_button.find().click()
@@ -537,6 +539,7 @@ class CloudProjectElements(UiComponent):
         self.cloud_tab.wait().click()
         self.first_cloud_project.wait()
         self.delete_cloud_project_button.find().click()
+        time.sleep(2)
         self.delete_cloud_project_input.find().send_keys(project_title)
         self.delete_cloud_project_confirm_button.wait().click()
         time.sleep(10)

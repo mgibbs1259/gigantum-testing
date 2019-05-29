@@ -4,6 +4,7 @@ import os
 from subprocess import Popen, PIPE
 
 import selenium
+from selenium.webdriver.common.by import By
 
 import testutils
 from testutils import graphql
@@ -52,6 +53,8 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     cloud_project_elts.delete_cloud_project(project_title)
 
     # Assert project does not exist in cloud tab
+    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
+
     assert project_title != first_cloud_project, \
         f"Expected {project_title} to not be the first cloud project in {username}'s Cloud tab, " \
         f"but instead got {first_cloud_project}"
@@ -74,17 +77,17 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     """
         Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
     """
-    # Create and publish project
+    # Owner creates and publishes project
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
-    # Add collaborator
+    # Owner adds collaborator and logs out
     collaborator = cloud_project_elts.add_collaborator_read_permissions(project_title)
-    # Owner logs out
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.do_logout()
-    # Collaborator logs in and imports cloud project
+
+    # Collaborator logs in, imports cloud project, and logs out
     logging.info(f"Logging in as {collaborator}")
     testutils.log_in(driver, user_index=1)
     time.sleep(2)
@@ -98,7 +101,6 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts.first_cloud_project.wait()
     first_cloud_project = cloud_project_elts.first_cloud_project.find().text
 
-    # Assert cloud project imports successfully
     assert project_title == first_cloud_project, \
         f"Expected {project_title} to be the first cloud project in {collaborator}'s Cloud tab, " \
         f"but instead got {first_cloud_project}"
@@ -106,15 +108,13 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts.import_first_cloud_project_button.find().click()
     container_elts = testutils.ContainerElements(driver)
     container_elts.container_status_stopped.wait()
-
-    # Assert imported cloud project opens to project overview page
     shared_project_title = cloud_project_elts.project_overview_project_title.find().text
 
     assert project_title in shared_project_title, \
         f"After import, expected project {project_title} to open to project overview page"
 
-    # Collaborator logs out
     side_bar_elts.do_logout()
+
     # Owner logs in and deletes cloud project
     logging.info(f"Logging in as {username}")
     testutils.log_in(driver)

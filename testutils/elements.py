@@ -210,6 +210,7 @@ class EnvironmentElements(UiComponent):
         time.sleep(5)
         wait = selenium.webdriver.support.ui.WebDriverWait(self.driver, 30)
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".flex>.Stopped")))
+        time.sleep(5)
 
     def add_custom_docker_instructions(self, docker_instruction):
         logging.info("Adding custom Docker instruction")
@@ -227,7 +228,7 @@ class EnvironmentElements(UiComponent):
 class JupyterLabElements(UiComponent):
     @property
     def jupyterlab_launch_button(self):
-        return CssElement(self.driver, "div[data-selenium-id='DevTools'] div button")
+        return CssElement(self.driver, ".DevTools__btn--launch")
 
     @property
     def jupyter_notebook_button(self):
@@ -247,7 +248,7 @@ class JupyterLabElements(UiComponent):
 
     def create_jupyter_notebook(self):
         logging.info("Switching to JupyterLab")
-        self.jupyterlab_launch_button.wait().click()
+        self.jupyterlab_launch_button.find().click()
         # The time it takes to open JupyterLab is inconsistent, so a long wait is necessary
         time.sleep(35)
         window_handles = self.driver.window_handles

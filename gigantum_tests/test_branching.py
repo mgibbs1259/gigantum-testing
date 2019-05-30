@@ -56,15 +56,15 @@ def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     file_browser_elts.delete_file_button.wait().click()
     file_browser_elts.confirm_delete_file_button.wait().click()
     time.sleep(2)
-    branch_elts.switch_to_master_branch()
-    branch_elts.merge_test_branch_into_master_branch()
+    branch_elts.switch_to_alternate_branch()
+    branch_elts.merge_alternate_branch()
     logging.info(f"Checking that file deleted in test-branch does not appear in master branch")
 
     assert file_browser_elts.file_browser_empty.find(), \
         "Expected sample-upload.txt to not appear in master branch"
 
 
-def test_favorite_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
+'''def test_favorite_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     """
     Test that a file created on the master branch, favorited in a local branch, and then merged back into the
     master branch is favorited in the master branch.
@@ -86,25 +86,9 @@ def test_favorite_file_local_branch(driver: selenium.webdriver, *args, **kwargs)
     favorite_file_off_hover.perform()
     file_browser_elts.favorite_file_button_off.find().click()
     time.sleep(2)
-    branch_elts.switch_to_master_branch()
-    branch_elts.merge_test_branch_into_master_branch()
+    branch_elts.switch_to_alternate_branch()
+    branch_elts.merge_alternate_branch()
     logging.info(f"Checking that file favorited in test-branch is favorited in master branch")
 
     assert file_browser_elts.favorite_file_button_on.find(), \
-        "Expected sample-upload.txt to be favorited in master branch"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        "Expected sample-upload.txt to be favorited in master branch"'''

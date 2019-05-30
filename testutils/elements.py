@@ -443,14 +443,14 @@ class BranchElements(UiComponent):
         self.branch_name_input.find().send_keys(branch_name)
         self.create_button.wait().click()
 
-    def switch_to_master_branch(self):
-        logging.info(f"Switching to master branch")
+    def switch_to_alternate_branch(self):
+        logging.info("Switching from current branch to alternate branch")
         self.upper_left_branch_drop_down_button.find().click()
         self.upper_left_first_branch_button.wait().click()
         time.sleep(4)
 
-    def merge_test_branch_into_master_branch(self):
-        logging.info(f"Merging test-branch into master branch")
+    def merge_alternate_branch(self):
+        logging.info("Merging alternate branch into current branch")
         self.manage_branches_button.wait().click()
         branch_container_hover = ActionChains(self.driver).move_to_element(self.manage_branches_branch_container.find())
         branch_container_hover.perform()

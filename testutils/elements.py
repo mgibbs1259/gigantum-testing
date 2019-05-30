@@ -6,6 +6,7 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from .testutils import *
 from .graphql import list_remote_datasets, list_remote_projects
@@ -415,6 +416,14 @@ class BranchElements(UiComponent):
         return CssElement(self.driver, ".BranchMenu__dropdown-btn>div[data-tooltip='Local only']")
 
     @property
+    def upper_left_branch_drop_down_button(self):
+        return CssElement(self.driver, ".BranchMenu__dropdown-btn")
+
+    @property
+    def upper_left_first_branch_button(self):
+        return CssElement(self.driver, ".BranchMenu__text")
+
+    @property
     def manage_branches_button(self):
         return CssElement(self.driver, ".Btn--branch--manage")
 
@@ -426,11 +435,41 @@ class BranchElements(UiComponent):
     def manage_branches_local_only(self):
         return CssElement(self.driver, ".Branches__details>div[data-tooltip='Local only']")
 
+    @property
+    def manage_branches_branch_container(self):
+        return CssElement(self.driver, ".Branches__branch>.Branches__base-section>.Branches__branchname-container")
+
+    @property
+    def manage_branches_merge_branch_button(self):
+        return CssElement(self.driver, ".Branches__btn--merge")
+
+    @property
+    def manage_branches_confirm_merge_branch_button(self):
+        return CssElement(self.driver, ".Branches__Modal-confirm")
+
     def create_local_branch(self, branch_name):
         logging.info(f"Creating a new local branch {branch_name}")
         self.create_branch_button.wait().click()
         self.branch_name_input.find().send_keys(branch_name)
         self.create_button.wait().click()
+
+    def switch_to_alternate_branch(self):
+        """ Switch from the current branch to the alternate branch """
+        logging.info("Switching from current branch to alternate branch")
+        self.upper_left_branch_drop_down_button.find().click()
+        self.upper_left_first_branch_button.wait().click()
+        time.sleep(4)
+
+    def merge_alternate_branch(self):
+        """ Merge the alternate branch into the current branch """
+        logging.info("Merging alternate branch into current branch")
+        self.manage_branches_button.wait().click()
+        branch_container_hover = ActionChains(self.driver).move_to_element(self.manage_branches_branch_container.find())
+        branch_container_hover.perform()
+        self.manage_branches_merge_branch_button.wait().click()
+        time.sleep(2)
+        self.manage_branches_confirm_merge_branch_button.wait().click()
+        time.sleep(8)
 
 
 class CloudProjectElements(UiComponent):
@@ -558,12 +597,36 @@ class FileBrowserElements(UiComponent):
         return CssElement(self.driver, "#data")
 
     @property
+    def file_browser_empty(self):
+        return CssElement(self.driver, ".FileBrowser__empty")
+
+    @property
     def file_browser_area(self):
         return CssElement(self.driver, ".FileBrowser")
 
     @property
     def file_information(self):
         return CssElement(self.driver, ".File__text div span")
+
+    @property
+    def check_file_check_box(self):
+        return CssElement(self.driver, ".File__row>.CheckboxMultiselect")
+
+    @property
+    def delete_file_button(self):
+        return CssElement(self.driver, ".FileBrowser__multiselect>.Btn__delete")
+
+    @property
+    def confirm_delete_file_button(self):
+        return CssElement(self.driver, ".justify--space-around>.File__btn--add")
+
+    @property
+    def favorite_file_button_off(self):
+        return CssElement(self.driver, ".Btn__Favorite-off")
+
+    @property
+    def favorite_file_button_on(self):
+        return CssElement(self.driver, ".Btn__Favorite-on")
 
     @property
     def container_status_stopped(self):

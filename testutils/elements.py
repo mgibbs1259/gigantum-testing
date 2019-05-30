@@ -570,13 +570,22 @@ class CloudProjectElements(UiComponent):
         container_elts.container_status_stopped.wait()
         time.sleep(5)
 
-    def add_collaborator_read_permissions(self, project_title):
-        logging.info(f"Adding a collaborator to project {project_title}")
+    def add_collaborator_with_permissions(self, project_title, permissions="read"):
+        logging.info(f"Adding a collaborator to project {project_title} with read permissions")
         self.open_collaborators_button.find().click()
         collaborator = load_credentials(user_index=1)[0].rstrip()
         self.collaborator_input.wait().send_keys(collaborator)
-        self.add_collaborator_button.wait().click()
-        time.sleep(2)
+        if permissions == "write":
+            self.collaborator_permissions_button.wait().click()
+            self.select_write_permissions_button.wait().click()
+            time.sleep(2)
+        elif permissions == "admin":
+            self.collaborator_permissions_button.wait().click()
+            self.select_admin_permissions_button.wait().click()
+            time.sleep(2)
+        else:
+            self.add_collaborator_button.wait().click()
+            time.sleep(2)
         self.close_collaborators_button.find().click()
         return collaborator
 

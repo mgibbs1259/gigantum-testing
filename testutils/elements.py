@@ -555,12 +555,16 @@ class FileBrowserElements(UiComponent):
         return CssElement(self.driver, ".File__text div span")
 
     @property
+    def check_file_check_box(self):
+        return CssElement(self.driver, ".File__row>.CheckboxMultiselect")
+
+    @property
     def delete_file_button(self):
-        return CssElement(self.driver, ".relative>.Btn__delete")
+        return CssElement(self.driver, ".FileBrowser__multiselect>.Btn__delete")
 
     @property
     def confirm_delete_file_button(self):
-        return CssElement(self.driver, ".flex>.File__btn--add")
+        return CssElement(self.driver, ".justify--space-around>.File__btn--add")
 
     @property
     def container_status_stopped(self):

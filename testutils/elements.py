@@ -571,7 +571,11 @@ class FileBrowserElements(UiComponent):
         return CssElement(self.driver, ".justify--space-around>.File__btn--add")
 
     @property
-    def favorite_file_button(self):
+    def favorite_file_button_off(self):
+        return CssElement(self.driver, ".Btn__Favorite-off")
+
+    @property
+    def favorite_file_button_on(self):
         return CssElement(self.driver, ".Btn__Favorite-on")
 
     @property

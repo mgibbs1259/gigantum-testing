@@ -45,11 +45,9 @@ def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/{username}/{project_title}/inputData")
     time.sleep(2)
     logging.info(f"Adding a file to the master branch of project {project_title}")
-    with open('/tmp/sample-upload.txt', 'w') as example_file:
-        example_file.write('Sample Text')
-    input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title, 'input')
-    shutil.copy(example_file.name, input_path)
-    time.sleep(8)
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.drag_drop_file_in_drop_zone()
+    time.sleep(4)
     branch_elts = testutils.BranchElements(driver)
     branch_elts.create_local_branch("test-branch")
     time.sleep(8)
@@ -58,7 +56,7 @@ def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     file_browser_elts.check_file_check_box.find().click()
     file_browser_elts.delete_file_button.wait().click()
     file_browser_elts.confirm_delete_file_button.wait().click()
-    time.sleep(4)
+    time.sleep(2)
     logging.info(f"Switching to master branch")
     branch_elts.upper_left_branch_drop_down_button.find().click()
     branch_elts.upper_left_first_branch_button.wait().click()
@@ -87,17 +85,17 @@ def test_file_favorite_local_branch(driver: selenium.webdriver, *args, **kwargs)
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/{username}/{project_title}/inputData")
     time.sleep(2)
     logging.info(f"Adding a file to the master branch of project {project_title}")
-    with open('/tmp/sample-upload.txt', 'w') as example_file:
-        example_file.write('Sample Text')
-    input_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks', project_title, 'input')
-    shutil.copy(example_file.name, input_path)
-    time.sleep(8)
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.drag_drop_file_in_drop_zone()
+    time.sleep(4)
     branch_elts = testutils.BranchElements(driver)
     branch_elts.create_local_branch("test-branch")
     time.sleep(8)
     logging.info(f"Favoriting file in test-branch")
-    file_browser_elts = testutils.FileBrowserElements(driver)
-    file_browser_elts.favorite_file_button.find().click()
+    favorite_file_off_hover = ActionChains(driver).move_to_element(file_browser_elts.favorite_file_button_off.find())
+    favorite_file_off_hover.perform()
+    file_browser_elts.favorite_file_button_off.find().click()
+    time.sleep(2)
     logging.info(f"Switching to master branch")
     branch_elts.upper_left_branch_drop_down_button.find().click()
     branch_elts.upper_left_first_branch_button.wait().click()
@@ -112,7 +110,8 @@ def test_file_favorite_local_branch(driver: selenium.webdriver, *args, **kwargs)
     time.sleep(8)
     logging.info(f"Checking that file favorited in test-branch is favorited in master branch")
 
-    assert file_browser_elts.favorite_file_button.find(), "Expected sample-upload.txt to be favorited in master branch"
+    assert file_browser_elts.favorite_file_button_on.find(), \
+        "Expected sample-upload.txt to be favorited in master branch"
 
 
 

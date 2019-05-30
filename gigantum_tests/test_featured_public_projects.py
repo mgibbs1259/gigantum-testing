@@ -1,4 +1,5 @@
 import logging
+import time
 
 import selenium
 from selenium.webdriver.common.by import By
@@ -23,9 +24,11 @@ def test_featured_public_projects(driver: selenium.webdriver, *args, **kwargs):
         import_project_elts = testutils.ImportProjectElements(driver)
         import_project_elts.import_project_via_url(project)
         container_elts = testutils.ContainerElements(driver)
-        container_elts.container_status_stopped.wait()
+        container_elts.container_status_stopped.wait(90)
 
         assert container_elts.container_status_stopped.find().is_displayed(), "Expected stopped container status"
 
         logging.info(f"Featured public project {project} was imported successfully")
-        testutils.SideBarElements(driver).projects_icon.find().click()
+        side_bar_elts = testutils.SideBarElements(driver)
+        side_bar_elts.projects_icon.find().click()
+        time.sleep(2)

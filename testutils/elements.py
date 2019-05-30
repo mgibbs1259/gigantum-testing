@@ -296,10 +296,16 @@ class ImportProjectElements(UiComponent):
     def import_button(self):
         return CssElement(self.driver, "button~button")
 
+    @property
+    def overview_tab(self):
+        return CssElement(self.driver, "#overview")
+
     def import_project_via_url(self, project_url):
         self.import_existing_button.wait().click()
-        self.project_url_input.wait().send_keys(project_url)
+        self.project_url_input.find().send_keys(project_url)
         self.import_button.wait().click()
+        self.overview_tab.wait(90)
+        time.sleep(5)
 
 
 class DatasetElements(UiComponent):
@@ -667,6 +673,10 @@ class FileBrowserElements(UiComponent):
 
 
 class ContainerElements(UiComponent):
+    @property
+    def container_status_building(self):
+        return CssElement(self.driver, ".flex>.Building")
+
     @property
     def container_status_stopped(self):
         return CssElement(self.driver, ".flex>.Stopped")

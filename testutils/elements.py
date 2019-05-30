@@ -286,15 +286,27 @@ class JupyterLabElements(UiComponent):
 class ImportProjectElements(UiComponent):
     @property
     def import_existing_button(self):
-        return self.driver.find_element_by_css_selector(".btn--import~.btn--import")
+        return CssElement(self.driver, ".btn--import~.btn--import")
 
     @property
     def project_url_input(self):
-        return self.driver.find_element_by_css_selector(".Import__input")
+        return CssElement(self.driver, ".Import__input")
 
     @property
     def import_button(self):
-        return self.driver.find_element_by_css_selector("button~button")
+        return CssElement(self.driver, "button~button")
+
+    @property
+    def overview_tab(self):
+        return CssElement(self.driver, "#overview")
+
+    def import_project_via_url(self, project_url):
+        self.import_existing_button.wait().click()
+        self.project_url_input.find().send_keys(project_url)
+        self.import_button.wait().click()
+        self.overview_tab.wait(90)
+        # Wait to ensure that the container changes from stopped to building
+        time.sleep(5)
 
 
 class DatasetElements(UiComponent):
@@ -662,6 +674,10 @@ class FileBrowserElements(UiComponent):
 
 
 class ContainerElements(UiComponent):
+    @property
+    def container_status_building(self):
+        return CssElement(self.driver, ".flex>.Building")
+
     @property
     def container_status_stopped(self):
         return CssElement(self.driver, ".flex>.Stopped")

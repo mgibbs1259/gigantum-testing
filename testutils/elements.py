@@ -178,6 +178,10 @@ class AddProjectBaseElements(UiComponent):
     def r_tidyverse_base_button(self):
         return self.driver.find_element_by_css_selector("h6[data-name='r-tidyverse']")
 
+    @property
+    def r_studio_base_button(self):
+        return self.driver.find_element_by_css_selector("h6[data-name='rstudio-server']")
+
 
 class EnvironmentElements(UiComponent):
     @property
@@ -681,6 +685,3 @@ class ContainerElements(UiComponent):
     @property
     def container_status_stopped(self):
         return CssElement(self.driver, ".flex>.Stopped")
-
-
-

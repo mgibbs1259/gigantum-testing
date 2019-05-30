@@ -444,12 +444,14 @@ class BranchElements(UiComponent):
         self.create_button.wait().click()
 
     def switch_to_alternate_branch(self):
+        """ Switch from the current branch to the alternate branch """
         logging.info("Switching from current branch to alternate branch")
         self.upper_left_branch_drop_down_button.find().click()
         self.upper_left_first_branch_button.wait().click()
         time.sleep(4)
 
     def merge_alternate_branch(self):
+        """ Merge the alternate branch into the current branch """
         logging.info("Merging alternate branch into current branch")
         self.manage_branches_button.wait().click()
         branch_container_hover = ActionChains(self.driver).move_to_element(self.manage_branches_branch_container.find())

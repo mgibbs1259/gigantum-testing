@@ -36,8 +36,8 @@ def test_create_local_branch(driver: selenium.webdriver, *args, **kwargs):
 
 def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test that files created on the master branch, deleted in a local branch, and then merged back into the
-    master branch do not appear in the master branch.
+    Test that a file created on the master branch, deleted in a local branch, and then merged back into the
+    master branch does not appear in the master branch.
     """
     r = testutils.prep_py3_minimal_base(driver)
     username, project_title = r.username, r.project_name
@@ -68,12 +68,20 @@ def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     branch_container_hover = ActionChains(driver).move_to_element(branch_elts.manage_branches_branch_container.find())
     branch_container_hover.perform()
     branch_elts.manage_branches_merge_branch_button.wait().click()
+    time.sleep(2)
     branch_elts.manage_branches_confirm_merge_branch_button.wait().click()
     time.sleep(8)
-    logging.info(f"Checking that file deleted in test-branch does not appear on master branch")
-    first_file = file_browser_elts.file_information.find().text
+    logging.info(f"Checking that file deleted in test-branch does not appear in master branch")
 
-    assert first_file != "sample-upload.txt", f"Expected {first_file} to not appear in master branch"
+    assert file_browser_elts.file_browser_empty.find(), "Expected sample-upload.txt to not appear in master branch"
+
+
+def test_file_favorite_local_branch(driver: selenium.webdriver, *args, **kwargs):
+    """
+    Test that a file created on the master branch, favorited in a local branch, and then merged back into the
+    master branch is favorited in the master branch.
+    """
+
 
 
 

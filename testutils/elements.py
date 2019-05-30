@@ -547,6 +547,10 @@ class FileBrowserElements(UiComponent):
         return CssElement(self.driver, "#data")
 
     @property
+    def file_browser_empty(self):
+        return CssElement(self.driver, ".FileBrowser__empty")
+
+    @property
     def file_browser_area(self):
         return CssElement(self.driver, ".FileBrowser")
 

@@ -286,15 +286,15 @@ class JupyterLabElements(UiComponent):
 class ImportProjectElements(UiComponent):
     @property
     def import_existing_button(self):
-        return self.driver.find_element_by_css_selector(".btn--import~.btn--import")
+        return CssElement(self.driver, ".btn--import~.btn--import")
 
     @property
     def project_url_input(self):
-        return self.driver.find_element_by_css_selector(".Import__input")
+        return CssElement(self.driver, ".Import__input")
 
     @property
     def import_button(self):
-        return self.driver.find_element_by_css_selector("button~button")
+        return CssElement(self.driver, "button~button")
 
 
 class DatasetElements(UiComponent):

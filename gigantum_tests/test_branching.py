@@ -1,7 +1,6 @@
 import logging
 import time
 import os
-import shutil
 
 import selenium
 from selenium.webdriver.common.by import By
@@ -71,10 +70,11 @@ def test_delete_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     time.sleep(8)
     logging.info(f"Checking that file deleted in test-branch does not appear in master branch")
 
-    assert file_browser_elts.file_browser_empty.find(), "Expected sample-upload.txt to not appear in master branch"
+    assert file_browser_elts.file_browser_empty.find(), \
+        "Expected sample-upload.txt to not appear in master branch"
 
 
-def test_file_favorite_local_branch(driver: selenium.webdriver, *args, **kwargs):
+def test_favorite_file_local_branch(driver: selenium.webdriver, *args, **kwargs):
     """
     Test that a file created on the master branch, favorited in a local branch, and then merged back into the
     master branch is favorited in the master branch.

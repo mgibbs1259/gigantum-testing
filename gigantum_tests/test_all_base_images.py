@@ -44,3 +44,6 @@ def test_base_rstudio(driver: selenium.webdriver, *args, **kwargs):
     """
     Test the creation of a project with a RStudio base.
     """
+    b = lambda: \
+        testutils.elements.AddProjectBaseElements(driver).r_studio_base_button
+    testutils.prep_base(driver, b)

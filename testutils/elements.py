@@ -83,6 +83,30 @@ class Auth0LoginElements(UiComponent):
             pass
 
 
+class SideBarElements(UiComponent):
+    @property
+    def projects_icon(self):
+        return CssElement(self.driver, ".SideBar__nav-item--labbooks")
+
+    @property
+    def datasets_icon(self):
+        return CssElement(self.driver, ".SideBar__icon--datasets")
+
+    @property
+    def username_button(self):
+        return CssElement(self.driver, "#username")
+
+    @property
+    def logout_button(self):
+        return CssElement(self.driver, "#logout")
+
+    def do_logout(self):
+        logging.info("Logging out")
+        self.username_button.wait().click()
+        self.logout_button.wait().click()
+        time.sleep(2)
+
+
 class GuideElements(UiComponent):
     @property
     def got_it_button(self):
@@ -273,20 +297,6 @@ class ImportProjectElements(UiComponent):
         return self.driver.find_element_by_css_selector("button~button")
 
 
-class SideBarElements(UiComponent):
-    @property
-    def projects_icon(self):
-        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
-
-    @property
-    def username_button(self):
-        return self.driver.find_element_by_css_selector("#username")
-
-    @property
-    def logout_button(self):
-        return self.driver.find_element_by_css_selector("#logout")
-
-
 class DatasetElements(UiComponent):
     @property
     def dataset_page_tab(self):
@@ -438,7 +448,7 @@ class BranchElements(UiComponent):
         return CssElement(self.driver, ".Branches__Modal-confirm")
 
     def create_local_branch(self, branch_name):
-        logging.info("Creating a new local branch")
+        logging.info(f"Creating a new local branch {branch_name}")
         self.create_branch_button.wait().click()
         self.branch_name_input.find().send_keys(branch_name)
         self.create_button.wait().click()
@@ -462,7 +472,7 @@ class BranchElements(UiComponent):
         time.sleep(8)
 
 
-class PublishProjectElements(UiComponent):
+class CloudProjectElements(UiComponent):
     @property
     def publish_project_button(self):
         return CssElement(self.driver, ".Btn--branch--sync--publish")
@@ -472,84 +482,105 @@ class PublishProjectElements(UiComponent):
         return CssElement(self.driver, ".VisibilityModal__buttons .Btn--last")
 
     @property
-    def project_page_tab(self):
-        return self.driver.find_element_by_css_selector(".SideBar__nav-item--labbooks")
+    def open_collaborators_button(self):
+        return CssElement(self.driver, ".Collaborators__btn")
 
     @property
-    def cloud_tab(self):
-        return self.driver.find_element_by_css_selector(".Tab--cloud")
+    def collaborator_input(self):
+        return CssElement(self.driver, ".CollaboratorsModal__input--collaborators")
 
     @property
-    def local_tab(self):
-        return self.driver.find_element_by_css_selector(".Tab--local")
+    def collaborator_permissions_button(self):
+        return CssElement(self.driver, ".CollaboratorsModal__permissions")
 
     @property
-    def sync_project_button(self):
-        return self.driver.find_element_by_css_selector(".Btn--branch--sync--upToDate")
+    def select_write_permissions_button(self):
+        return self.driver.find_element_by_xpath("//div[contains(text(), 'Write')]")
 
     @property
-    def delete_project_button(self):
-        return self.driver.find_element_by_css_selector(".Button__icon--delete")
-
-    @property
-    def delete_project_input(self):
-        return self.driver.find_element_by_css_selector("#deleteInput")
-
-    @property
-    def delete_confirm_button(self):
-        return self.driver.find_element_by_css_selector(".ButtonLoader")
-
-    @property
-    def publish_continue_button(self):
-        return self.driver.find_element_by_xpath("//button[contains(text(), 'Continue')]")
-
-    @property
-    def publish_private_project_button(self):
-        return self.driver.find_element_by_xpath("//label[@for='project_private']")
-
-    @property
-    def publish_private_dataset_button(self):
-        return self.driver.find_element_by_xpath("//label[@class='PublishDatasetsModal__private-label']")
-
-    @property
-    def publish_all_button(self):
-        return self.driver.find_element_by_xpath("//button[contains(text(), 'Publish All')]")
-
-    @property
-    def collaborators_button(self):
-        return self.driver.find_element_by_css_selector(".Collaborators__btn")
-
-    @property
-    def select_permission_button(self):
-        return self.driver.find_element_by_css_selector(".CollaboratorsModal__permissions")
-
-    @property
-    def select_admin_button(self):
+    def select_admin_permissions_button(self):
         return self.driver.find_element_by_xpath("//div[contains(text(), 'Admin')]")
 
     @property
-    def collaborators_input(self):
-        return self.driver.find_element_by_css_selector(".CollaboratorsModal__input--collaborators")
-
-    @property
-    def add_collaborators_button(self):
-        return self.driver.find_element_by_css_selector(".Btn__plus")
+    def add_collaborator_button(self):
+        return CssElement(self.driver, ".Btn__plus")
 
     @property
     def close_collaborators_button(self):
-        return self.driver.find_element_by_css_selector(".Modal__close")
+        return CssElement(self.driver, ".Modal__close")
 
     @property
-    def overview_project_title(self):
-        return CssElement(self.driver, ".TitleSection__namespace-title")
+    def sync_cloud_project_button(self):
+        return CssElement(self.driver, ".Btn--branch--sync--upToDate")
+
+    @property
+    def sync_cloud_project_message(self):
+        return CssElement(self.driver, ".Footer__message-item>p")
+
+    @property
+    def delete_cloud_project_button(self):
+        return CssElement(self.driver, ".Button__icon--delete")
+
+    @property
+    def delete_cloud_project_input(self):
+        return CssElement(self.driver, "#deleteInput")
+
+    @property
+    def delete_cloud_project_confirm_button(self):
+        return CssElement(self.driver, ".ButtonLoader")
+
+    @property
+    def cloud_tab(self):
+        return CssElement(self.driver, ".Tab--cloud")
+
+    @property
+    def first_cloud_project(self):
+        return CssElement(self.driver, ".RemoteLabbooks__panel-title span span")
 
     @property
     def import_first_cloud_project_button(self):
-        return self.driver.find_element_by_css_selector(".Button__icon--cloud-download")
+        return CssElement(self.driver, ".Button__icon--cloud-download")
 
-    def publish_project(self):
+    @property
+    def project_overview_project_title(self):
+        return CssElement(self.driver, ".TitleSection__namespace-title")
+
+    def publish_private_project(self, project_title):
+        logging.info(f"Publishing private project {project_title}")
         self.publish_project_button.wait().click()
         self.publish_confirm_button.wait().click()
+        time.sleep(5)
+        container_elts = ContainerElements(self.driver)
+        container_elts.container_status_stopped.wait()
+        time.sleep(5)
+
+    def add_collaborator_read_permissions(self, project_title):
+        logging.info(f"Adding a collaborator to project {project_title}")
+        self.open_collaborators_button.find().click()
+        collaborator = load_credentials(user_index=1)[0].rstrip()
+        self.collaborator_input.wait().send_keys(collaborator)
+        self.add_collaborator_button.wait().click()
+        time.sleep(2)
+        self.close_collaborators_button.find().click()
+        return collaborator
+
+    def sync_cloud_project(self, project_title):
+        logging.info(f"Syncing cloud project {project_title}")
+        self.sync_cloud_project_button.find().click()
+        time.sleep(5)
+        container_elts = ContainerElements(self.driver)
+        container_elts.container_status_stopped.wait()
+
+    def delete_cloud_project(self, project_title):
+        logging.info(f"Deleting cloud project {project_title}")
+        side_bar_elts = SideBarElements(self.driver)
+        side_bar_elts.projects_icon.find().click()
+        self.cloud_tab.wait().click()
+        self.first_cloud_project.wait()
+        self.delete_cloud_project_button.find().click()
+        self.delete_cloud_project_input.wait().send_keys(project_title)
+        self.delete_cloud_project_confirm_button.wait().click()
+        time.sleep(10)
 
 
 class FileBrowserElements(UiComponent):
@@ -628,6 +659,12 @@ class FileBrowserElements(UiComponent):
         self.driver.find_element_by_css_selector(".ButtonLoader ").click()
         # wait the linking window to disappear
         wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".LinkModal__container")))
+
+
+class ContainerElements(UiComponent):
+    @property
+    def container_status_stopped(self):
+        return CssElement(self.driver, ".flex>.Stopped")
 
 
 

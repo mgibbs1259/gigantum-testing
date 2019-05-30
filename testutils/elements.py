@@ -305,6 +305,7 @@ class ImportProjectElements(UiComponent):
         self.project_url_input.find().send_keys(project_url)
         self.import_button.wait().click()
         self.overview_tab.wait(90)
+        # Wait to ensure that the container changes from stopped to building
         time.sleep(5)
 
 

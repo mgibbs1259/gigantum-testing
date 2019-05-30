@@ -1,45 +1,32 @@
-# Builtin imports
-import logging
 import time
 import os
 
-# Library imports
 import selenium
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-# Local packages
 import testutils
 
 
 def test_linked_published_dataset_then_publish(driver: selenium.webdriver, *args, **kwargs):
     """
-    1. create and publish a dataset
-    2. create a project and link the dataset
-    3. publish the project
+    Test that a dataset can be created, published,
+    linked to a project and published with the project.
     """
-    # create a dataset
-    # dataset set up
     testutils.log_in(driver)
     testutils.GuideElements(driver).remove_guide()
-
-    ds_elements = testutils.DatasetElements(driver)
-    # create and publish datset
-    dataset_title_local = ds_elements.create_dataset(testutils.unique_dataset_name())
-    ds_elements.publish_dataset()
-
+    ds_elts = testutils.DatasetElements(driver)
+    # Create and publish dataset
+    ds_elts.create_dataset(testutils.unique_dataset_name())
+    ds_elts.publish_dataset()
+    # Create a project, link dataset, and publish project
     driver.get(os.environ['GIGANTUM_HOST'])
     r = testutils.prep_py3_minimal_base(driver, skip_login=True)
-    username, project_name = r.username, r.project_name
-
-    filebrowser_elts = testutils.FileBrowserElements(driver)
-    filebrowser_elts.link_dataset('a', 'b')
-
+    username, project_title = r.username, r.project_name
+    file_browser_elts = testutils.FileBrowserElements(driver)
+    file_browser_elts.link_dataset('a', 'b')
     time.sleep(4)
-
-    pp = testutils.PublishProjectElements(driver)
-    pp.publish_project()
+    cloud_project_elts = testutils.CloudProjectElements(driver)
+    cloud_project_elts.publish_private_project(project_title)
     time.sleep(4)
 
     # TODO - Use query to affirm that dataset linked properly

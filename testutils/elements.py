@@ -405,6 +405,14 @@ class BranchElements(UiComponent):
         return CssElement(self.driver, ".BranchMenu__dropdown-btn>div[data-tooltip='Local only']")
 
     @property
+    def upper_left_branch_drop_down_button(self):
+        return CssElement(self.driver, ".BranchMenu__dropdown-btn")
+
+    @property
+    def upper_left_first_branch_button(self):
+        return CssElement(self.driver, ".BranchMenu__text")
+
+    @property
     def manage_branches_button(self):
         return CssElement(self.driver, ".Btn--branch--manage")
 
@@ -415,6 +423,18 @@ class BranchElements(UiComponent):
     @property
     def manage_branches_local_only(self):
         return CssElement(self.driver, ".Branches__details>div[data-tooltip='Local only']")
+
+    @property
+    def manage_branches_branch_container(self):
+        return CssElement(self.driver, ".Branches__branch>.Branches__base-section>.Branches__branchname-container")
+
+    @property
+    def manage_branches_merge_branch_button(self):
+        return CssElement(self.driver, ".Branches__btn--merge")
+
+    @property
+    def manage_branches_confirm_merge_branch_button(self):
+        return CssElement(self.driver, ".Branches__Modal-confirm")
 
     def create_local_branch(self, branch_name):
         logging.info("Creating a new local branch")
@@ -533,6 +553,14 @@ class FileBrowserElements(UiComponent):
     @property
     def file_information(self):
         return CssElement(self.driver, ".File__text div span")
+
+    @property
+    def delete_file_button(self):
+        return CssElement(self.driver, ".relative>.Btn__delete")
+
+    @property
+    def confirm_delete_file_button(self):
+        return CssElement(self.driver, ".flex>.File__btn--add")
 
     @property
     def container_status_stopped(self):

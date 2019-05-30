@@ -6,6 +6,7 @@ import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from .testutils import *
 from .graphql import list_remote_datasets, list_remote_projects
@@ -441,6 +442,22 @@ class BranchElements(UiComponent):
         self.create_branch_button.wait().click()
         self.branch_name_input.find().send_keys(branch_name)
         self.create_button.wait().click()
+
+    def switch_to_master_branch(self):
+        logging.info(f"Switching to master branch")
+        self.upper_left_branch_drop_down_button.find().click()
+        self.upper_left_first_branch_button.wait().click()
+        time.sleep(4)
+
+    def merge_test_branch_into_master_branch(self):
+        logging.info(f"Merging test-branch into master branch")
+        self.manage_branches_button.wait().click()
+        branch_container_hover = ActionChains(self.driver).move_to_element(self.manage_branches_branch_container.find())
+        branch_container_hover.perform()
+        self.manage_branches_merge_branch_button.wait().click()
+        time.sleep(2)
+        self.manage_branches_confirm_merge_branch_button.wait().click()
+        time.sleep(8)
 
 
 class PublishProjectElements(UiComponent):

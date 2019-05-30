@@ -296,6 +296,11 @@ class ImportProjectElements(UiComponent):
     def import_button(self):
         return CssElement(self.driver, "button~button")
 
+    def import_project_via_url(self, project_url):
+        self.import_existing_button.wait().click()
+        self.project_url_input.wait().send_keys(project_url)
+        self.import_button.wait().click()
+
 
 class DatasetElements(UiComponent):
     @property

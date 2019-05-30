@@ -38,3 +38,9 @@ def test_base_rtidy(driver: selenium.webdriver, *args, **kwargs):
     b = lambda : \
         testutils.elements.AddProjectBaseElements(driver).r_tidyverse_base_button
     testutils.prep_base(driver, b)
+
+
+def test_base_rstudio(driver: selenium.webdriver, *args, **kwargs):
+    """
+    Test the creation of a project with a RStudio base.
+    """

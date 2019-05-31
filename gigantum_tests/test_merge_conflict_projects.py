@@ -12,7 +12,7 @@ from testutils import graphql
 
 def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
     """
-    Prepare a merge conflict in a project.
+    Prepare a merge conflict in a cloud project.
     """
     # Owner creates a project, publishes it, adds a collaborator, and logs out
     r = testutils.prep_py3_minimal_base(driver)
@@ -69,7 +69,7 @@ def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
 
 def test_use_mine_merge_conflict_project(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test a merge conflict in a project in which the owner resolves it with 'Use Mine.'
+    Test a merge conflict in a cloud project in which the owner resolves it with 'Use Mine.'
     """
     # Prepare merge conflict
     username, project_title, collaborator = prep_merge_conflict(driver)
@@ -91,7 +91,7 @@ def test_use_mine_merge_conflict_project(driver: selenium.webdriver, *args, **kw
 
 def test_use_theirs_merge_conflict_project(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test a merge conflict in a project in which the owner resolves it with 'Use Theirs.'
+    Test a merge conflict in a cloud project in which the owner resolves it with 'Use Theirs.'
     """
     # Prepare merge conflict
     username, project_title, collaborator = prep_merge_conflict(driver)
@@ -113,7 +113,7 @@ def test_use_theirs_merge_conflict_project(driver: selenium.webdriver, *args, **
 
 def test_abort_merge_conflict_project(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test a merge conflict in a project in which the owner resolves it with 'Abort.'
+    Test a merge conflict in a cloud project in which the owner resolves it with 'Abort.'
     """
     # Prepare merge conflict
     username, project_title, collaborator = prep_merge_conflict(driver)
@@ -124,13 +124,12 @@ def test_abort_merge_conflict_project(driver: selenium.webdriver, *args, **kwarg
     git_get_log_command_1 = Popen(['git', 'log', '--pretty=format%H'],
                                   cwd=project_path, stdout=PIPE, stderr=PIPE)
     before_merge_conflict_resolve_stdout = git_get_log_command_1.stdout.readline().decode('utf-8').strip()
-    print('b:', before_merge_conflict_resolve_stdout)
     cloud_project_elts.merge_conflict_abort_button.wait(90).click()
+    time.sleep(2)
     # Check that merge conflict resolves to 'Abort'
     git_get_log_command_2 = Popen(['git', 'log', '--pretty=format%H'],
                                   cwd=project_path, stdout=PIPE, stderr=PIPE)
     after_merge_conflict_resolve_stdout = git_get_log_command_2.stdout.readline().decode('utf-8').strip()
-    print('a:', after_merge_conflict_resolve_stdout)
 
     assert before_merge_conflict_resolve_stdout == after_merge_conflict_resolve_stdout, \
         f"Merge did not resolve to 'Abort' expected to see {before_merge_conflict_resolve_stdout}, " \

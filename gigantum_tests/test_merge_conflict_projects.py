@@ -41,6 +41,7 @@ def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
     container_elts.container_status_stopped.wait(30)
 
     # Collaborator adds a file, syncs, and logs out
+    logging.info(f"Navigating to {collaborator}'s Input Data tab")
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
     time.sleep(2)
     file_browser_elts = testutils.FileBrowserElements(driver)
@@ -101,8 +102,11 @@ def test_use_theirs_merge_conflict_project(driver: selenium.webdriver, *args, **
     # Owner uploads file, syncs, and resolves the merge conflict with 'Use Theirs'
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.merge_conflict_use_theirs_button.wait(30).click()
+    timeout = time.time() + 30
     while cloud_project_elts.sync_cloud_project_message.find().text != "Sync complete":
         cloud_project_elts.sync_cloud_project_message.wait(3)
+        if time.time() > timeout:
+            break
     # Check that merge conflict resolves to 'Use Theirs'
     file_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks',
                              project_title, 'input', 'sample-upload.txt')

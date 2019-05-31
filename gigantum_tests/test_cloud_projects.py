@@ -12,7 +12,7 @@ from testutils import graphql
 
 def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs):
     """
-        Test that a project in Gigantum can be published, synced, and deleted.
+    Test that a project in Gigantum can be published, synced, and deleted.
     """
     # Create and publish project
     r = testutils.prep_py3_minimal_base(driver)
@@ -75,7 +75,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     """
-        Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
+    Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
     """
     # Owner creates and publishes project
     r = testutils.prep_py3_minimal_base(driver)
@@ -113,7 +113,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     assert project_title in shared_project_title, \
         f"After import, expected project {project_title} to open to project overview page"
 
-    side_bar_elts.do_logout()
+    side_bar_elts.do_logout(collaborator)
 
     # Owner logs in and deletes cloud project
     logging.info(f"Logging in as {username}")

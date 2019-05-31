@@ -100,8 +100,8 @@ class SideBarElements(UiComponent):
     def logout_button(self):
         return CssElement(self.driver, "#logout")
 
-    def do_logout(self):
-        logging.info("Logging out")
+    def do_logout(self, username):
+        logging.info(f"Logging out as {username}")
         self.username_button.wait().click()
         self.logout_button.wait().click()
         time.sleep(2)
@@ -561,6 +561,18 @@ class CloudProjectElements(UiComponent):
     def project_overview_project_title(self):
         return CssElement(self.driver, ".TitleSection__namespace-title")
 
+    @property
+    def merge_conflict_use_mine_button(self):
+        return CssElement(self.driver, ".ForceSync__buttonContainer > button:nth-of-type(1)")
+
+    @property
+    def merge_conflict_use_theirs_button(self):
+        return CssElement(self.driver, ".ForceSync_buttonContainer > button:nth-of-type(2)")
+
+    @property
+    def merge_conflict_abort_button(self):
+        return CssElement(self.driver, ".ForceSync_buttonContainer > button:nth-of-type(3)")
+
     def publish_private_project(self, project_title):
         logging.info(f"Publishing private project {project_title}")
         self.publish_project_button.wait().click()
@@ -571,17 +583,19 @@ class CloudProjectElements(UiComponent):
         time.sleep(5)
 
     def add_collaborator_with_permissions(self, project_title, permissions="read"):
-        logging.info(f"Adding a collaborator to project {project_title} with read permissions")
+        logging.info(f"Adding a collaborator to project {project_title} with {permissions} permissions")
         self.open_collaborators_button.find().click()
         collaborator = load_credentials(user_index=1)[0].rstrip()
         self.collaborator_input.wait().send_keys(collaborator)
         if permissions == "write":
             self.collaborator_permissions_button.wait().click()
-            self.select_write_permissions_button.wait().click()
+            self.select_write_permissions_button.click()
+            self.add_collaborator_button.wait().click()
             time.sleep(2)
         elif permissions == "admin":
             self.collaborator_permissions_button.wait().click()
-            self.select_admin_permissions_button.wait().click()
+            self.select_admin_permissions_button.click()
+            self.add_collaborator_button.wait().click()
             time.sleep(2)
         else:
             self.add_collaborator_button.wait().click()
@@ -661,13 +675,13 @@ class FileBrowserElements(UiComponent):
     def link_dataset_button(self):
         return CssElement(self.driver, 'button[data-tooltip="Link Dataset"]')
 
-    def drag_drop_file_in_drop_zone(self):
+    def drag_drop_file_in_drop_zone(self, file_content="Sample Text"):
         logging.info("Dragging and dropping a file into the drop zone")
         with open("testutils/file_browser_drag_drop_script.js", "r") as js_file:
             js_script = js_file.read()
         file_path = "/tmp/sample-upload.txt"
         with open(file_path, "w") as example_file:
-            example_file.write("Sample Text")
+            example_file.write(file_content)
         file_input = self.driver.execute_script(js_script, self.file_browser_area.find(), 0, 0)
         file_input.send_keys(file_path)
         self.file_information.wait()

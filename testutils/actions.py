@@ -103,7 +103,7 @@ def log_in(driver: selenium.webdriver, user_index: int = 0) -> str:
     time.sleep(2)
     try:
         if auth0_elts.auth0_lock_button.find():
-            logging.info("clicking 'Not your account?'")
+            logging.info("Clicking 'Not your account?'")
             auth0_elts.not_your_account_button.find().click()
     except Exception as e:
         logging.warning(e)

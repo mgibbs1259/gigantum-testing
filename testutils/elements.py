@@ -579,7 +579,7 @@ class CloudProjectElements(UiComponent):
         self.publish_confirm_button.wait().click()
         time.sleep(5)
         container_elts = ContainerElements(self.driver)
-        container_elts.container_status_stopped.wait()
+        container_elts.container_status_stopped.wait(20)
         time.sleep(5)
 
     def add_collaborator_with_permissions(self, project_title, permissions="read"):

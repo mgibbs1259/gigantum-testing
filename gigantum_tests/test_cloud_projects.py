@@ -32,7 +32,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     assert "https://" in cloud_project_stdout, f"Expected to see a remote set for project {project_title}, " \
                                                f"but got {cloud_project_stdout}"
 
-    logging.info(f"Checking if a project {project_title} appears in {username}'s Cloud tab")
+    logging.info(f"Checking if project {project_title} appears in {username}'s Cloud tab")
     cloud_project_elts.first_cloud_project.wait()
     first_cloud_project = cloud_project_elts.first_cloud_project.find().text
     logging.info(f"Found first cloud project {first_cloud_project}")

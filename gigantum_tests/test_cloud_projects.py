@@ -21,13 +21,6 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     cloud_project_elts.publish_private_project(project_title)
     logging.info(f"Navigating to {username}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
-    cloud_project_elts.first_cloud_project.wait()
-    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
-    logging.info(f"Found first cloud project {first_cloud_project}")
-
-    assert project_title == first_cloud_project, \
-        f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
-        f"but instead got {first_cloud_project}"
 
     logging.info(f"Checking if a remote is set for project {project_title}")
     project_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username,
@@ -38,6 +31,15 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
     assert "https://" in cloud_project_stdout, f"Expected to see a remote set for project {project_title}, " \
                                                f"but got {cloud_project_stdout}"
+
+    logging.info(f"Checking if a project {project_title} appears in {username}'s Cloud tab")
+    cloud_project_elts.first_cloud_project.wait()
+    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
+    logging.info(f"Found first cloud project {first_cloud_project}")
+
+    assert project_title == first_cloud_project, \
+        f"Expected {project_title} to be the first cloud project in {username}'s Cloud tab, " \
+        f"but instead got {first_cloud_project}"
 
     # Add a file and sync cloud project
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
@@ -52,13 +54,6 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
     # Delete cloud project
     cloud_project_elts.delete_cloud_project(project_title)
 
-    # Assert project does not exist in cloud tab
-    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
-
-    assert project_title != first_cloud_project, \
-        f"Expected {project_title} to not be the first cloud project in {username}'s Cloud tab, " \
-        f"but instead got {first_cloud_project}"
-
     # Assert project does not exist remotely (via GraphQL)
     remote_projects = graphql.list_remote_projects()
 
@@ -71,6 +66,13 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
     assert "fatal" in del_cloud_project_stderr, f"Expected to not see a remote set for project {project_title}, " \
                                                 f"but got {del_cloud_project_stderr}"
+
+    # Assert project does not exist in cloud tab
+    first_cloud_project = cloud_project_elts.first_cloud_project.find().text
+
+    assert project_title != first_cloud_project, \
+        f"Expected {project_title} to not be the first cloud project in {username}'s Cloud tab, " \
+        f"but instead got {first_cloud_project}"
 
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
@@ -140,5 +142,3 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
 
     assert "fatal" in del_cloud_project_stderr, f"Expected to not see a remote set for project {project_title}, " \
                                                 f"but got {del_cloud_project_stderr}"
-
-

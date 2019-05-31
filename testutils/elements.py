@@ -580,7 +580,7 @@ class CloudProjectElements(UiComponent):
         time.sleep(5)
         container_elts = ContainerElements(self.driver)
         container_elts.container_status_stopped.wait(30)
-        time.sleep(5)
+        time.sleep(10)
 
     def add_collaborator_with_permissions(self, project_title, permissions="read"):
         logging.info(f"Adding a collaborator to project {project_title} with {permissions} permissions")

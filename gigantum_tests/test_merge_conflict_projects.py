@@ -35,10 +35,10 @@ def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
     logging.info(f"Navigating to {collaborator}'s Cloud tab")
     driver.get(f"{os.environ['GIGANTUM_HOST']}/projects/cloud")
     time.sleep(2)
-    cloud_project_elts.first_cloud_project.wait(90)
+    cloud_project_elts.first_cloud_project.wait(30)
     cloud_project_elts.import_first_cloud_project_button.find().click()
     container_elts = testutils.ContainerElements(driver)
-    container_elts.container_status_stopped.wait(90)
+    container_elts.container_status_stopped.wait(30)
 
     # Collaborator adds a file, syncs, and logs out
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
@@ -75,9 +75,12 @@ def test_use_mine_merge_conflict_project(driver: selenium.webdriver, *args, **kw
     username, project_title, collaborator = prep_merge_conflict(driver)
     # Owner resolves the merge conflict with 'Use Mine'
     cloud_project_elts = testutils.CloudProjectElements(driver)
-    cloud_project_elts.merge_conflict_use_mine_button.wait(90).click()
+    cloud_project_elts.merge_conflict_use_mine_button.wait(30).click()
+    timeout = time.time() + 30
     while cloud_project_elts.sync_cloud_project_message.find().text != "Sync complete":
         cloud_project_elts.sync_cloud_project_message.wait(3)
+        if time.time() > timeout:
+            break
     # Check that merge conflict resolves to 'Use Mine'
     file_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks',
                              project_title, 'input', 'sample-upload.txt')
@@ -97,7 +100,7 @@ def test_use_theirs_merge_conflict_project(driver: selenium.webdriver, *args, **
     username, project_title, collaborator = prep_merge_conflict(driver)
     # Owner uploads file, syncs, and resolves the merge conflict with 'Use Theirs'
     cloud_project_elts = testutils.CloudProjectElements(driver)
-    cloud_project_elts.merge_conflict_use_theirs_button.wait(90).click()
+    cloud_project_elts.merge_conflict_use_theirs_button.wait(30).click()
     while cloud_project_elts.sync_cloud_project_message.find().text != "Sync complete":
         cloud_project_elts.sync_cloud_project_message.wait(3)
     # Check that merge conflict resolves to 'Use Theirs'
@@ -124,7 +127,7 @@ def test_abort_merge_conflict_project(driver: selenium.webdriver, *args, **kwarg
     git_get_log_command_1 = Popen(['git', 'log', '--pretty=format%H'],
                                   cwd=project_path, stdout=PIPE, stderr=PIPE)
     before_merge_conflict_resolve_stdout = git_get_log_command_1.stdout.readline().decode('utf-8').strip()
-    cloud_project_elts.merge_conflict_abort_button.wait(90).click()
+    cloud_project_elts.merge_conflict_abort_button.wait(30).click()
     time.sleep(2)
     # Check that merge conflict resolves to 'Abort'
     git_get_log_command_2 = Popen(['git', 'log', '--pretty=format%H'],

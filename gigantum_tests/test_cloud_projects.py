@@ -85,7 +85,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     # Owner adds collaborator and logs out
     collaborator = cloud_project_elts.add_collaborator_with_permissions(project_title)
     side_bar_elts = testutils.SideBarElements(driver)
-    side_bar_elts.do_logout()
+    side_bar_elts.do_logout(username)
 
     # Collaborator logs in, imports cloud project, and logs out
     logging.info(f"Logging in as {collaborator}")
@@ -107,7 +107,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
 
     cloud_project_elts.import_first_cloud_project_button.find().click()
     container_elts = testutils.ContainerElements(driver)
-    container_elts.container_status_stopped.wait()
+    container_elts.container_status_stopped.wait(30)
     shared_project_title = cloud_project_elts.project_overview_project_title.find().text
 
     assert project_title in shared_project_title, \

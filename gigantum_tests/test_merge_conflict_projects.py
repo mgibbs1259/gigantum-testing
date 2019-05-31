@@ -9,9 +9,9 @@ import testutils
 from testutils import graphql
 
 
-def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kwargs):
+def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test a merge conflict in a project in which the owner resolves it with 'Use Mine.'
+    Prepare a merge conflict in a project.
     """
     # Owner creates a project, publishes it, adds a collaborator, and logs out
     r = testutils.prep_py3_minimal_base(driver)
@@ -47,7 +47,7 @@ def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kw
     cloud_project_elts.sync_cloud_project(project_title)
     side_bar_elts.do_logout(collaborator)
 
-    # Owner logs in, adds a file with the same name, but different content, and syncs
+    # Owner logs in and navigates to Input Data
     logging.info(f"Logging in as {username}")
     testutils.log_in(driver)
     time.sleep(2)
@@ -59,18 +59,53 @@ def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kw
     logging.info(f"Navigating to {username}'s Input Data tab")
     driver.get(f'{os.environ["GIGANTUM_HOST"]}/projects/{username}/{project_title}/inputData')
     time.sleep(2)
+    file_browser_elts = testutils.FileBrowserElements(driver)
     file_browser_elts.drag_drop_file_in_drop_zone(file_content="Owner")
+    cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.sync_cloud_project(project_title)
+    return username, project_title, collaborator
+
+
+def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kwargs):
+    """
+    Test a merge conflict in a project in which the owner resolves it with 'Use Mine.'
+    """
+    # Prepare merge conflict
+    username, project_title, collaborator = prep_merge_conflict(driver)
+    # Owner resolves the merge conflict with 'Use Mine'
+    cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.merge_conflict_use_mine_button.wait(90).click()
     cloud_project_elts.sync_cloud_project_message.wait()
-
     # Check that merge conflict resolves to 'Use Mine'
     file_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks',
                              project_title, 'input', 'sample-upload.txt')
     with open(file_path, "r") as resolve_merge_conflict_file:
         resolve_merge_conflict_file = resolve_merge_conflict_file.read()
 
-    assert resolve_merge_conflict_file == "Owner", f"Merge did not resolve to 'Use Mine' expected to see 'Owner' " \
-                                                   f"in file, but instead got {resolve_merge_conflict_file}"
+    assert resolve_merge_conflict_file == "Owner", \
+        f"Merge did not resolve to 'Use Mine' expected to see 'Owner' in file, " \
+        f"but instead got {resolve_merge_conflict_file}"
+
+
+def test_merge_conflict_project_use_theirs(driver: selenium.webdriver, *args, **kwargs):
+    """
+    Test a merge conflict in a project in which the owner resolves it with 'Use Theirs.'
+    """
+    # Prepare merge conflict
+    username, project_title, collaborator = prep_merge_conflict(driver)
+    # Owner uploads file, syncs, and resolves the merge conflict with 'Use Theirs'
+    cloud_project_elts = testutils.CloudProjectElements(driver)
+    cloud_project_elts.merge_conflict_use_theirs_button.wait(90).click()
+    cloud_project_elts.sync_cloud_project_message.wait()
+    # Check that merge conflict resolves to 'Use Theirs'
+    file_path = os.path.join(os.environ['GIGANTUM_HOME'], username, username, 'labbooks',
+                             project_title, 'input', 'sample-upload.txt')
+    with open(file_path, "r") as resolve_merge_conflict_file:
+        resolve_merge_conflict_file = resolve_merge_conflict_file.read()
+
+    assert resolve_merge_conflict_file == "Collaborator", \
+        f"Merge did not resolve to 'Use Mine' expected to see 'Collaborator' in file, " \
+        f"but instead got {resolve_merge_conflict_file}"
+
 
 

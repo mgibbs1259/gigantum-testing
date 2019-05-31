@@ -587,7 +587,10 @@ class CloudProjectElements(UiComponent):
         self.open_collaborators_button.find().click()
         collaborator = load_credentials(user_index=1)[0].rstrip()
         self.collaborator_input.wait().send_keys(collaborator)
-        if permissions == "write":
+        if permissions == "read":
+            self.add_collaborator_button.wait().click()
+            time.sleep(2)
+        elif permissions == "write":
             self.collaborator_permissions_button.wait().click()
             self.select_write_permissions_button.click()
             self.add_collaborator_button.wait().click()
@@ -598,8 +601,7 @@ class CloudProjectElements(UiComponent):
             self.add_collaborator_button.wait().click()
             time.sleep(2)
         else:
-            self.add_collaborator_button.wait().click()
-            time.sleep(2)
+            assert False, "An invalid argument was supplied for permissions in add_collaborator_with_permissions"
         self.close_collaborators_button.find().click()
         return collaborator
 

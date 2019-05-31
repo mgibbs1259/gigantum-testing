@@ -563,15 +563,15 @@ class CloudProjectElements(UiComponent):
 
     @property
     def merge_conflict_use_mine_button(self):
-        return CssElement(self.driver, ".ForceSync__buttonContainer > button:nth-child(1)")
+        return CssElement(self.driver, ".ForceSync__buttonContainer button:nth-child(1)")
 
     @property
     def merge_conflict_use_theirs_button(self):
-        return CssElement(self.driver, ".ForceSync_buttonContainer > button:nth-child(2)")
+        return CssElement(self.driver, ".ForceSync__buttonContainer button:nth-child(2)")
 
     @property
     def merge_conflict_abort_button(self):
-        return CssElement(self.driver, ".ForceSync_buttonContainer > button:nth-child(3)")
+        return CssElement(self.driver, ".ForceSync__buttonContainer button:nth-child(3)")
 
     def publish_private_project(self, project_title):
         logging.info(f"Publishing private project {project_title}")

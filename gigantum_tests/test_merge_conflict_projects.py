@@ -66,7 +66,7 @@ def prep_merge_conflict(driver: selenium.webdriver, *args, **kwargs):
     return username, project_title, collaborator
 
 
-def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kwargs):
+def test_use_mine_merge_conflict_project(driver: selenium.webdriver, *args, **kwargs):
     """
     Test a merge conflict in a project in which the owner resolves it with 'Use Mine.'
     """
@@ -87,7 +87,7 @@ def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kw
         f"but instead got {resolve_merge_conflict_file}"
 
 
-def test_merge_conflict_project_use_theirs(driver: selenium.webdriver, *args, **kwargs):
+def test_use_theirs_merge_conflict_project(driver: selenium.webdriver, *args, **kwargs):
     """
     Test a merge conflict in a project in which the owner resolves it with 'Use Theirs.'
     """

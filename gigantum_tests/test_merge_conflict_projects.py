@@ -9,9 +9,9 @@ import testutils
 from testutils import graphql
 
 
-def test_merge_conflict_project_use_theirs(driver: selenium.webdriver, *args, **kwargs):
+def test_merge_conflict_project_use_mine(driver: selenium.webdriver, *args, **kwargs):
     """
-    Test a merge conflict in a project in which the owner resolves it with 'use theirs.'
+    Test a merge conflict in a project in which the owner resolves it with 'Use Mine.'
     """
     # Owner creates a project, publishes it, adds a collaborator, and logs out
     r = testutils.prep_py3_minimal_base(driver)
@@ -70,7 +70,7 @@ def test_merge_conflict_project_use_theirs(driver: selenium.webdriver, *args, **
     with open(file_path, "r") as resolve_merge_conflict_file:
         resolve_merge_conflict_file = resolve_merge_conflict_file.read()
 
-    print(resolve_merge_conflict_file)
-
     assert resolve_merge_conflict_file == "Owner", f"Merge did not resolve to 'Use Mine' expected to see 'Owner' " \
                                                    f"in file, but instead got {resolve_merge_conflict_file}"
+
+

@@ -83,7 +83,7 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
     # Owner adds collaborator and logs out
-    collaborator = cloud_project_elts.add_collaborator_read_permissions(project_title)
+    collaborator = cloud_project_elts.add_collaborator_with_permissions(project_title)
     side_bar_elts = testutils.SideBarElements(driver)
     side_bar_elts.do_logout()
 

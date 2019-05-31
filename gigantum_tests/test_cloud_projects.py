@@ -12,7 +12,7 @@ from testutils import graphql
 
 def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs):
     """
-        Test that a project in Gigantum can be published, synced, and deleted.
+    Test that a project in Gigantum can be published, synced, and deleted.
     """
     # Create and publish project
     r = testutils.prep_py3_minimal_base(driver)
@@ -75,7 +75,7 @@ def test_publish_sync_delete_project(driver: selenium.webdriver, *args, **kwargs
 
 def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     """
-        Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
+    Test that a project in Gigantum can be published, shared with a collaborator, and imported by the collaborator.
     """
     # Owner creates and publishes project
     r = testutils.prep_py3_minimal_base(driver)
@@ -83,9 +83,9 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
     cloud_project_elts = testutils.CloudProjectElements(driver)
     cloud_project_elts.publish_private_project(project_title)
     # Owner adds collaborator and logs out
-    collaborator = cloud_project_elts.add_collaborator_read_permissions(project_title)
+    collaborator = cloud_project_elts.add_collaborator_with_permissions(project_title)
     side_bar_elts = testutils.SideBarElements(driver)
-    side_bar_elts.do_logout()
+    side_bar_elts.do_logout(username)
 
     # Collaborator logs in, imports cloud project, and logs out
     logging.info(f"Logging in as {collaborator}")
@@ -107,13 +107,13 @@ def test_publish_collaborator(driver: selenium.webdriver, *args, ** kwargs):
 
     cloud_project_elts.import_first_cloud_project_button.find().click()
     container_elts = testutils.ContainerElements(driver)
-    container_elts.container_status_stopped.wait()
+    container_elts.container_status_stopped.wait(30)
     shared_project_title = cloud_project_elts.project_overview_project_title.find().text
 
     assert project_title in shared_project_title, \
         f"After import, expected project {project_title} to open to project overview page"
 
-    side_bar_elts.do_logout()
+    side_bar_elts.do_logout(collaborator)
 
     # Owner logs in and deletes cloud project
     logging.info(f"Logging in as {username}")
